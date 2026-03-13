@@ -1,19 +1,252 @@
-\documentclass{article}
+\documentclass[twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{authblk}
+\usepackage{setspace}
+\usepackage{graphicx}
+\graphicspath{{./figures/}}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\setcounter{secnumdepth}{4}
+
+% ---- Column & line number spacing tweaks ----
+\setlength{\columnsep}{24pt}      % space between the two columns (default ~10pt)
+\usepackage[switch]{lineno}       % 'switch' puts line numbers on outer margins
+\setlength\linenumbersep{8pt}     % gap between line numbers and text
+
+
+%%%%%% Bibliography %%%%%%
+% Replace "sample" in the \addbibresource line below with the name of your .bib file.
+\usepackage[
+  style=nejm, 
+  citestyle=numeric-comp,
+  sorting=none
+]{biblatex}
+\addbibresource{sample.bib}
+
+%%%%%% Title %%%%%%
+% Full titles can be a maximum of 100 characters, including spaces. 
+% Title Format: Use title case, capitalizing the first letter of each word, except for certain small words, such as articles and short prepositions
+\title{Deep Learning vs. Conventional Methods for Tabular Data Imputation}
+
+%%%%%% Authors %%%%%%
+% Authors should be listed in order of contribution to the paper, by first name, then middle initial (if any), followed by last name.
+% Authors should be listed in the order in which they will appear in the published version if the manuscript is accepted. 
+% Use an asterisk (*) to identify the corresponding author, and be sure to include that person’s e-mail address. Use symbols (in this order: †, ‡, §, ||, ¶, #, ††, ‡‡, etc.) for author notes, such as present addresses, “These authors contributed equally to this work” notations, and similar information.
+% You can include group authors, but please include a list of the actual authors (the group members) in the Supplementary Materials.
+
+
+%%%%%% Date %%%%%%
+% Date is optional
+\date{}
+
+%%%%%% Spacing %%%%%%
+% For a proof-style two-column layout, a mild stretch often looks good.
+% You can change 1.15 to 1.0 for true single spacing, or back to \onehalfspacing.
+\setstretch{1.15}
+
 \begin{document}
 
-\title{My First LaTeX Document}
-\author{Your Name}
-\date{\today}
+
 \maketitle
 
+%%%%%% Main Text %%%%%%
+\begin{abstract}
+The abstract should be a single paragraph written in plain language that a general reader can understand. Do not include citations, figures, tables, or undefined abbreviations in the abstract. Any abbreviations that appear in the title should be defined in the abstract. The length should not exceed 250 words, to include: 
+\begin{itemize}
+    \item An opening sentence that states the question/problem addressed by the research AND
+    \item Enough background content to give context to the study AND
+    \item A brief statement of primary results AND
+    \item A short concluding sentence.
+\end{itemize}
+
+Keep in mind that abstracts are the primary way research is discovered in databases. Insert keywords naturally into the abstract text, using terms that a reader might actually type into a search bar.
+\end{abstract}
+\vspace{1em}
+
 \section{Introduction}
-This is my first LaTeX document. It's amazing how easy it is to create professional-looking documents with LaTeX.
+Your manuscript should contain all of the numbered sections specified in this template: Introduction, Materials and Methods, Results, Discussion. Please do not reorder or retitle the section headings.
 
-\section{Mathematics}
-LaTeX is particularly powerful for typesetting mathematical equations. For example, we can write the equation of a circle as:
-\[ x^2 + y^2 = r^2 \]
+The manuscript should start with a brief introduction that lays out the problem addressed by the research and describes the paper’s importance. The scientific question being investigated should be described in detail. The introduction should provide sufficient background information to make the article understandable to readers in other disciplines and provide enough context to ensure that the implications of the experimental findings are clear. 
 
-\section{Conclusion}
-In conclusion, LaTeX is a fantastic tool for creating documents with mathematical content. testtest
+%%%%% Citations in the text %%%%%%
+\subsection*{Citations}
+Citations of references in the text should be identified using numbers in square brackets e.g., ``as discussed by Cui \cite{Cui1}'' or ``as discussed elsewhere \cite{Cui1,Ninomiya1,Li1,Wang1,Yang1}.'' All references should be cited within the text and uncited references will be removed. 
+
+As an example, this template includes a ``sample.bib'' file containing the references in BibTeX.
+
+Citations referenced only in supplementary materials should still be included in the reference list of the main text.
+
+%%%%%% Equations %%%%%%
+\subsection*{Equations}
+Equations should be provided in a text format, rather than as an image. Equations should be numbered consecutively, in round brackets, on the right-hand side of the page by using the ``\textbackslash begin\{equation\}'' command. They should be referred to as Equation 1, etc. in the main text.
+
+\medskip For example, see Equation \ref{eq:1} and Equation \ref{eq:2} below.
+\begin{equation} \label{eq:1}
+    a^2 + b^2 = c^2
+\end{equation}
+\begin{equation} \label{eq:2}
+\begin{split}
+A & = \frac{\pi r^2}{2} \\
+ & = \frac{1}{2} \pi r^2
+\end{split}
+\end{equation}
+
+
+
+Upon acceptance, authors will be asked to provide the figures as separate electronic files. A figure guide is available for reference from the \href{https://spj.science.org/pb-assets/SPJ/CustomPages/Misc/SPJ_Figure_Preparation_Guide}{Science Partner Journals website}. In summary, authors must supply figures as Adobe Portable Document Format (PDF), Adobe Illustrator (AI), or Encapsulated PostScript (EPS) for illustrations or diagrams; Tagged Image File Format (TIFF), JPEG, PNG, PhotoShop (PSD), EPS, or PDF for photography or microscopy. Images should be of at least 300 dpi resolution, unless due to the limited resolution of a scientific instrument. If an image has labels, the image and labels should be embedded in separate layers.
+
+\section{Methods}
+
+\subsection{Literature Search Procedure}
+Begin with a section titled Experimental Design describing the objectives and design of the study as well as prespecified components. 
+
+\subsection{Conventional Statistical Methods}  
+\subsubsection{Deletion Methods}
+\paragraph{Listwise Deletion}
+Listwise Deletion, also known as Complete Case Analysis (CCA), is the most direct method for handling missing values. It removes an entire row from the dataset if it contains one or more missing values. The main advantage of this approach is that it is extremely simple to implement and requires no additional computation. However, this method may substantially reduce the sample size and consequently decrease statistical power.[A review on]
+\paragraph{Pairwise Deletion}
+Pairwise Deletion, also known as Available Case Analysis (ACA), is a method used to handle missing values. It excludes observations only when the analysis involves variables with missing data, rather than removing the entire case. The main advantage of this approach is that it retains more available data and preserves a larger sample size and statistical power. However, this method is appropriate only under the MCAR assumption. Different analyses may use different sample sizes. This can make the correlation matrix difficult to interpret and may produce a non-positive definite matrix, which can affect subsequent model estimation.
+
+\subsubsection{Mean / Median Imputation}
+Mean / Median Imputation is one of the most common single imputation methods in statistics. It replaces missing values with the mean or median of the observed values for that variable. This method is simple to implement and computationally efficient. It can also provide a practical solution when the dataset is very small. However, this method is appropriate only when the missing data mechanism satisfies MCAR. It may underestimate the variance and standard errors and bias the correlations among variables. In addition, the mean is sensitive to extreme values and cannot capture complex nonlinear relationships.
+
+\subsubsection{MICE}
+
+
+\subsection{Machine Learning Methods}  
+\subsubsection{K-Nearest Neighbors (KNN)}
+KNN imputation is a non-parametric method because it does not assume a specific functional form or probability distribution for the data. Instead, missing values are estimated using the observed values of the K most similar instances in the dataset.[Deep learning]
+
+This method estimates missing values using the K most similar observations in the dataset. First, the distance between the incomplete observation and all other observations is computed using a distance metric such as Euclidean distance. Next, the K nearest neighbors are identified. For numerical variables, the missing value is imputed using the mean or weighted mean of the neighbors. If the missing value is a category, the algorithm uses the mode (the most frequent value) among the neighbors.[How To Treat]
+
+The KNN imputation method offers several advantages over traditional missing data handling techniques such as mean imputation. First, KNN preserves the underlying relationships among variables because the imputed values are derived from observations with similar feature patterns rather than from global summary statistics. Second, KNN is a non-parametric method and therefore does not require assumptions about the underlying data distribution. This makes the method flexible and applicable to a wide range of datasets. Third, KNN can accommodate both continuous and categorical variables by using appropriate aggregation strategies such as the mean for numerical attributes and the mode for categorical attributes. Finally, because KNN relies on similarity among observations, it is capable of capturing local structures in the data, which can lead to more accurate imputations compared with simple statistical approaches.
+
+Despite its advantages, the KNN imputation method also has several limitations. One significant issue is its computational cost. Because the algorithm must search through the entire dataset to identify the nearest neighbors for each missing value, it can become computationally expensive and memory-intensive when applied to very large datasets. Another challenge lies in its sensitivity to hyperparameters. The effectiveness of the method depends heavily on the choice of the parameter k and the quality of the features used to compute distances. If the selected features are weakly related to the variable with missing values, the imputation results may be inaccurate.[AStudyOn]
+
+\subsubsection{MissForest}
+MissForest is a non-parametric imputation method that utilizes Random Forest to estimate missing values. The algorithm first initializes missing entries using simple statistical methods, such as mean imputation for continuous variables and mode imputation for categorical variables. Variables are then ordered according to the amount of missing data, starting with those with the fewest missing values. For each variable with missing data, a Random Forest model is trained using the observed values as the response variable and the remaining variables as predictors. The trained model is then used to predict the missing values. This process is repeated iteratively, and the imputed dataset is updated in each step.
+The algorithm stops when the difference between successive imputations begins to increase.
+
+The main strength of MissForest is its ability to capture non-linear relationships and complex interactions between variables. Unlike methods such as KNN and MICE, MissForest can handle both continuous and categorical variables directly. It not only avoids separate processing for different data types but also eliminates the need for additional transformations, such as standardization or dummy coding. Another advantage is that it does not require strong assumptions about the data distribution. Instead, it uses random forest models to learn relationships between variables directly from the data. In addition, MissForest can estimate imputation quality using the Out-of-Bag (OOB) error, so a separate test dataset is not required.
+
+Although MissForest has several advantages, it also has some limitations. Since the algorithm repeatedly trains random forest models during the iterative imputation process, it may require more computational time when applied to large datasets. Instead, a more relevant issue for small datasets is the potential risk of overfitting. Because MissForest relies on random forest models, the algorithm may learn patterns that are overly specific to the limited sample. Therefore, when applying MissForest to small-sample survey data, it is important to carefully examine the stability and plausibility of the imputed values.
+
+Empirical studies suggest that MissForest performs particularly well when the dataset contains more than 1,000 observations, often achieving better imputation accuracy than traditional methods such as mean imputation or KNN-based approaches. [A review on missing] In addition, prior research indicates that for tabular datasets with moderate sample sizes (typically fewer than 30,000 observations), MissForest may outperform deep learning approaches such as GAIN or variational autoencoders (VAE). Therefore, for survey datasets with sample sizes between approximately 1,000 and 30,000 observations, MissForest can be considered a suitable method for handling missing values.[Versus]
+
+
+\subsection{Deep Learning Methods}
+The integration of deep learning into the field of data imputation primarily involves two frameworks: Generative Adversarial Networks (GANs) and Transformer-based models (Attention mechanisms).
+
+\subsubsection{Generative Frameworks}
+The core objective of generative frameworks is to learn the joint probability distribution of the data. Rather than simply predicting a value based on other features, these models attempt to reconstruct the underlying data-generating logic to produce imputations that maintain global statistical characteristics.
+
+\begin{itemize}
+    \item \textbf{Generative Adversarial Networks (GANs):} These consist of a Generator, which observes available data to predict missing values, and a Discriminator, which attempts to distinguish between observed and imputed data points. GAN-based models exhibit higher resilience under high missingness rates (e.g., above 50\%) because they capture the overall data generation logic rather than local correlations. GAIN \cite{yoon2018gain} serves as a pivotal benchmark in this field, introducing a "hint vector" to guide the discriminator and force the generator to learn the true underlying distribution.
+    
+    \item \textbf{Variational Autoencoders (VAEs):} VAEs compress incomplete data into a low-dimensional latent space to learn the probability distribution before decoding and reconstructing the complete data matrix. A significant advantage of VAEs is their ability to provide uncertainty quantification, which is critical for risk-sensitive scenarios such as healthcare. MIWAE \cite{mattei2019miwae} optimized importance sampling for incomplete datasets, while TVAE was specifically designed to handle tabular heterogeneity.
+    
+    \item \textbf{Diffusion Models:} These models simulate physical diffusion processes to reconstruct missing values through iterative denoising. TabDDPM \cite{kotelnikov2023tabddpm} has been shown in recent 2025 literature to outperform GANs and VAEs in preserving original data distributions (e.g., minimizing KL divergence). The latest MissDDIM \cite{zhou2025missddim} further addresses the inference latency of diffusion models by replacing stochastic sampling with a deterministic non-Markovian sampling path, achieving faster and more consistent imputation results.
+\end{itemize}
+
+\subsubsection{Attention-based Frameworks}
+The essence of attention mechanisms lies in dynamic weight allocation. When imputing a specific missing cell, the model automatically determines which other features or similar samples are most informative for the current estimation.
+
+\begin{itemize}
+    \item \textbf{TabNet:} This architecture utilizes sequential attention to "mask" features at each decision step, mimicking the splitting logic of decision trees. By employing the Sparsemax function to generate sparse weights, TabNet \cite{arik2021tabnet} achieves tree-like interpretability while effectively modeling complex non-linear interactions between features.
+    
+    \item \textbf{Transformer Variants:} Through self-attention mechanisms, these models capture not only "between-feature" correlations within a single row but also "between-sample" relationships across different rows. FT-Transformer \cite{gorishniy2021revisiting} transforms features into embeddings for processing, while the Non-Parametric Transformer (NPT) \cite{kossen2021self} allows the model to communicate across all samples in a dataset. Recent research has further optimized these frameworks to enhance fault tolerance and computational efficiency.
+    
+    \item \textbf{Tabular Foundation Models and In-Context Learning (ICL):} Frameworks such as TabPFN eliminate the need for retraining on missing data. Instead, they treat the training set as "context" for the Transformer, leveraging pre-trained weights to predict missing values in the test set via a single forward pass. TabImpute \cite{feitelberg2025tabimpute} introduced entry-wise featurization, achieving a 100x speedup over traditional TabPFN imputation methods and setting a new benchmark for zero-shot data imputation.
+\end{itemize}
+
+\section{Results}
+The results should describe the experiments performed and the findings observed. The results section should be divided into subsections to delineate different experimental themes. 
+\begin{itemize}
+    \item All data should be presented in the Results. No data should be presented for the first time in the Discussion. Data (such as from Western blots) should be appropriately quantified.
+    \item Subheadings must be either all complete sentences or all phrases. They should be brief, ideally less than 10 words. Subheadings should not end in a period. Your paper may have as many subheadings as are necessary.
+    \item Figures and tables must be called out in numerical order. For example, the first mention of any panel of Fig. 3 cannot precede the first mention of all panels of Fig. 2. The supplementary figures (for example, fig. S1) and tables (table S1) must also be called out in numerical order. 
+\end{itemize}
+
+\section{Discussion}
+Include a Discussion that summarizes (but does not merely repeat) your conclusions and elaborates on their implications. There should be a paragraph outlining the limitations of your results and interpretation, as well as a discussion of the steps that need to be taken for the findings to be applied. Please avoid claims of priority. 
+
+\section*{Acknowledgments}
+Anyone who made a contribution to the research or manuscript, but who is not a listed author, should be acknowledged (with their permission). Types of acknowledgments include:
+
+\subsection*{General} 
+Thank others for any contributions, whether it be direct technical help or indirect assistance 
+
+\subsection*{Author Contributions} 
+Describe contributions of each author to the paper, using the first initial and full last name. 
+
+\medskip Examples:
+
+``S. Zhang conceived the idea and designed the experiments.''
+
+``E. F. Mustermann and J. F. Smith conducted the experiments.''
+
+``All authors contributed equally to the writing of the manuscript.''
+
+\subsection*{Funding}
+Name financially supporting bodies (written out in full), followed by the funding awardee and associated grant numbers (if applicable) in square brackets. 
+
+\medskip Example: 
+
+``This work was supported by the Engineering and Physical Sciences Research Council [grant numbers xxxx, yyyy]; the National Science Foundation [grant number zzzz]; and a Leverhulme Trust Research Project Grant.'' 
+
+\medskip
+If the research did not receive specific funding, but was performed as part of the employment of the authors, please name this employer. If the funder was involved in the manuscript writing, editing, approval, or decision to publish, please declare this.
+
+\subsection*{Conflicts of Interest}
+Conflicts of interest (COIs, also known as ``competing interests'') occur when issues outside research could be reasonably perceived to affect the neutrality or objectivity of the work or its assessment. 
+
+Authors must declare all potential interests – whether or not they actually had an influence – in a ‘Conflicts of Interest’ section, which should explain why the interest may be a conflict. Authors must declare current or recent funding (including for Article Processing Charges) and other payments, goods or services that might influence the work. All funding, whether a conflict or not, must be declared in a ``Funding Statement.'' The involvement of anyone other than the authors who 1) has an interest in the outcome of the work; 2) is affiliated to an organization with such an interest; or 3) was employed or paid by a funder, in the commissioning, conception, planning, design, conduct, or analysis of the work, the preparation or editing of the manuscript, or the decision to publish must be declared.
+
+If there are none, the authors should state ``The author(s) declare(s) that there is no conflict of interest regarding the publication of this article.'' Submitting authors are responsible for coauthors declaring their interests. Declared conflicts of interest will be considered by the editor and reviewers and included in the published article.
+
+\subsection*{Data Availability}
+A data availability statement is compulsory for all research articles. This statement describes whether and how others can access the data supporting the findings of the paper, including 1) what the nature of the data is, 2) where the data can be accessed, and 3) any restrictions on data access and why.
+
+If data are in an archive, include the accession number or a placeholder for it. Also include any materials that must be obtained through a Material Transfer Agreements (MTA). 
+
+\section*{Supplementary Materials}
+Describe any supplementary materials submitted with the manuscript (e.g., audio files, video clips or datasets). 
+
+Please group supplementary materials in the following order: materials and methods, figures, tables, and other files (such as movies, data, interactive images, or database files). 
+
+\medskip Example:
+Fig. S1. Title of the first supplementary figure.
+
+Fig. S2. Title of the second supplementary figure.
+
+Table S1. Title of the first supplementary table.
+
+Data file S1. Title of the first supplementary data file.
+
+Movie S1. Title of the first supplementary movie.
+
+\medskip
+Be sure to submit all supplementary materials with the manuscript and remember to reference the supplementary materials at appropriate points within the manuscript. We recommend citing specific items, rather than referring to the supplementary materials in general, for example: ``See Figures S1-S10 in the Supplementary Material for comprehensive image analysis.''
+
+A link to access the supplementary materials will be provided in the published article.
+
+Supplementary Materials may include additional author notes—for example, a list of group authors.
+
+\section*{Guidelines for References}
+Authors are responsible for ensuring that the information in each reference is complete and accurate. All data must be cited and references to ``data not shown'' or citations to unpublished results are permitted.
+
+All references should be cited within the text and uncited references will be removed.
+
+There is only one reference list for all sources cited in the main text, figure and table legends, and Supplementary Materials. Do not include a second reference list in the Supplementary Materials section. References cited only in the Supplementary Materials section are not counted toward length guidelines.
+
+Please do not include any extraneous language such as explanatory notes as part of a reference to a given source. The journal prefers that manuscripts do not include end notes; if information is important enough to include, please put into main text.  If you need to include notes, please explain why they are needed in your cover letter to the editor.
+
+DOIs, if available, should be included for each reference.
+
+\printbibliography
 
 \end{document}

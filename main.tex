@@ -172,8 +172,26 @@ The results should describe the experiments performed and the findings observed.
 \end{itemize}
 
 \section{Discussion}
-Include a Discussion that summarizes (but does not merely repeat) your conclusions and elaborates on their implications. There should be a paragraph outlining the limitations of your results and interpretation, as well as a discussion of the steps that need to be taken for the findings to be applied. Please avoid claims of priority. 
+In this section, we will introduce the experiments conducted to evaluate the differences between traditional machine learning and deep learning methods for data imputation.We designed a two-phase experimental approach: Phase 1 compares the data recovery accuracy of different imputation methods, and Phase 2 evaluates the prediction accuracy for gender classification after imputation.
 
+\subsection{Experimental Setup} 
+\subsubsection{Environment and Tools}
+All experiments were conducted on the Kaggle online platform to ensure a consistent computing environment, with a fixed random seed of 42 applied to all data splitting and model initialization processes to ensure reproducibility.
+\subsubsection{Dataset Descriptions}
+To evaluate the impact of sample size on different imputation techniques, we selected two datasets with significantly different scales:
+\begin{itemize}
+    \item \textbf{Small-scale Dataset (Boy or Girl):} This dataset contains approximately 400 samples, representing a typical small-sample scenario. It includes various features such as height, weight, star sign, phone OS, and IQ. The target variable is gender, which is used to evaluate the performance of imputation methods on downstream classification tasks.
+    \item \textbf{Large-scale Dataset (CDC BRFSS):} Downloaded via the \texttt{kagglehub} library, this dataset contains hundreds of thousands of health-related records from the Behavioral Risk Factor Surveillance System (BRFSS). This large-scale dataset is used to assess whether deep learning models demonstrate superior representation capabilities when a vast amount of data is available.
+\end{itemize}
+
+\subsubsection{Experimental Design and Protocol}
+We use a control-variable approach to ensure that all processes remain identical except for the choice of the imputation method. The experimental pipeline is organized as follows:
+
+\begin{itemize}
+    \item \textbf{Data Preprocessing and Cleaning:} The raw datasets undergo initial cleaning to handle anomalies. Categorical features are transformed using \textit{Label Encoding} to ensure they are compatible with both machine learning and deep learning algorithms.
+    \item \textbf{Phase 1: Recovery Accuracy Analysis:} To test the reconstructive capability of each method, we simulate data loss by randomly masking 10\% of the values in the continuous features. Various imputation techniques are then applied to fill these gaps, and their performance is evaluated using distance-based metrics (such as MAE and $R^2$) by comparing the imputed values against the original ground truth.
+    \item \textbf{Phase 2: Downstream Performance Evaluation:} This phase investigates the impact of different imputation methods on the final predictive outcome. Using a unified downstream classification model, we measure the gender prediction accuracy. This allows us to determine which imputation strategy provides the highest utility for practical classification tasks.
+\end{itemize}
 \section*{Acknowledgments}
 Anyone who made a contribution to the research or manuscript, but who is not a listed author, should be acknowledged (with their permission). Types of acknowledgments include:
 

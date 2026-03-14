@@ -226,7 +226,7 @@ Bias = \frac{1}{n} \sum_{i=1}^{n} (\hat{y}_i - y_i)
 
 By analyzing these four metrics collectively, we can comprehensively evaluate each imputation method's performance across different data scales in terms of accuracy, stability, and distribution fitting.
 
-\subsubsection{Recovery Performance on Small-scale Dataset}
+\subsubsection{Recovery Performance on Small Dataset}
 
 In the tests conducted on the small-scale "Boy or Girl" dataset, the experimental results align with the initial hypothesis, demonstrating that traditional machine learning significantly outperforms deep learning models in terms of data recovery capability. According to the observations in Table~\ref{tab:boy_girl_results}, MissForest stands out across all metrics, achieving the highest $R^2$ of $0.2131$ and the lowest MAE of $3.9075$. This confirms that the random forest-based imputation method, even with limited data, can accurately capture the non-linear correlations between height and other features through its ensemble learning mechanism.
 
@@ -236,7 +236,7 @@ This phenomenon validates the perspective presented in Chapter 3: deep learning 
 
 \begin{table}[h]
 \centering
-\caption{Recovery Performance Comparison}
+\caption{Recovery Performance Comparison - Small Dataset}
 \label{tab:boy_girl_results}
 \resizebox{\columnwidth}{!}{ % <--- 開始縮放
     \begin{tabular}{lcccc}
@@ -291,8 +291,82 @@ Following the numerical evaluation in Table~\ref{tab:boy_girl_results}, we exami
     \caption{VAE. Like GAIN, it fails to capture the linear trend in this small-sample scenario.}
     \label{fig:plot_vae}
 \end{figure}
-\FloatBarrier  % <--- 加入這行
+\FloatBarrier
+In summary, for small-scale datasets with simple feature dimensions, deep learning models are not the optimal choice for missing value imputation, as their recovery performance often lags behind basic statistical baselines (such as Median Imputation). Conversely, the ensemble learning mechanism in traditional machine learning (e.g., MissForest) demonstrates superior robustness and effectively captures feature correlations even with limited data. These findings suggest that when handling tabular data, model selection must prioritize the impact of data scale on algorithmic convergence; pursuing complex models without sufficient data may lead to lower imputation fidelity.
 
+\subsubsection{Recovery Performance on Big Dataset}
+
+In the tests using the large-scale dataset (CDC BRFSS), the experimental results show a completely different trend compared to the small-sample tests. When the amount of data increases significantly, the advantages of deep learning models start to appear. According to the data in Table~\ref{tab:cdc_results}, VAE showed a dominant advantage in all evaluation metrics. Its $R^2$ reached the highest in the entire group at 0.9386, and the MAE was only 0.724. This shows that in a big data environment, VAE can accurately learn the data distribution and the complex relationships between features.
+
+In contrast, traditional machine learning methods like MICE and MissForest still maintain good stability, with $R^2$ values of 0.5572 and 0.5664, respectively. However, their recovery accuracy is clearly behind VAE. This proves that while traditional methods can still provide reliable results when dealing with massive amounts of data, their ability to represent data has reached a bottleneck. They find it hard to improve the imputation quality further through big data, unlike certain deep learning models.
+
+It is worth noting that another deep learning model, GAIN, still performs poorly at this stage. The failure of GAIN is mainly due to the gap between distribution matching and point-wise accuracy. While GAIN focuses on making the overall statistical distribution look real to fool the discriminator, it often ignores the exact precision for each individual data point, leading to a low $R^2$. Furthermore, GAIN often suffers from "mode collapse," where the generator simply predicts the average height to stay "safe," which explains the horizontal patterns seen in its scatter plots. Additionally, the adversarial training process is highly unstable for tabular data, making it difficult to converge even with large datasets. In summary, the large-scale experiment confirms that when the data scale is large enough, deep learning—especially generative models like VAE—has great potential to surpass traditional methods, provided the training is stable.
+
+\begin{table}[h]
+\centering
+\caption{Recovery Performance Comparison - Big Dataset}
+\label{tab:cdc_results}
+\resizebox{\columnwidth}{!}{ % <--- 開始縮放
+    \begin{tabular}{lcccc}
+    \toprule
+    Method & MAE (cm) & RMSE (cm) & $R^2$ & Bias (cm) \\
+    \midrule
+    Median Impute & 8.8916 & 10.8688 & -0.0927 & -1.9041 \\
+    MICE & 5.4667 & 7.0170 & 0.5572 & 0.0222 \\
+    MissForest & 5.4062 & 6.9443 & 0.5664 & 0.0045 \\
+    GAIN & 8.118 & 10.0684 & 0.0791 & -2.4617 \\
+    VAE & 0.724 & 2.576 & 0.9386 & 0.0664 \\
+    \bottomrule
+    \end{tabular}
+} % <--- 結束縮放
+\end{table}
+
+In this section, we visually compare the imputation results for the CDC BRFSS dataset. The following figures demonstrate how each model performs as the sample size increases.
+
+% 1. Median Imputation (CDC)
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.75\linewidth]{median-bigdata.png}
+    \caption{Median Imputation. Similar to the small dataset, it fails to capture any individual variance.}
+    \label{fig:cdc_plot_median}
+\end{figure}
+
+% 2. MICE (CDC)
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.75\linewidth]{mice_bigdata.png}
+    \caption{MICE Imputation. The distribution begins to align with the diagonal, but still shows noticeable spread.}
+    \label{fig:cdc_plot_mice}
+\end{figure}
+
+% 3. MissForest (CDC)
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.75\linewidth]{missforest_bigdata.png}
+    \caption{MissForest Imputation. Performance is stable, but the density around the diagonal is lower than VAE.}
+    \label{fig:cdc_plot_mf}
+\end{figure}
+
+% 4. gain (CDC) - 表現最差的一張
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.75\linewidth]{gain_bigdata.png}
+    \caption{GAIN. The points are widely scattered and fail to align with the diagonal line, which visually explains the very low $R^2$ of 0.0791 and high MAE.}
+    \label{fig:cdc_plot_vae}
+\end{figure}
+
+% 5. VAE (CDC) - 表現最優秀的一張
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.75\linewidth]{vae-bigdata.png}
+    \caption{VAE. The points are highly concentrated along the $y=x$ line, visually confirming the $R^2 = 0.9386$ result.}
+    \label{fig:cdc_plot_vae}
+\end{figure}
+
+% 強制擋住後面的文字，確保圖片全部先展示完
+\FloatBarrier
+
+In our large-scale experiment, we observed a clear reversal in performance. As the data size grows, the recovery accuracy of traditional machine learning remains stable, but it seems to have a limit. On the other hand, with enough data support, certain deep learning methods show a strong ability to learn features, which greatly improves the imputation accuracy. This proves that for handling missing values in large datasets, generative deep learning models are a better and more promising solution.
 
 \subsection*{Funding}
 Name financially supporting bodies (written out in full), followed by the funding awardee and associated grant numbers (if applicable) in square brackets. 

@@ -10,6 +10,7 @@
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{hyperref}
+\usepackage{placeins}
 \setcounter{secnumdepth}{4}
 
 % ---- Column & line number spacing tweaks ----
@@ -192,22 +193,106 @@ We use a control-variable approach to ensure that all processes remain identical
     \item \textbf{Phase 1: Recovery Accuracy Analysis:} To test the reconstructive capability of each method, we simulate data loss by randomly masking 10\% of the values in the continuous features. Various imputation techniques are then applied to fill these gaps, and their performance is evaluated using distance-based metrics (such as MAE and $R^2$) by comparing the imputed values against the original ground truth.
     \item \textbf{Phase 2: Downstream Performance Evaluation:} This phase investigates the impact of different imputation methods on the final predictive outcome. Using a unified downstream classification model, we measure the gender prediction accuracy. This allows us to determine which imputation strategy provides the highest utility for practical classification tasks.
 \end{itemize}
-\section*{Acknowledgments}
-Anyone who made a contribution to the research or manuscript, but who is not a listed author, should be acknowledged (with their permission). Types of acknowledgments include:
 
-\subsection*{General} 
-Thank others for any contributions, whether it be direct technical help or indirect assistance 
+\subsection{Phase 1: Recovery Accuracy Analysis}
+\subsubsection{Experiment Objectives and Method Selection}
+In this experiment, we picked four methods based on the analysis from Chapters 2 and 3. We chose MICE and MissForest to represent traditional machine learning, and GAIN and VAE for deep learning. By comparing these four, we want to observe two main things: first, which method is the most accurate at restoring missing values under the same conditions; second, how sample size affects performance. Basically, we want to find out if deep learning is superior for large datasets, and if traditional machine learning is actually more accurate when we only have a small sample size.
 
-\subsection*{Author Contributions} 
-Describe contributions of each author to the paper, using the first initial and full last name. 
+\subsubsection{Experimental Design and Evaluation Metrics}
 
-\medskip Examples:
+The experimental design focuses on two datasets: the \textit{Boy or Girl} dataset and the \textit{CDC BRFSS} (detailed in Section 4.1.2). To evaluate the reconstructive performance of different imputation models on continuous data, we specifically target the "Height" feature for our experiments. We simulate a missing data scenario by randomly masking 10\% of the observations, using the remaining 90\% as the training baseline for the models.
 
-``S. Zhang conceived the idea and designed the experiments.''
+To quantify the effectiveness of the imputation as a regression task, we utilize four metrics to assess the fit between the imputed values and the ground truth:
 
-``E. F. Mustermann and J. F. Smith conducted the experiments.''
+First, \textbf{Mean Absolute Error (MAE)} measures the average absolute difference between the imputed values and the actual values, providing a direct reflection of the prediction error scale:
+\begin{equation}
+MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|
+\end{equation}
 
-``All authors contributed equally to the writing of the manuscript.''
+Second, \textbf{Root Mean Square Error (RMSE)} is employed to capture the stability of the imputation. Compared to MAE, RMSE is more sensitive to large errors due to the squaring of differences, which helps identify potential outliers in the results:
+\begin{equation}
+RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
+\end{equation}
+
+Third, the \textbf{Coefficient of Determination ($R^2$)} is used to evaluate the model's ability to explain the variance in the original data. An $R^2$ value closer to 1 indicates that the imputed data closely follows the distribution of the original dataset:
+\begin{equation}
+R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}
+\end{equation}
+
+Finally, we include \textbf{Bias} to observe if the model exhibits systematic errors, such as a tendency to consistently over- or under-estimate the height values:
+\begin{equation}
+Bias = \frac{1}{n} \sum_{i=1}^{n} (\hat{y}_i - y_i)
+\end{equation}
+
+By analyzing these four metrics collectively, we can comprehensively evaluate each imputation method's performance across different data scales in terms of accuracy, stability, and distribution fitting.
+
+\subsubsection{Recovery Performance on Small-scale Dataset}
+
+In the tests conducted on the small-scale "Boy or Girl" dataset, the experimental results align with the initial hypothesis, demonstrating that traditional machine learning significantly outperforms deep learning models in terms of data recovery capability. According to the observations in Table~\ref{tab:boy_girl_results}, MissForest stands out across all metrics, achieving the highest $R^2$ of $0.2131$ and the lowest MAE of $3.9075$. This confirms that the random forest-based imputation method, even with limited data, can accurately capture the non-linear correlations between height and other features through its ensemble learning mechanism.
+
+In contrast, the performance of the two deep learning models, GAIN and VAE, is highly unsatisfactory. Their MAE values are as high as $8.3544$ and $5.8562$, respectively, which are not only considerably higher than those of MissForest but also behind the control group, Median Imputation ($MAE=4.9310$). More significantly, both models exhibit negative $R^2$ values, implying that generative models completely fail to capture the data distribution in an environment with approximately 400 samples, with their prediction biases exceeding the statistical baseline.
+
+This phenomenon validates the perspective presented in Chapter 3: deep learning models rely heavily on large volumes of samples for weight optimization and feature representation learning. In scenarios involving simple feature dimensions and minute sample sizes, neural networks are prone to getting stuck in local optima or suffering from severe overfitting, which prevents the models from converging effectively.
+
+\begin{table}[h]
+\centering
+\caption{Recovery Performance Comparison}
+\label{tab:boy_girl_results}
+\resizebox{\columnwidth}{!}{ % <--- 開始縮放
+    \begin{tabular}{lcccc}
+    \toprule
+    Method & MAE (cm) & RMSE (cm) & $R^2$ & Bias (cm) \\
+    \midrule
+    Median Impute & 4.9310 & 5.8398 & -0.1278 & -1.9655 \\
+    MICE & 4.5183 & 6.5659 & 0.1341 & 0.8883 \\
+    MissForest & 3.9075 & 4.8780 & 0.2131 & -1.6122 \\
+    GAIN & 8.3544 & 9.2752 & -0.7280 & -6.0957 \\
+    VAE & 5.8562 & 7.4658 & -0.1196 & -0.5622 \\
+    \bottomrule
+    \end{tabular}
+} % <--- 結束縮放
+\end{table}
+
+Following the numerical evaluation in Table~\ref{tab:boy_girl_results}, we examine the visual distribution. The following figures show the relationship between actual values and imputed values for each method.
+
+% 1. Median Imputation
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{median_plot.png}
+    \caption{Median Imputation (Baseline). It shows a horizontal line as it fills all gaps with a median value.}
+    \label{fig:plot_median}
+\end{figure}
+
+% 2. MICE
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{mice_plot.png}
+    \caption{MICE Imputation. Shows some correlation but with significant dispersion.}
+    \label{fig:plot_mice}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    % 第三張
+    \includegraphics[width=0.72\linewidth]{missforest_plot.png}
+    \caption{MissForest Imputation. This method shows the highest accuracy with points closest to the diagonal.}
+    \vspace{5pt} % 兩圖之間稍微留白
+    
+    % 第四張
+    \includegraphics[width=0.72\linewidth]{gain_plot.png}
+    \caption{GAIN. The points are widely scattered, indicating poor convergence on small datasets.}
+    \label{fig:grouped_plots}
+\end{figure}
+
+% 5. VAE
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{vae_plot.png}
+    \caption{VAE. Like GAIN, it fails to capture the linear trend in this small-sample scenario.}
+    \label{fig:plot_vae}
+\end{figure}
+\FloatBarrier  % <--- 加入這行
+
 
 \subsection*{Funding}
 Name financially supporting bodies (written out in full), followed by the funding awardee and associated grant numbers (if applicable) in square brackets. 

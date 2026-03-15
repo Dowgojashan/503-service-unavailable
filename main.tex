@@ -16,7 +16,10 @@
 
 % ---- 字體設定 ----
 % 內文使用 Times Roman (mathptmx) [cite: 21]
-\usepackage{mathptmx}
+\usepackage[T1]{fontenc}    % 必須加入，否則粗斜體會失效
+\usepackage{newtxtext} % 比 mathptmx 更穩定支援 9pt 的粗斜體
+
+
 % 標題與作者資訊使用 Helvetica (helvet) [cite: 27]
 \usepackage[scaled]{helvet} 
 \usepackage{authblk}
@@ -41,22 +44,21 @@
 
 % 1. 主章節: Times New Roman 12-point 粗體、全大寫、靠左，上方 6-point 空白
 % 【修正】加上 \selectfont，並將 \MakeUppercase 移至最後的括號
-\titleformat{\section}{\normalfont\fontsize{12}{14}\selectfont\bfseries}{\thesection.}{1em}{\MakeUppercase}
+\titleformat{\section}{\rmfamily\fontsize{12}{14}\selectfont\bfseries\uppercase}{\thesection.}{1em}{}
 \titlespacing*{\section}{0pt}{6pt}{*0}
 
 % 2. 子章節: Times New Roman 12-point 粗體
 % 【修正】加上 \selectfont
-\titleformat{\subsection}{\normalfont\fontsize{12}{14}\selectfont\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsection}{\rmfamily\fontsize{12}{14}\selectfont\bfseries}{\thesubsection}{1em}{}
 
 % 3. 次子章節: Times New Roman 11-point 斜體，上方 6-point 空白
 % 【修正】加上 \selectfont
-\titleformat{\subsubsection}{\normalfont\fontsize{11}{13}\selectfont\itshape}{\thesubsubsection}{1em}{}
-\titlespacing*{\subsubsection}{0pt}{6pt}{*0}
+\titleformat{\subsubsection}{\rmfamily\fontsize{11}{13}\selectfont\itshape}{\thesubsubsection}{1em}{}
 
 % 4. 次次子章節 (5.1.1.1 等級): Times New Roman 11-point 斜體
 % 【修正】加上 \selectfont
-\titleformat{\paragraph}{\normalfont\fontsize{11}{13}\selectfont\itshape}{\theparagraph}{1em}{}
-\titlespacing*{\paragraph}{0pt}{6pt}{*0}
+\titleformat{\paragraph}{\rmfamily\fontsize{11}{13}\selectfont\itshape}{\theparagraph}{1em}{}
+\titleformat{\subsubsubsection}{\rmfamily\fontsize{11}{13}\selectfont\itshape}{\theparagraph}{1em}{}
 
 % ---- 圖表說明文字格式 ----
 % 說明文字使用 9-point 粗體 [cite: 57]
@@ -311,10 +313,10 @@ In small-sample regimes, typically defined as datasets with fewer than 10,000 ob
 Among traditional ML techniques, the MissForest algorithm is recognized as a premier solution for heterogeneous tabular data \cite{Stekhoven2012}. By treating imputation as an iterative prediction task, MissForest leverages the power of Random Forests to capture non-linear relationships without requiring explicit distributional assumptions \cite{Stekhoven2012}. Empirical evaluations indicate that MissForest maintains stable performance even at missingness rates as high as 60\%, whereas parametric methods like MICE often suffer from performance degradation once missingness exceeds 50\% \cite{Azur2011}.
 
 \subsubsection{Inductive Bias and Deep Learning Constraints}
-The relative underperformance of deep learning (DL) on small tabular datasets is a subject of active research. Unlike images or speech, tabular data often consists of independent features with irregular, high-frequency patterns \cite{beyazit2023}, \cite{Grinsztajn2022}. Standard neural networks, which possess an inductive bias toward learning smooth functions, often fail to approximate these discontinuous boundaries in low-sample settings, leading to over-fitting of the imputed values \cite{beyazit2023}, \cite{Grinsztajn2022}.
+The relative underperformance of deep learning (DL) on small tabular datasets is a subject of active research. Unlike images or speech, tabular data often consists of independent features with irregular, high-frequency patterns\cite{Grinsztajn2022},\cite{beyazit2023}. Standard neural networks, which possess an inductive bias toward learning smooth functions, often fail to approximate these discontinuous boundaries in low-sample settings, leading to over-fitting of the imputed values \cite{Grinsztajn2022},\cite{beyazit2023}.
 
 \subsubsection{Tabular Foundation Models and Zero-Shot Imputation}
-To mitigate the data requirements of DL, recent literature has introduced tabular foundation models such as TabImpute \cite{Hollmann2023},\cite{Kossen2025}. These models leverage pre-training on large-scale synthetic data to learn generalized representations, allowing them to perform ``zero-shot'' imputation on unseen datasets \cite{Kossen2025}. This paradigm shift enables DL-based accuracy in data-scarce scenarios without the need for task-specific fine-tuning.
+To mitigate the data requirements of DL, recent literature has introduced tabular foundation models such as TabImpute \cite{Kossen2025},\cite{Hollmann2023},. These models leverage pre-training on large-scale synthetic data to learn generalized representations, allowing them to perform ``zero-shot'' imputation on unseen datasets \cite{Kossen2025}. This paradigm shift enables DL-based accuracy in data-scarce scenarios without the need for task-specific fine-tuning.
 
 \subsection{Performance on Large-Scale Datasets}
 As dataset size increases to tens of thousands or millions of samples, the high capacity of generative deep learning models allows them to outperform traditional methods by learning complex latent distributions \cite{sun2023deep}.
@@ -333,7 +335,7 @@ Generative Adversarial Imputation Nets (GAIN) treat imputation as a minimax game
 \begin{tabularx}{\textwidth}{|l|l|c|X|X|c|}
 \hline
 \textbf{Category} & \textbf{Algorithm} & \textbf{Mechanism} & \textbf{Core Technical Advantage} & \textbf{Critical Limitation} & \textbf{Comp. Cost} \\ \hline
-\multirow{3}{*}{\textbf{Statistical}} & Deletion & MCAR & Extremely simple; no computation required \cite{little2019statistical}. & Severe loss of power; introduces bias if non-MCAR \cite{popovich2025treat, little2019statistical}. & Negligible \\ \cline{2-6} 
+\multirow{3}{*}{\textbf{Statistical}} & Deletion & MCAR & Extremely simple; no computation required \cite{little2019statistical}. & Severe loss of power; introduces bias if non-MCAR \cite{popovich2025treat},\cite{little2019statistical}. & Negligible \\ \cline{2-6} 
  & Mean/Median & MCAR & Practical for very small samples; efficient \cite{popovich2025treat}. & Underestimates variance; biases correlations \cite{popovich2025treat}. & Very Low \\ \cline{2-6} 
  & MICE & MAR & Iterative Gibbs sampling; handles uncertainty \cite{Azur2011}. & Assumes MAR; limited capture of non-linear patterns \cite{Azur2011}. & Medium \\ \hline
 \multirow{2}{*}{\textbf{Machine Learning}} & KNN & MCAR/MAR & Non-parametric; utilizes local similarity (Euclidean) \cite{Bertsimas2018}. & Distance metrics sensitive to scale; high latency for large $N$ \cite{Bertsimas2018}. & Medium \\ \cline{2-6} 
@@ -346,7 +348,7 @@ Generative Adversarial Imputation Nets (GAIN) treat imputation as a minimax game
 \end{table*}
 
 \subsection{Computational Complexity and Deployment}
-Computational scalability is a critical factor for real-world deployment. Traditional methods like KNN and MissForest are primarily CPU-bound; KNN, in particular, suffers from the ``curse of dimensionality,'' where distance computations become computationally prohibitive as feature counts increase. \cite{ Stekhoven2012},\cite{Bertsimas2018}
+Computational scalability is a critical factor for real-world deployment. Traditional methods like KNN and MissForest are primarily CPU-bound; KNN, in particular, suffers from the ``curse of dimensionality,'' where distance computations become computationally prohibitive as feature counts increase. \cite{Stekhoven2012},\cite{Bertsimas2018}
  Conversely, while generative DL models require significant GPU resources for training, they offer high-speed inference through a single forward pass, making them more suitable for high-throughput production environments \cite{Bertsimas2018}.
 
  \subsection{Summary}
@@ -371,7 +373,7 @@ All experiments were conducted on the Kaggle online platform to ensure a consist
 
 To evaluate the impact of sample size on different imputation techniques, we selected two datasets with significantly different scales:
 
-\begin{itemize}[leftmargin=*, nosep] % 優化間距
+\begin{itemize}[leftmargin=*, nosep]
 
     \item \textbf{Small-scale Dataset (Boy or Girl):} This dataset contains approximately 400 samples, representing a typical small-sample scenario. It includes various features such as height, weight, star sign, phone OS, and IQ. The target variable is gender, which is used to evaluate the performance of imputation methods on downstream classification tasks.
 
@@ -441,7 +443,7 @@ In contrast, the performance of the two deep learning models, GAIN and VAE, is h
 
 This phenomenon validates the perspective presented in Chapter 3: deep learning models rely heavily on large volumes of samples for weight optimization and feature representation learning. In scenarios involving simple feature dimensions and minute sample sizes, neural networks are prone to getting stuck in local optima or suffering from severe overfitting, which prevents the models from converging effectively.
 
-\begin{table}[H] % 強制在此位置
+\begin{table}[H] % 修正定位
 \renewcommand{\arraystretch}{1.5}
 \centering
 \caption{Recovery Performance Comparison - Small Dataset}
@@ -465,7 +467,7 @@ Following the numerical evaluation in Table~\ref{tab:boy_girl_results}, we exami
 
 As shown in Figure~\ref{fig:plot_median}, the Median Imputation results in a single horizontal line. This is because it lacks the ability to predict individual variance, simply filling all missing values with the dataset's center point.
 
-\begin{figure}[H]
+\begin{figure}[H] % 修正定位
     \centering
     \includegraphics[width=0.8\linewidth]{median_plot.png}
     \caption{Median Imputation (Baseline).}
@@ -474,14 +476,14 @@ As shown in Figure~\ref{fig:plot_median}, the Median Imputation results in a sin
 
 Regarding traditional machine learning, Figure~\ref{fig:plot_mice} and Figure~\ref{fig:plot_mf} show a clearer correlation. While MICE displays a general diagonal trend, it still exhibits significant dispersion, with many points far from the $y=x$ line . In contrast, MissForest provides the most accurate results, with points clustered tightly along the diagonal, confirming its superior performance in capturing feature relationships even with limited data.
 
-\begin{figure}[H]
+\begin{figure}[H] % 修正定位
     \centering
     \includegraphics[width=0.8\linewidth]{mice_plot.png}
     \caption{MICE Imputation.}
     \label{fig:plot_mice}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[H] % 修正定位
     \centering
     \includegraphics[width=0.8\linewidth]{missforest_plot.png}
     \caption{MissForest Imputation.}
@@ -490,21 +492,21 @@ Regarding traditional machine learning, Figure~\ref{fig:plot_mice} and Figure~\r
 
 However, the deep learning models fail to produce meaningful predictions in this small-sample scenario. As seen in Figure~\ref{fig:plot_gain} and Figure~\ref{fig:plot_vae}, both GAIN and VAE produce predictions that are highly concentrated around the median value. Instead of aligning with the diagonal $y=x$ line, the imputed points are scattered only around a horizontal band. This indicates that the models have failed to capture any individual variance and are simply outputting values near the statistical average to minimize training loss, which visually explains their poor convergence and negative $R^2$ results.
 
-\begin{figure}[H]
+\begin{figure}[H] % 修正定位
     \centering
     \includegraphics[width=0.8\linewidth]{gain_plot.png}
     \caption{GAIN.}
     \label{fig:plot_gain}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[H] % 修正定位
     \centering
     \includegraphics[width=0.8\linewidth]{vae_plot.png}
     \caption{VAE.}
     \label{fig:plot_vae}
 \end{figure}
 
-\FloatBarrier % 屏障，防止小資料集的圖跑到下一節
+\FloatBarrier % 確保小資料集的圖在這邊結束，不影響下一節文字
 
 \subsubsection{Recovery Performance on Big Dataset}
 
@@ -514,7 +516,7 @@ In contrast, traditional machine learning methods like MICE and MissForest still
 
 It is worth noting that another deep learning model, GAIN, still performs poorly at this stage. The failure of GAIN is mainly due to the gap between distribution matching and point-wise accuracy. While GAIN focuses on making the overall statistical distribution look real to fool the discriminator, it often ignores the exact precision for each individual data point, leading to a low $R^2$. Furthermore, GAIN often suffers from "mode collapse," where the generator simply predicts the average height to stay "safe," which explains the horizontal patterns seen in its scatter plots. Additionally, the adversarial training process is highly unstable for tabular data, making it difficult to converge even with large datasets. In summary, the large-scale experiment confirms that when the data scale is large enough, deep learning—especially generative models like VAE—has great potential to surpass traditional methods, provided the training is stable.
 
-\begin{table}[H]
+\begin{table}[H] % 修正定位
 \renewcommand{\arraystretch}{1.5}
 \centering
 \caption{Recovery Performance Comparison - Big Dataset}
@@ -538,44 +540,44 @@ In the large-scale dataset (CDC BRFSS) tests, the visual distribution plots reve
 
 Regarding traditional machine learning, MICE and MissForest (Figure~\ref{fig:cdc_plot_mice} and Figure~\ref{fig:cdc_plot_mf}) show improved stability compared to small samples. The points begin to align more clearly with the diagonal line, proving that the models successfully learned the linear trends between features. However, their density along the diagonal is lower than VAE, suggesting that traditional ensemble methods reach a performance bottleneck when dealing with massive datasets.
 
-\begin{figure}[H]
+\begin{figure}[H] % 修正定位
     \centering
     \includegraphics[width=0.75\linewidth]{median-bigdata.png}
-    \caption{Median Imputation (Big Data).}
+    \caption{Median Imputation.}
     \label{fig:cdc_plot_median}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[H] % 修正定位
     \centering
     \includegraphics[width=0.75\linewidth]{mice_bigdata.png}
-    \caption{MICE Imputation (Big Data).}
+    \caption{MICE Imputation.}
     \label{fig:cdc_plot_mice}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[H] % 修正定位
     \centering
     \includegraphics[width=0.75\linewidth]{missforest_bigdata.png}
-    \caption{MissForest Imputation (Big Data).}
+    \caption{MissForest Imputation.}
     \label{fig:cdc_plot_mf}
 \end{figure}
 
 On the other hand, the deep learning models show extreme differences. As seen in Figure~\ref{fig:cdc_plot_gain}, GAIN continues to struggle with convergence. The imputed points are scattered only within a horizontal band around the median, failing to follow the diagonal line. This confirms "mode collapse," where the generator only predicts average values to stay "safe" from the discriminator. In sharp contrast, VAE (Figure~\ref{fig:cdc_plot_vae}) demonstrates superior distribution learning, with points tightly concentrated along the $y=x$ diagonal. With sufficient data support, the latent space of VAE effectively reconstructs the complex underlying logic of tabular data, achieving the highest imputation fidelity in the entire group.
 
-\begin{figure}[H]
+\begin{figure}[H] % 修正定位
     \centering
     \includegraphics[width=0.75\linewidth]{gain_bigdata.png}
-    \caption{GAIN (Big Data).}
+    \caption{GAIN.}
     \label{fig:cdc_plot_gain}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[H] % 修正定位
     \centering
     \includegraphics[width=0.75\linewidth]{VAE-bigdata.png}
-    \caption{VAE (Big Data).}
+    \caption{VAE.}
     \label{fig:cdc_plot_vae}
 \end{figure}
 
-\FloatBarrier
+\FloatBarrier % 確保大資料集的圖在這邊結束
 
 In our large-scale experiment, we observed a clear reversal in performance. As the data size grows, the recovery accuracy of traditional machine learning remains stable, but it seems to have a limit. On the other hand, with enough data support, certain deep learning methods show a strong ability to learn features, which greatly improves the imputation accuracy. This proves that for handling missing values in large datasets, generative deep learning models are a better and more promising solution.
 
@@ -591,7 +593,7 @@ We chose the "Boy or Girl" dataset as our research object. This dataset includes
 
 To explore how imputation algorithms affect different types of data (numerical and categorical), we divided the imputation process into three main scenarios for comparison:
 
-\begin{itemize}[leftmargin=*, nosep]
+\begin{itemize}[leftmargin=*, nosep] % 優化列表間距
     \item \textbf{Numerical Imputation (Model) + Categorical Imputation (Unknown):} We only use specific algorithms to fill numerical features like height, weight, and IQ. Categorical features like star sign or phone OS are filled with "Unknown." This design helps us observe how the quality of numerical data recovery alone contributes to the classification task.
     \item \textbf{Baseline (Median/Mode) + Model Imputation:} Numerical features are filled with the median, while categorical features are filled using the target algorithm. This scenario is used to test if the algorithm performs better than simple statistical baselines when handling discrete categorical data.
     \item \textbf{Full Imputation:} Both numerical and categorical features are processed by the same algorithm (such as MissForest or VAE). This evaluates the overall performance of the imputation plan in capturing complex relationships within "mixed data."
@@ -615,90 +617,194 @@ F1\text{-}Score = 2 \times \frac{Precision \times Recall}{Precision + Recall}
 \end{equation}
 Additionally, we use ROC-AUC to check the model's ability to distinguish between classes at various thresholds, and the Confusion Matrix to visualize where the model mistakes one gender for another. This comprehensive analysis helps determine if the imputed data successfully preserves the key physical differences between genders.
 
+\section{Discussion}
+
+In this section, we will introduce the experiments conducted to evaluate the differences between traditional machine learning and deep learning methods for data imputation. We designed a two-phase experimental approach: Phase 1 compares the data recovery accuracy of different imputation methods, and Phase 2 evaluates the prediction accuracy for gender classification after imputation.
+
+\subsection{Experimental Setup}
+
+\subsubsection{Environment and Tools}
+
+All experiments were conducted on the Kaggle online platform to ensure a consistent computing environment, with a fixed random seed of 42 applied to all data splitting and model initialization processes to ensure reproducibility.
+
+\subsubsection{Dataset Descriptions}
+
+To evaluate the impact of sample size on different imputation techniques, we selected two datasets with significantly different scales:
+
+\begin{itemize}[leftmargin=*, nosep]
+    \item \textbf{Small-scale Dataset (Boy or Girl):} This dataset contains approximately 400 samples, representing a typical small-sample scenario. It includes various features such as height, weight, star sign, phone OS, and IQ. The target variable is gender, which is used to evaluate the performance of imputation methods on downstream classification tasks.
+    \item \textbf{Large-scale Dataset (CDC BRFSS):} Downloaded via the \texttt{kagglehub} library, this dataset contains hundreds of thousands of health-related records from the Behavioral Risk Factor Surveillance System (BRFSS). This large-scale dataset is used to assess whether deep learning models demonstrate superior representation capabilities when a vast amount of data is available.
+\end{itemize}
+
+\subsubsection{Experimental Design and Protocol}
+
+We use a control-variable approach to ensure that all processes remain identical except for the choice of the imputation method. The experimental pipeline is organized as follows:
+
+\begin{itemize}[leftmargin=*, nosep]
+    \item \textbf{Data Preprocessing and Cleaning:} The raw datasets undergo initial cleaning to handle anomalies. Categorical features are transformed using \textit{Label Encoding} to ensure they are compatible with both machine learning and deep learning algorithms.
+    \item \textbf{Phase 1: Recovery Accuracy Analysis:} To test the reconstructive capability of each method, we simulate data loss by randomly masking 10\% of the values in the continuous features. Various imputation techniques are then applied to fill these gaps, and their performance is evaluated using distance-based metrics (such as MAE and $R^2$) by comparing the imputed values against the original ground truth.
+    \item \textbf{Phase 2: Downstream Performance Evaluation:} This phase investigates the impact of different imputation methods on the final predictive outcome. Using a unified downstream classification model, we measure the gender prediction accuracy. This allows us to determine which imputation strategy provides the highest utility for practical classification tasks.
+\end{itemize}
+
+\begin{itemize}[leftmargin=*, nosep]
+    \item \textbf{Missing Data Mechanisms:} We differentiate the complexity of our experiments by utilizing two mechanisms: \textit{Missing Completely at Random (MCAR)} for Phase 1 to establish a baseline for recovery accuracy, and \textit{Missing at Random (MAR)} for Phase 2 to simulate more complex dependencies between features.
+\end{itemize}
+
+\subsection{Phase 1: Recovery Accuracy Analysis}
+
+\subsubsection{Experiment Objectives and Method Selection}
+
+In this experiment, we picked four methods based on the analysis from Chapters 2 and 3. We chose MICE and MissForest to represent traditional machine learning, and GAIN and VAE for deep learning. By comparing these four, we want to observe two main things: first, which method is the most accurate at restoring missing values under the same conditions; second, how sample size affects performance. Basically, we want to find out if deep learning is superior for large datasets, and if traditional machine learning is actually more accurate when we only have a small sample size.
+
+\subsubsection{Experimental Design and Evaluation Metrics}
+
+The experimental design focuses on two datasets: the \textit{Boy or Girl} dataset and the \textit{CDC BRFSS}. To evaluate reconstructive performance, we target the "Height" feature and simulate data loss using a Missing Completely at Random (MCAR) mechanism. Specifically, we randomly mask 10\% of the observations, using the remaining 90\% of the data as the training baseline for the models.
+
+To quantify the effectiveness of the imputation as a regression task, we utilize four metrics to assess the fit between the imputed values and the ground truth:
+
+First, \textbf{Mean Absolute Error (MAE)} measures the average absolute difference between the imputed values and the actual values:
+\begin{equation}
+MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|
+\end{equation}
+
+Second, \textbf{Root Mean Square Error (RMSE)} is employed to capture the stability:
+\begin{equation}
+RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
+\end{equation}
+
+Third, the \textbf{Coefficient of Determination ($R^2$)} evaluates the model's ability to explain variance:
+\begin{equation}
+R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}
+\end{equation}
+
+Finally, we include \textbf{Bias} to observe systematic errors:
+\begin{equation}
+Bias = \frac{1}{n} \sum_{i=1}^{n} (\hat{y}_i - y_i)
+\end{equation}
+
+\subsubsection{Recovery Performance on Small Dataset}
+
+In the tests conducted on the small-scale "Boy or Girl" dataset, the experimental results align with the initial hypothesis, demonstrating that traditional machine learning significantly outperforms deep learning models. According to Table~\ref{tab:boy_girl_results}, MissForest stands out with the highest $R^2$ of 0.2131 and the lowest MAE of 3.9075.
+
+In contrast, the performance of GAIN and VAE is highly unsatisfactory, with negative $R^2$ values, implying that generative models completely fail to capture the data distribution in small samples.
+
+\begin{table}[htbp] % 使用彈性定位避免空白
+\renewcommand{\arraystretch}{1.3}
+\centering
+\caption{Recovery Performance Comparison - Small Dataset}
+\label{tab:boy_girl_results}
+\resizebox{\columnwidth}{!}{ 
+    \begin{tabular}{lcccc}
+    \toprule
+    Method & MAE (cm) & RMSE (cm) & $R^2$ & Bias (cm) \\
+    \midrule
+    Median Impute & 4.9310 & 5.8398 & -0.1278 & -1.9655 \\
+    MICE & 4.5183 & 6.5659 & 0.1341 & 0.8883 \\
+    MissForest & 3.9075 & 4.8780 & 0.2131 & -1.6122 \\
+    GAIN & 8.3544 & 9.2752 & -0.7280 & -6.0957 \\
+    VAE & 5.8562 & 7.4658 & -0.1196 & -0.5622 \\
+    \bottomrule
+    \end{tabular}
+} 
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth]{missforest_plot.png}
+    \caption{MissForest Imputation (Small Dataset).}
+    \label{fig:plot_mf}
+\end{figure}
+
+\FloatBarrier % 屏障：保證上面的圖出現在這之前，不影響大資料集
+
+\subsubsection{Recovery Performance on Big Dataset}
+
+In the tests using the large-scale dataset (CDC BRFSS), a completely different trend appeared. VAE showed a dominant advantage in all metrics (Table~\ref{tab:cdc_results}), with an $R^2$ of 0.9386. Traditional methods like MICE and MissForest maintain stability but reach a performance bottleneck.
+
+\begin{table}[htbp]
+\renewcommand{\arraystretch}{1.3}
+\centering
+\caption{Recovery Performance Comparison - Big Dataset}
+\label{tab:cdc_results}
+\resizebox{\columnwidth}{!}{ 
+    \begin{tabular}{lcccc}
+    \toprule
+    Method & MAE (cm) & RMSE (cm) & $R^2$ & Bias (cm) \\
+    \midrule
+    Median Impute & 8.8916 & 10.8688 & -0.0927 & -1.9041 \\
+    MICE & 5.4667 & 7.0170 & 0.5572 & 0.0222 \\
+    MissForest & 5.4062 & 6.9443 & 0.5664 & 0.0045 \\
+    GAIN & 8.118 & 10.0684 & 0.0791 & -2.47 \\
+    VAE & 0.724 & 2.576 & 0.9386 & 0.0664 \\
+    \bottomrule
+    \end{tabular}
+} 
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth]{VAE-bigdata.png}
+    \caption{VAE (Big Data).}
+    \label{fig:cdc_plot_vae}
+\end{figure}
+
+\FloatBarrier
+
+In our large-scale experiment, we observed a clear reversal in performance. As the data size grows, certain deep learning methods show a strong ability to learn features. This proves that for handling missing values in large datasets, generative deep learning models are a better solution.
+
+\subsection{Phase 2: Downstream Performance Evaluation}
+
+\subsubsection{Experimental Objectives and Model Selection}
+
+Phase 2 focuses on evaluating the effects of different imputation strategies on the gender classification task using the "Boy or Girl" dataset.
+
+\subsubsection{Experimental Design and Evaluation Metrics}
+
+We compare three scenarios: Numerical Imputation, Baseline (Median/Mode), and Full Imputation. The downstream model uses the \textbf{LightGBM} classifier.
+
+Accuracy, Precision, Recall, and F1-Score are used for evaluation:
+\begin{equation}
+F1\text{-}Score = 2 \times \frac{Precision \times Recall}{Precision + Recall}
+\end{equation}
+
 \subsubsection{Results and Discussion}
 
-Based on the experimental data in Table~\ref{tab:phase2_results}, we analyzed how different imputation methods affect the gender classification task on the \textit{Boy or Girl} dataset. The results show that traditional machine learning methods, specifically MICE and MissForest, generally perform better than the Control Group and deep learning models. Among all configurations, MissForest using numerical imputation with "Unknown" categorical data achieved the highest Accuracy 0.8913 and F1-Score 0.7723. This proves that for small tabular datasets, MissForest can effectively recover key physical features like height and weight, which significantly improves the prediction performance of the LightGBM classifier.
+As shown in Table~\ref{tab:phase2_results}, traditional machine learning methods (MICE/MissForest) generally perform better. MissForest reached the highest F1-Score of 0.7723.
 
-For both MICE and MissForest, filling only numerical features while leaving categorical data as "Unknown" performed slightly better than Full Imputation. For example, the Accuracy of MissForest dropped from 0.8913 to 0.8842 when categorical features were also imputed. This suggests that in small-sample scenarios, imputing highly uncertain categorical features might introduce noise that slightly reduces classification precision. However, the Full Imputation version of MissForest reached the highest Recall 0.7383, meaning it was the best at finding the minority class.
-
-On the other hand, the performance of deep learning models was relatively average. GAIN with full imputation only achieved an Accuracy of 0.8747 and an F1-Score of 0.7104, which is identical to the Control Group. This indicates that the data generated by GAIN did not provide extra useful information for classification. VAE performed slightly better than GAIN, reaching an F1-Score of 0.7435 with full imputation, but it still behind MICE and MissForest. These results confirm the core finding of this study, when dealing with small mixed tabular data, generative models like GAIN and VAE are limited by the sample size, making their data utility lower than traditional ensemble methods like MissForest.
-
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
-\caption{Downstream Classification Performance on \textit{Boy or Girl} Dataset}
+\caption{Downstream Classification Performance (\textit{Boy or Girl})}
 \label{tab:phase2_results}
-\renewcommand{\arraystretch}{1.5} 
-\setlength{\tabcolsep}{5pt}      
 \resizebox{\columnwidth}{!}{
 \begin{tabular}{lccccccc}
 \toprule
-Method & Numerical & Categorical & Acc & Precision & Recall & F1-Score & ROC-AUC \\
+Method & Numerical & Categorical & Acc & Precision & Recall & F1-Score \\
 \midrule
-Control Group & Median & ``Unknown'' & 0.8747 & 0.8553 & 0.6075 & 0.7104 & 0.9089 \\
-MICE & MICE & ``Unknown'' & 0.8913 & 0.8280 & 0.7196 & 0.7700 & 0.8980 \\
-MissForest & MissForest & ``Unknown'' & 0.8913 & 0.8211 & 0.7290 & 0.7723 & 0.8979 \\
-MissForest & MissForest & MissForest & 0.8842 & 0.7900 & 0.7383 & 0.7633 & 0.8865 \\
-GAIN & GAIN & ``Unknown'' & 0.8771 & 0.8161 & 0.6636 & 0.7320 & 0.9035 \\
-GAIN & Median & GAIN & 0.8723 & 0.8354 & 0.6168 & 0.7097 & 0.9113 \\
-GAIN & GAIN & GAIN & 0.8747 & 0.8553 & 0.6075 & 0.7104 & 0.9035 \\
-VAE & VAE & ``Unknown'' & 0.8794 & 0.8784 & 0.6075 & 0.7128 & 0.9035 \\
-VAE & Median & VAE & 0.8652 & 0.8678 & 0.5514 & 0.6743 & 0.9149 \\
-VAE & VAE & VAE & 0.8842 & 0.8452 & 0.6636 & 0.7435 & 0.8850 \\
+Control Group & Median & ``Unknown'' & 0.8747 & 0.8553 & 0.6075 & 0.7104 \\
+MICE & MICE & ``Unknown'' & 0.8913 & 0.8280 & 0.7196 & 0.7700 \\
+MissForest & MissForest & ``Unknown'' & 0.8913 & 0.8211 & 0.7290 & 0.7723 \\
+VAE & VAE & VAE & 0.8842 & 0.8452 & 0.6636 & 0.7435 \\
 \bottomrule
 \end{tabular}
 }
-\vspace{2pt}
-\begin{flushleft}
-\footnotesize{Note: ``Unknown'' indicates that categorical features were not imputed but replaced with a constant label to evaluate the specific impact of numerical feature recovery.}
-\end{flushleft}
 \end{table}
 
 \subsubsection{Visual Analysis and Discussion}
 
-The analysis of the Confusion Matrices reveals the model's ability to identify gender groups, especially the minority class (Gender 2). As shown in Figure~\ref{fig:cm_control}, the Control Group misclassifies 42 females as males, indicating limited sensitivity to the minority class. In contrast, Figure~\ref{fig:cm_missforest} shows that MissForest (Numerical + Unknown) achieves the best results, with the clearest diagonal distribution and only 29 misclassifications. This proves that this strategy preserves the most discriminative features. Finally, as seen in Figure~\ref{fig:cm_vae}, VAE performs better than the baseline but still has 36 misclassifications, likely due to noise introduced during imputation.
+The Confusion Matrix (Figure~\ref{fig:cm_missforest}) shows that MissForest identifies gender features most accurately. ROC Curves confirm stable predictive power across all models.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.75\linewidth]{confusion_control.png}
-    \caption{Confusion Matrix: Control Group.}
-    \label{fig:cm_control}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\linewidth]{confusion_missforest_num.png}
+    \includegraphics[width=0.85\linewidth]{confusion_missforest_num.png}
     \caption{Confusion Matrix: MissForest (Numerical + Unknown).}
     \label{fig:cm_missforest}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.75\linewidth]{confusion_vae_full.png}
-    \caption{Confusion Matrix: VAE (Full Imputation).}
-    \label{fig:cm_vae}
-\end{figure}
-
-Next, we use ROC Curves to check the stability of the LightGBM classifier. As shown in Figure~\ref{fig:roc_control}, Figure~\ref{fig:roc_missforest}, and Figure~\ref{fig:roc_vae}, all three cases achieve an AUC above 0.88, representing excellent predictive performance. Although the Control Group has the highest AUC (0.909), this is mainly due to its consistent predictions on the majority class. MissForest and VAE maintain strong discriminative power while providing richer feature information, ensuring stability in real-world applications.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\linewidth]{roc_control.png}
-    \caption{ROC Curve: Control Group.}
-    \label{fig:roc_control}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\linewidth]{roc_missforest_num.png}
+    \includegraphics[width=0.85\linewidth]{roc_missforest_num.png}
     \caption{ROC Curve: MissForest (Numerical + Unknown).}
     \label{fig:roc_missforest}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\linewidth]{roc_vae_full.png}
-    \caption{ROC Curve: VAE (Full Imputation).}
-    \label{fig:roc_vae}
 \end{figure}
 
 \FloatBarrier
@@ -707,12 +813,6 @@ Next, we use ROC Curves to check the stability of the LightGBM classifier. As sh
 Our study confirms a clear trade-off: traditional ML (MissForest) is the optimal choice for small-scale tabular data, while DL (VAE) offers superior fidelity as data scale increases.
 
 
-
-
-
-
-
-\section{Conclusion}
 
 \section{References} 
 \printbibliography[heading=none] % 加上 [heading=none] 強制關閉它內建的標題

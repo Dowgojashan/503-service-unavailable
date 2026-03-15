@@ -81,8 +81,8 @@
 \DeclareFieldFormat{doi}{doi: \href{https://doi.org/#1}{#1}} % 2. 強制把大寫 DOI 改成小寫 doi，並保持超連結功能
 
 %%%%%% Title %%%%%%
-% 標題: Helvetica 18-point 粗體 [cite: 27]
-\title{\sffamily\fontsize{18}{20}\bfseries Deep Learning vs. Conventional Methods for Tabular Data Imputation}
+% 標題: Helvetica 18-point 粗體
+\title{\sffamily\fontsize{18}{20}\selectfont\textbf{Deep Learning vs. Conventional Methods for Tabular Data Imputation}}
 
 %%%%%% Authors %%%%%%
 % 排列成 2x2 陣列 (兩上兩下)
@@ -188,7 +188,7 @@ Regarding the treatment of missing values, current literature can primarily be c
 \subsection{The "ML vs. DL" Debate on Tabular Data}
 Historically, missing value imputation relied on conventional machine learning (ML) methods like KNN and Random Forests (e.g., missForest). Recently, deep learning (DL) models such as GANs and Autoencoders have been introduced to capture complex nonlinear relationships.\cite{shahbazian2023generative} However, whether DL can completely replace conventional methods for "Tabular Data"—which mixes continuous and categorical variables—remains controversial.
 
-Unlike images or text, tabular data lacks spatial continuity. Literature shows that tree-based ML models naturally excel at handling such mixed features with stability and minimal hyperparameter tuning. Conversely, while DL generative models (like GAIN or VAE) possess high theoretical capacity, their performance heavily relies on massive datasets. In small-sample scenarios (e.g., < 30,000 records), DL models often struggle to capture the true data distribution, risking convergence issues and "mode collapse".\cite{sun2023deep} Therefore, applying DL to tabular data requires careful consideration of the inherent data structure and sample size.
+Unlike images or text, tabular data lacks spatial continuity. Literature shows that tree-based ML models naturally excel at handling such mixed features with stability and minimal hyperparameter tuning. Conversely, while DL generative models (like GAIN or VAE) possess high theoretical capacity, their performance heavily relies on massive datasets. In small-sample scenarios (e.g., < 10,000 records), DL models often struggle to capture the true data distribution, risking convergence issues and "mode collapse".\cite{sun2023deep} Therefore, applying DL to tabular data requires careful consideration of the inherent data structure and sample size.
 
 \subsection{Scope and Goals}
 This study focuses on comparing the performance of conventional machine learning methods and deep generative models for tabular data imputation through both literature review and empirical experiments, and explores the impact of sample size on the performance of these two techniques.
@@ -303,10 +303,6 @@ Statistical error metrics are employed to assess point-wise accuracy in both sma
     \item \textbf{Root Mean Square Error (RMSE)}: A quadratic scoring rule that penalizes large errors more heavily, reflecting the stability of the imputation:
     \begin{equation}
         RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
-    \end{equation}
-    \item \textbf{Kullback-Leibler (KL) Divergence}: Specifically for generative models, KL Divergence is used to quantify the difference between the original data distribution ($P$) and the imputed distribution ($Q$), ensuring distributional consistency:
-    \begin{equation}
-        D_{KL}(P \parallel Q) = \sum_{x \in X} P(x) \log\left(\frac{P(x)}{Q(x)}\right)
     \end{equation}
 \end{itemize}
 

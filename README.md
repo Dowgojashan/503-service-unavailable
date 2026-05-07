@@ -1,8 +1,6 @@
 # Project Overview
 
-本專案包含兩個主要部分：
-1. **E-commerce Support Agent 實驗**：位於根目錄的 Python 筆記本（`phase1_easy.ipynb`, `phase2_medium.ipynb`, `phase3_hard.ipynb`），主要測試 LLM（如 Gemma-3）在不同難度下的對話表現。
-2. **資料缺失補全研究 (Data Imputation)**：位於 `A1/` 目錄，包含一篇關於 `Deep Learning vs. Conventional Methods for Tabular Data Imputation` 的論文及其相關圖表。
+本專案主要為 **E-commerce Support Agent 實驗**：位於根目錄的 Python 筆記本（`phase1_easy.ipynb`, `phase2_medium.ipynb`, `phase3_hard.ipynb`），主要測試 LLM（如 Gemma-3）在不同難度下的對話表現。
 
 ---
 
@@ -39,7 +37,6 @@ GEMINI_API_KEY=您的_API_KEY_在這邊
 ## 專案結構說明
 
 - `/`: 存放主實驗筆記本與原始資料。
-- `/A1/`: 存放學術論文原始碼 (`main.tex`)、PDF 報告與實驗結果圖表。
 - `/experiment_logs/`: 存放 LLM 實驗的執行紀錄 (JSON 格式)。
 - `fact_sheet_*.json`: 存放實驗中使用的事實清單。
 

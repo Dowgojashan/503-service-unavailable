@@ -290,21 +290,7 @@ Diffusion models represent the current frontier in generative modeling, simulati
     \item \textbf{TabDDPM:} Specifically designed for tabular data, TabDDPM captures intricate feature dependencies and has been shown to be highly effective in maintaining the integrity of the data structure during the imputation process. By iteratively refining the data from a noise distribution back to the manifold of real observations, it provides a robust solution for complex imputation tasks. 
 \end{itemize}
 
-\subsection{Evaluation Metrics}
-To rigorously evaluate the efficacy of the proposed imputation frameworks, this study utilizes metrics categorized under Imputation Fidelity. These measures quantify the proximity between the imputed values and the original ground truth. This assessment is critical for determining a model's ability to restore missing information without introducing significant statistical noise.
 
-\subsubsection{Imputation Fidelity}
-Statistical error metrics are employed to assess point-wise accuracy in both small-sample and large-scale empirical settings.\cite{sun2023deep}
-\begin{itemize}
-    \item \textbf{Mean Absolute Error (MAE)}: Measures the average magnitude of absolute differences between imputed and true values:
-    \begin{equation}
-        MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|
-    \end{equation}
-    \item \textbf{Root Mean Square Error (RMSE)}: A quadratic scoring rule that penalizes large errors more heavily, reflecting the stability of the imputation:
-    \begin{equation}
-        RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
-    \end{equation}
-\end{itemize}
 
 \section{Literature Findings and Comparative Analysis}
 
@@ -536,52 +522,51 @@ In the large-scale dataset (CDC BRFSS) tests, the visual distribution plots reve
 
 Regarding traditional machine learning, MICE and MissForest (Figure~\ref{fig:cdc_plot_mice} and Figure~\ref{fig:cdc_plot_mf}) show improved stability compared to small samples. The points begin to align more clearly with the diagonal line, proving that the models successfully learned the linear trends between features. However, their density along the diagonal is lower than VAE, suggesting that traditional ensemble methods reach a performance bottleneck when dealing with massive datasets.
 
-\vspace{1\baselineskip}
-
-\begin{figure}[H] % 使用 [t] 讓這一組圖待在該頁頂部
+% 第 1 張：Median 獨立出來
+\begin{figure}[htbp]
     \centering
-    
-    % 第 1 張：Median
     \includegraphics[width=0.85\linewidth]{median-bigdata.png}
     \caption{Median Imputation. Similar to the small dataset, it fails to capture any individual variance.}
     \label{fig:cdc_plot_median}
-    
-    \vspace{1em} % 增加圖片之間的垂直間距
-    
-    % 第 2 張：MICE
+\end{figure}
+
+% 第 2 張：MICE 獨立出來
+\begin{figure}[htbp]
+    \centering
     \includegraphics[width=0.85\linewidth]{mice_bigdata.png}
     \caption{MICE Imputation. The distribution begins to align with the diagonal, but still shows noticeable spread.}
     \label{fig:cdc_plot_mice}
-    
-    \vspace{1em}
-    
-    % 第 3 張：MissForest
+\end{figure}
+
+% 第 3 張：MissForest 獨立出來
+\begin{figure}[htbp]
+    \centering
     \includegraphics[width=0.85\linewidth]{missforest_bigdata.png}
     \caption{MissForest Imputation. Performance is stable, but the density around the diagonal is lower than VAE.}
     \label{fig:cdc_plot_mf}
 \end{figure}
 
 
-On the other hand, the deep learning models show extreme differences. As seen in Figure~\ref{fig:cdc_plot_gain}, GAIN continues to struggle with convergence. The imputed points are scattered only within a horizontal band around the median, failing to follow the diagonal line. This confirms "mode collapse," where the generator only predicts average values to stay "safe" from the discriminator. In sharp contrast, VAE (Figure~\ref{fig:cdc_plot_vae}) demonstrates superior distribution learning, with points tightly concentrated along the $y=x$ diagonal. With sufficient data support, the latent space of VAE effectively reconstructs the complex underlying logic of tabular data, achieving the highest imputation fidelity in the entire group.
-
-
 % 4. GAIN (CDC)
-\begin{figure}[ht]
+\begin{figure}[htbp] % <--- 統一改成 htbp
     \centering
     \includegraphics[width=0.75\linewidth]{gain_bigdata.png}
     \caption{GAIN. The points are widely scattered in a horizontal pattern, showing mode collapse around the median.}
     \label{fig:cdc_plot_gain}
 \end{figure}
 
+On the other hand, the deep learning models show extreme differences. As seen in Figure~\ref{fig:cdc_plot_gain}, GAIN continues to struggle with convergence. The imputed points are scattered only within a horizontal band around the median, failing to follow the diagonal line. This confirms "mode collapse," where the generator only predicts average values to stay "safe" from the discriminator. In sharp contrast, VAE (Figure~\ref{fig:cdc_plot_vae}) demonstrates superior distribution learning, with points tightly concentrated along the $y=x$ diagonal. With sufficient data support, the latent space of VAE effectively reconstructs the complex underlying logic of tabular data, achieving the highest imputation fidelity in the entire group.
+
+
 % 5. VAE (CDC)
-\begin{figure}[ht]
+\begin{figure}[htbp] % <--- 統一改成 htbp
     \centering
     \includegraphics[width=0.75\linewidth]{VAE-bigdata.png}
     \caption{VAE. The points are highly concentrated along the $y=x$ line, visually confirming the $R^2 = 0.9386$ result.}
     \label{fig:cdc_plot_vae}
 \end{figure}
 
-\FloatBarrier
+% \FloatBarrier % 繼續保持註解掉，讓版面自由流動
 
 In our large-scale experiment, we observed a clear reversal in performance. As the data size grows, the recovery accuracy of traditional machine learning remains stable, but it seems to have a limit. On the other hand, with enough data support, certain deep learning methods show a strong ability to learn features, which greatly improves the imputation accuracy. This proves that for handling missing values in large datasets, generative deep learning models are a better and more promising solution.
 
@@ -683,31 +668,35 @@ The analysis of the Confusion Matrices reveals the model's ability to identify g
 \end{figure}
 % --- 混淆矩陣圖片結束 ---
 
-\FloatBarrier
+% \FloatBarrier % <--- 1. 把它註解掉，不要強制阻擋排版流動
 
 Next, we use ROC Curves to check the stability of the LightGBM classifier. As shown in Figure~\ref{fig:roc_control}, Figure~\ref{fig:roc_missforest}, and Figure~\ref{fig:roc_vae}, all three cases achieve an AUC above 0.88, representing excellent predictive performance. Although the Control Group has the highest AUC (0.909), this is mainly due to its consistent predictions on the majority class. MissForest and VAE maintain strong discriminative power while providing richer feature information, ensuring stability in real-world applications.
 
-% --- ROC 曲線圖片開始 ---
-\begin{figure}[ht]
+% --- 獨立把 14 號圖抽出來，它就會自動塞進左欄文字下方 ---
+\begin{figure}[htbp] 
     \centering
     \includegraphics[width=0.75\linewidth]{roc_control.png}
     \caption{ROC Curve: Control Group. High AUC reflects stability on original distributions.}
     \label{fig:roc_control}
 \end{figure}
 
-\begin{figure}[ht]
+% --- 15、16 號圖綁在一起，LaTeX 會自動把這包推去右欄頂部 ---
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\linewidth]{roc_missforest_num.png}
     \caption{ROC Curve: MissForest (Numerical + Unknown). The model maintains robust discriminative power.}
     \label{fig:roc_missforest}
-\end{figure}
-
-\begin{figure}[ht]
-    \centering
+    
+    \vspace{1.5em} % 15、16 號之間的垂直距離
+    
     \includegraphics[width=0.75\linewidth]{roc_vae_full.png}
     \caption{ROC Curve: VAE (Full Imputation). Shows a slight decrease in power due to noise on a small sample size.}
     \label{fig:roc_vae}
 \end{figure}
+% --- ROC 曲線圖片結束 ---
+
+% 築起隱形牆，確保結論一定在所有圖片之後
+\FloatBarrier
 
 \section{Conclusion}
 

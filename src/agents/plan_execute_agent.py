@@ -3,48 +3,49 @@ from src.agents.base import BaseAgent
 from src.tools.simulator import ToolSimulator
 
 class PlanExecuteAgent(BaseAgent):
-    def __init__(self, model_name="gemini-1.5-flash", system_instruction=None):
+    def __init__(self, model_name="gemini-2.5-flash", system_instruction=None):
         super().__init__(model_name, system_instruction)
         self.simulator = ToolSimulator()
 
     def run(self, user_input, case_id=None):
         self.history.append({"role": "user", "content": user_input})
+        total_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         
         # Step 1: Planning
         plan_prompt = f"User Input: {user_input}\nPlease create a multi-step plan to resolve this request. List the steps clearly."
-        plan = self._call_llm(plan_prompt)
-        print(f"--- Plan ---\n{plan}")
+        plan, usage = self._call_llm(plan_prompt)
+        for k in total_usage: total_usage[k] += usage[k]
+        full_trace = f"--- Plan ---\n{plan}"
         
         # Step 2: Execution
-        # We pass the plan to the executor
-        execution_prompt = f"User Input: {user_input}\nPlan: {plan}\nNow execute the plan. Use tools if necessary. Provide a final response."
-        
-        # For simplicity, we'll allow one round of execution which can include multiple tool calls if the model supports it 
-        # or we can loop. Let's do a simple loop for execution steps.
-        
-        current_context = execution_prompt
+        current_context = f"User Input: {user_input}\nPlan: {plan}\nNow execute the plan. Use tools if necessary. Provide a final response."
         for i in range(3): # Max 3 execution steps
-            response = self._call_llm(current_context)
-            print(f"--- Execution Step {i+1} ---\n{response}")
+            response, usage = self._call_llm(current_context)
+            for k in total_usage: total_usage[k] += usage[k]
+            full_trace += f"\n--- Execution Step {i+1} ---\n{response}"
             
             action_match = re.search(r"Action:\s*(\w+)\((.*)\)", response)
             if action_match:
                 tool_name = action_match.group(1)
                 tool_args = action_match.group(2).replace('"', '').replace("'", "").strip()
                 observation = self._execute_tool(tool_name, tool_args, case_id)
+                full_trace += f"\nObservation: {observation}\n"
                 current_context += f"\n{response}\nObservation: {observation}\n"
             else:
                 break
         
         # Final Step: Consolidate
         final_prompt = f"{current_context}\nBased on the plan and execution above, provide the Final Response to the user."
-        final_answer = self._call_llm(final_prompt)
+        final_answer, usage = self._call_llm(final_prompt)
+        for k in total_usage: total_usage[k] += usage[k]
         
         if "Final Response:" in final_answer:
-            final_answer = final_answer.split("Final Response:")[1].strip()
+            final_result = final_answer.split("Final Response:")[1].strip()
+        else:
+            final_result = final_answer
             
-        self.history.append({"role": "assistant", "content": final_answer})
-        return final_answer
+        self.history.append({"role": "assistant", "content": full_trace})
+        return final_result, total_usage
 
     def _execute_tool(self, tool_name, tool_args, case_id):
         if not case_id: return "Error: case_id is required."

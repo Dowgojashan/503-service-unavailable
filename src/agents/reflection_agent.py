@@ -3,42 +3,42 @@ from src.tools.simulator import ToolSimulator
 import re
 
 class ReflectionAgent(BaseAgent):
-    def __init__(self, model_name="gemini-1.5-flash", system_instruction=None):
+    def __init__(self, model_name="gemini-2.5-flash", system_instruction=None):
         super().__init__(model_name, system_instruction)
         self.simulator = ToolSimulator()
 
     def run(self, user_input, case_id=None):
-        # Step 1: Initial Generation & Tool use (if needed)
-        # For simplicity, we use a ReAct-like loop for tool access, 
-        # but we force a reflection step before the final answer.
-        
         self.history.append({"role": "user", "content": user_input})
+        total_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         
-        # We'll use a specific prompt to trigger the Reflection pattern
+        # Step 1: Reflection Process
         prompt = f"User Input: {user_input}\nPlease follow the Reflection pattern: Initial Draft -> Reflection -> Final Response."
+        response, usage = self._call_llm(prompt)
+        for k in total_usage: total_usage[k] += usage[k]
         
-        response = self._call_llm(prompt)
-        print(f"--- Reflection Process ---\n{response}")
+        full_trace = f"--- Reflection Process ---\n{response}"
         
-        # Check for tool use in the initial draft or reflection
-        # (This agent is a bit more 'all-in-one' for this implementation)
+        # Check for tool use
         action_match = re.search(r"Action:\s*(\w+)\((.*)\)", response)
         if action_match:
             tool_name = action_match.group(1)
             tool_args = action_match.group(2).replace('"', '').replace("'", "").strip()
             observation = self._execute_tool(tool_name, tool_args, case_id)
+            full_trace += f"\nObservation: {observation}\n"
             
-            # Refinement based on tool observation
+            # Refinement
             refine_prompt = f"{prompt}\n{response}\nObservation: {observation}\nNow provide the Final Response based on this observation."
-            response = self._call_llm(refine_prompt)
+            response, usage = self._call_llm(refine_prompt)
+            for k in total_usage: total_usage[k] += usage[k]
+            full_trace += f"\n--- Final Refinement ---\n{response}"
             
         if "Final Response:" in response:
             final_answer = response.split("Final Response:")[1].strip()
         else:
-            final_answer = response
+            final_answer = response # Fallback
             
-        self.history.append({"role": "assistant", "content": response})
-        return final_answer
+        self.history.append({"role": "assistant", "content": full_trace})
+        return final_answer, total_usage
 
     def _execute_tool(self, tool_name, tool_args, case_id):
         if not case_id: return "Error: case_id is required."

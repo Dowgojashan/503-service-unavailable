@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class BaseAgent(ABC):
-    def __init__(self, model_name="gemini-2.5-flash", system_instruction=None):
+    def __init__(self, model_name="gemini-3.1-flash-lite", system_instruction=None):
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
             raise ValueError("GEMINI_API_KEY not found in environment variables.")
@@ -25,15 +25,15 @@ class BaseAgent(ABC):
         """
         pass
 
-    def _call_llm(self, prompt, retries=6):
+    def _call_llm(self, prompt, retries=8):
         """
         Helper to call the LLM with Enhanced Exponential Backoff for 429, 500, and 503 errors.
-        Retries: 6 attempts with increasing backoff (5s, 10s, 20s, 30s, 40s, 60s)
+        Retries: 8 attempts with increasing backoff (5s, 10s, 20s, 40s, 60s, 90s, 120s, 150s)
         """
         full_prompt = f"{self.system_instruction}\n\n{prompt}" if self.system_instruction else prompt
         
         # Enhanced backoff strategy: longer waits for server errors
-        backoff_times = [5, 10, 20, 30, 40, 60]
+        backoff_times = [5, 10, 20, 40, 60, 90, 120, 150]
         
         for attempt in range(retries):
             try:
@@ -43,7 +43,7 @@ class BaseAgent(ABC):
                     config={
                         "temperature": 0.0,
                         "top_p": 0.9,
-                        "max_output_tokens": 800,
+                        "max_output_tokens": 1000,
                     }
                 )
                 
@@ -64,10 +64,10 @@ class BaseAgent(ABC):
                 else:
                     raise e
             except errors.ServerError as e:
-                wait_time = backoff_times[attempt] if attempt < len(backoff_times) else 60
+                wait_time = backoff_times[attempt] if attempt < len(backoff_times) else 180
                 if "503" in str(e):
-                    # Service unavailable: use longer backoff
-                    wait_time = max(wait_time, 40)
+                    # Service unavailable: use even longer backoff for stability
+                    wait_time = max(wait_time, 60)
                     print(f"!!! 503 Service Unavailable. Waiting {wait_time}s... (Attempt {attempt+1}/{retries})")
                 elif "500" in str(e):
                     print(f"!!! 500 Server Error. Waiting {wait_time}s... (Attempt {attempt+1}/{retries})")

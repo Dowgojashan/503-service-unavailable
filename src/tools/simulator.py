@@ -17,22 +17,36 @@ class ToolSimulator:
             return None
         return self.data[case_id]
 
-    def query_order(self, case_id, order_id):
+    def query_order(self, case_id, search_param):
         """
-        Simulates querying order details.
+        Simulates querying order details by Order ID or Email.
         """
         case_data = self._get_case_data(case_id)
         if not case_data:
             return {"error": f"Case ID {case_id} not found."}
 
         ground_truth_order_id = case_data["ground_truth"]["order_info"]["order_number"]
+        ground_truth_email = case_data["ground_truth"]["customer_info"].get("email", "")
         
-        if order_id != ground_truth_order_id:
-            return {"error": f"Order ID {order_id} does not match our records for this case."}
+        search_param = search_param.strip().lower()
+        
+        # Check by Order ID
+        if search_param.upper() == ground_truth_order_id.strip().upper():
+             return {
+                "status": "success",
+                "data": case_data["ground_truth"]["order_info"]
+            }
+            
+        # Check by Email
+        if search_param == ground_truth_email.strip().lower():
+             return {
+                "status": "success",
+                "data": case_data["ground_truth"]["order_info"]
+            }
 
         return {
-            "status": "success",
-            "data": case_data["ground_truth"]["order_info"]
+            "error": f"Search for '{search_param}' returned no results in Case {case_id}.",
+            "hint": "You can search using either the Order ID (e.g., ORD123) or the Customer Email. Please verify the information with the customer."
         }
 
     def track_shipping(self, case_id, order_id):
@@ -45,8 +59,9 @@ class ToolSimulator:
 
         ground_truth_order_id = case_data["ground_truth"]["order_info"]["order_number"]
         
-        if order_id != ground_truth_order_id:
-            return {"error": f"Order ID {order_id} does not match our records for this case."}
+        # Robust fuzzy matching
+        if order_id.strip().upper() != ground_truth_order_id.strip().upper():
+            return {"error": f"Track Shipping failed: Order '{order_id}' not found in Case {case_id}."}
 
         shipping_date = case_data["ground_truth"]["order_info"].get("shipping_date", "N/A")
         status = case_data["ground_truth"]["order_info"].get("status", "Unknown")
@@ -70,8 +85,9 @@ class ToolSimulator:
 
         ground_truth_order_id = case_data["ground_truth"]["order_info"]["order_number"]
         
-        if order_id != ground_truth_order_id:
-            return {"error": f"Order ID {order_id} does not match our records for this case."}
+        # Robust fuzzy matching
+        if order_id.strip().upper() != ground_truth_order_id.strip().upper():
+            return {"error": f"Refund application failed: Order '{order_id}' not found in Case {case_id}."}
 
         refund_info = case_data["ground_truth"].get("refund_info", {})
         

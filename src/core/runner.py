@@ -7,7 +7,7 @@ from src.core.factory import AgentFactory
 from src.agents.customer_agent import CustomerAgent
 
 class DialogueRunner:
-    def __init__(self, model_name="gemini-2.5-flash"):
+    def __init__(self, model_name="gemini-3.1-flash-lite"):
         self.model_name = model_name
         self.instructions_dir = "prompts/system_instructions"
         self.api_error_log = []  # Track API errors for diagnostics
@@ -79,7 +79,7 @@ class DialogueRunner:
         
         for turn_idx in range(max_turns):
             # --- TOKEN SAFETY VALVE ---
-            if acc_usage["grand_total_tokens"] > 4000:
+            if acc_usage["grand_total_tokens"] > 30000:
                 print("!!! TOKEN SAFETY VALVE TRIGGERED")
                 status = "FAILED_TOKEN_LIMIT"
                 break
@@ -115,7 +115,108 @@ class DialogueRunner:
             agent_input = f"{customer_msg}\n\n[MANDATORY HINT]: Known info: {info_str}. If ID is present, you MUST use tools to provide the FINAL solution. Do NOT just say 'thank you' or 'how can I help'."
             
             service_final, service_usage = service_agent.run(agent_input, case_id=case_id)
+
+            # --- [NEW] ReAct Execution Assertion ---
+            # If the agent's Thought implies a lookup but no Action tag is provided, force it.
+            if agent_type == "ReAct" and "Action:" not in service_final and "Final Answer:" in service_final:
+                lower_final = service_final.lower()
+                lookup_keywords = ["search", "query", "lookup", "check the status", "verify", "order details"]
+                if any(kw in lower_final for kw in lookup_keywords):
+                    print("!!! [EXECUTION ASSERTION] Agent mentioned lookup but missing Action tag. Retrying...")
+                    error_prompt = "Error: You mentioned a lookup in your Thought but did not provide a valid Action tag. Please provide the Action tag now to get real data."
+                    service_final, next_usage = service_agent.run(error_prompt, case_id=case_id)
+                    for k in service_usage: service_usage[k] += next_usage[k]
+
+            # --- [NEW] ReAct Mode Observation Injection (Closed-Loop) ---
+            # If the agent returned a tool call, we loop until we get a non-tool-call final response
+            while agent_type == "Reflection" and "[Tool Call:" in service_final:
+                match = re.search(r"\[Tool Call:\s*(\w+)\s*\((.*?)\)\]", service_final)
+                if match:
+                    # [Improved Parsing] Extract value from "key=value" or just "value"
+                    if "=" in tool_args:
+                        # Extract everything after the first "="
+                        tool_args = tool_args.split("=", 1)[1].strip()
+                    
+                    print(f"--- [RUNNER INTERCEPT] Executing: {tool_name}({tool_args}) ---")
+                    
+                    # 1. Execute tool
+                    observation = service_agent._execute_tool(tool_name, tool_args, case_id)
+                    
+                    # 2. Inject Observation into Agent history
+                    obs_prompt = f"Observation: {observation}"
+                    print(f"--- [RUNNER INJECT] Observation: {observation} ---")
+                    
+                    # 3. Re-trigger Agent to process the observation
+                    service_final, next_usage = service_agent.run(obs_prompt, case_id=case_id)
+                    
+                    # Merge token usage
+                    for k in service_usage: service_usage[k] += next_usage[k]
+                else:
+                    break # Safety break if regex fails despite tag presence
+
+            # --- [NEW] ReAct Mode Observation Injection (Closed-Loop) ---
+            while agent_type == "ReAct" and "Action:" in service_final:
+                # [Action Truncation] Ensure we don't process hallucinated Observations
+                if "Observation:" in service_final:
+                    service_final = service_final.split("Observation:")[0].strip()
+                
+                match = re.search(r"Action:\s*(\w+)\((.*?)\)", service_final)
+                if match:
+                    tool_name = match.group(1)
+                    tool_args = match.group(2).replace('"', '').replace("'", "").strip()
+                    
+                    # [Improved Parsing] Extract value from "key=value" or just "value"
+                    if "=" in tool_args:
+                        tool_args = tool_args.split("=", 1)[1].strip()
+                    
+                    print(f"--- [RE-ACT INTERCEPT] Executing: {tool_name}({tool_args}) ---")
+                    
+                    # 1. Execute tool
+                    observation = service_agent._execute_tool(tool_name, tool_args, case_id)
+                    
+                    # 2. Inject Observation into Agent history
+                    obs_prompt = f"Observation: {observation}"
+                    print(f"--- [RE-ACT INJECT] Observation: {observation} ---")
+                    
+                    # 3. Re-trigger Agent to process the observation
+                    service_final, next_usage = service_agent.run(obs_prompt, case_id=case_id)
+                    
+                    # Merge token usage
+                    for k in service_usage: service_usage[k] += next_usage[k]
+                else:
+                    break 
+
+            # --- [CRITICAL] Thought Leakage Block (The Ultimate Defense) ---
+            # 1. Prioritize content after the final answer labels
+            if "Final Response:" in service_final:
+                service_final = service_final.split("Final Response:")[-1].strip()
+            elif "Final Answer:" in service_final:
+                service_final = service_final.split("Final Answer:")[-1].strip()
             
+            # 2. Scan line by line and remove all lines containing thought labels (Destructive Cleanup)
+            lines = service_final.split("\n")
+            clean_lines = []
+            forbidden_tokens = [
+                "Initial Draft", "Reflection", "Draft:", "Observation:", "Action:", "Final Response:", "Final Answer:",
+                "Verification", "Goal Anchoring", "Fact Check", "Policy Check", "Tone Check", "Security Check",
+                "Action Integrity", "[Tool Call:", "Thought:"
+            ]
+            for line in lines:
+                if not any(token.lower() in line.lower() for token in forbidden_tokens):
+                    clean_lines.append(line)
+            service_final = "\n".join(clean_lines).strip()
+
+            # 3. If cleaning results in an empty string (meaning the entire output was thoughts), 
+            # fallback to the last segment of the original output that doesn't look like a thought.
+            if not service_final:
+                 # Try to find something that doesn't look like a thought
+                 for line in reversed(lines):
+                     if not any(token.lower() in line.lower() for token in forbidden_tokens) and line.strip():
+                         service_final = line.strip()
+                         break
+                 if not service_final:
+                     service_final = lines[-1].strip()
+
             # Update tokens (includes all internal ReAct iterations)
             acc_usage["total_prompt_tokens"] += service_usage["prompt_tokens"]
             acc_usage["total_completion_tokens"] += service_usage["completion_tokens"]
@@ -136,16 +237,19 @@ class DialogueRunner:
                 break
             response_history.append(service_final)
 
-            # Task Completion Check
+            # --- Task Completion Check (Reliability Update) ---
             full_trace = service_agent.history[-1]["content"]
-            if "Observation:" in full_trace and "{'status': 'success'" in full_trace:
+            # Only count as tool triggered if "Observation:" is followed by a non-error JSON
+            if "Observation:" in full_trace and any(ok in full_trace for ok in ["'status': 'success'", '"status": "success"']):
                 tool_triggered = True
-                if any(k in service_final.lower() for k in ["cancel", "refund", "status", "date", "shipped", "delivered"]):
+                # Success requires both tool trigger AND a meaningful response based on it
+                if any(k in service_final.lower() for k in ["cancel", "refund", "status", "date", "shipped", "delivered", "eligible"]):
                     task_resolved = True
 
             if agent_type == "Single-slot" and any(k in service_final.lower() for k in ["cancel", "refunded", "status is", "order number"]):
                 task_resolved = True
                 tool_triggered = True 
+ 
 
             turn_data["service_agent"] = {
                 "final_answer": service_final,
@@ -186,4 +290,4 @@ if __name__ == "__main__":
     with open("data/fact_sheets.json", "r", encoding="utf-8") as f:
         all_facts = json.load(f)
     runner = DialogueRunner()
-    runner.run_conversation("CASE_001", all_facts["CASE_001"], "Reflection", "Polite")
+    runner.run_conversation("CASE_001", all_facts["CASE_001"], "ReAct", "Polite")

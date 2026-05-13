@@ -5,7 +5,7 @@ from src.agents.plan_execute_agent import PlanExecuteAgent
 
 class AgentFactory:
     @staticmethod
-    def create_agent(agent_type, model_name="gemini-1.5-flash", system_instruction=None):
+    def create_agent(agent_type, model_name="gemini-3.1-flash-lite", system_instruction=None):
         """
         Factory method to create an agent based on the specified type.
         """

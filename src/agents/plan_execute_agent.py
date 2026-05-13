@@ -3,7 +3,7 @@ from src.agents.base import BaseAgent
 from src.tools.simulator import ToolSimulator
 
 class PlanExecuteAgent(BaseAgent):
-    def __init__(self, model_name="gemini-2.5-flash", system_instruction=None):
+    def __init__(self, model_name="gemini-3.1-flash-lite", system_instruction=None):
         super().__init__(model_name, system_instruction)
         self.simulator = ToolSimulator()
 

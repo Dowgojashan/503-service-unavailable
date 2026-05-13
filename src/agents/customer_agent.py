@@ -4,7 +4,7 @@ class CustomerAgent(BaseAgent):
     """
     Customer Agent: Simulates a human customer with a specific persona and task.
     """
-    def __init__(self, model_name="gemini-3.1-flash-lite", persona_instruction=None, fact_sheet=None):
+    def __init__(self, model_name="gemma-4-31b-it", persona_instruction=None, fact_sheet=None):
         # Fix: Read task from fact_sheet["agent_input"]
         task_description = fact_sheet.get("agent_input", "")
         # metadata contains intent

@@ -7,7 +7,7 @@ from src.core.factory import AgentFactory
 from src.agents.customer_agent import CustomerAgent
 
 class DialogueRunner:
-    def __init__(self, model_name="gemini-3.1-flash-lite"):
+    def __init__(self, model_name="gemma-4-31b-it"):
         self.model_name = model_name
         self.instructions_dir = "prompts/system_instructions"
         self.api_error_log = []  # Track API errors for diagnostics
@@ -136,6 +136,12 @@ class DialogueRunner:
                 
                 # Case A: Tool Call detected
                 if "[Tool Call:" in service_final:
+                    # [OPTIMIZATION] Check if conversation is already resolved
+                    if task_resolved and is_farewell(customer_msg):
+                        print(">>> [RUNNER] Task already resolved and customer said goodbye. Blocking redundant tool call.")
+                        service_final = "Thank you for your patience. Have a great day! (System: Tool call blocked for resolved case)"
+                        break
+
                     match = re.search(r"\[Tool Call:\s*(\w+)\s*\((.*?)\)\]", service_final)
                     if match:
                         tool_name = match.group(1)
@@ -156,6 +162,15 @@ class DialogueRunner:
                 # Case B: Incomplete Reflection (No Tool Call AND No Final Response)
                 elif "Final Response:" not in service_final:
                     print(f"!!! [RUNNER] Incomplete Reflection detected. Retrying iteration {reflection_iter}...")
+                    
+                    # [NEW] Force switch to Single-slot fallback if retries exhausted
+                    if reflection_iter >= 3:
+                        print("!!! [RUNNER] Reflection retries exhausted. Force-switching to Single-slot logic for this turn.")
+                        fallback_prompt = f"Dialogue Context: {customer_msg}\n\nPlease provide a final, polite response to the user without any internal headers."
+                        service_final, next_usage = service_agent._call_llm(fallback_prompt) # Direct LLM call
+                        for k in service_usage: service_usage[k] += next_usage[k]
+                        break
+
                     retry_prompt = "[SYSTEM]: You stopped early without a Final Response or a Tool Call. Please finish your reflection and provide the Final Response now."
                     service_final, next_usage = service_agent.run(retry_prompt, case_id=case_id)
                     for k in service_usage: service_usage[k] += next_usage[k]

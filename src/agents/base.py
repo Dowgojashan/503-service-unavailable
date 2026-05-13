@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class BaseAgent(ABC):
-    def __init__(self, model_name="gemini-3.1-flash-lite", system_instruction=None):
+    def __init__(self, model_name="gemma-4-31b-it", system_instruction=None):
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
             raise ValueError("GEMINI_API_KEY not found in environment variables.")

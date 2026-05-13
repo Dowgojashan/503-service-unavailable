@@ -36,6 +36,7 @@ def diagnose():
         # 注意：gemini-2.0-flash-exp 是新的模型
         # gemma-7b, gemma2-27b 等是老模型，可能不再支持
         models_to_test = [
+            "gemma-4-31b-it",
             "gemini-3.1-flash-lite",
             "gemini-2.0-flash",
             "gemini-2.0-flash-lite",
@@ -94,6 +95,7 @@ def diagnose():
   2. ✗ 檢查 API Key 所關聯的專案設定
 
 推薦使用的模型：
+  - gemma-4-31b-it (本專案目前首選模型)
   - gemini-3.1-flash-lite (最新、速度快、適合此專案)
   - gemini-2.0-flash (最新、免費配額充足)
   - gemini-1.5-flash (穩定、廉價)

@@ -6,7 +6,7 @@ def test_case_001():
         with open("data/fact_sheets.json", "r", encoding="utf-8") as f:
             all_facts = json.load(f)
         
-        runner = DialogueRunner(model_name="gemini-3.1-flash-lite") # Use newest lite model
+        runner = DialogueRunner(model_name="gemma-4-31b-it") # Use newest lite model
         result = runner.run_conversation("CASE_001", all_facts["CASE_001"], "Reflection", "Polite")
         
         print("\n--- Test Completed ---")

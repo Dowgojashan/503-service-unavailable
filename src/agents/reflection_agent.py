@@ -3,7 +3,7 @@ from src.tools.simulator import ToolSimulator
 import re
 
 class ReflectionAgent(BaseAgent):
-    def __init__(self, model_name="gemini-3.1-flash-lite", system_instruction=None):
+    def __init__(self, model_name="gemma-4-31b-it", system_instruction=None):
         super().__init__(model_name, system_instruction)
         self.simulator = ToolSimulator()
 
@@ -34,6 +34,14 @@ class ReflectionAgent(BaseAgent):
 
         # 3. Reflection Process
         prompt = f"Dialogue History:\n{history_context}\n\nPlease follow the Reflection pattern: Initial Draft -> Reflection -> Final Response."
+        
+        # [OPTIMIZATION] Simplify reflection for end-stage
+        farewell_keywords = ["thank you", "bye", "goodbye", "have a nice day", "that is all"]
+        is_end_stage = any(w in user_input.lower() for w in farewell_keywords)
+        
+        if is_end_stage:
+            prompt += "\n\n[SYSTEM]: The user is ending the conversation. Skip complex analysis and provide a polite farewell in the Final Response."
+
         response, usage = self._call_llm(prompt)
         for k in total_usage: total_usage[k] += usage[k]
         

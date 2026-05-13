@@ -6,7 +6,7 @@ class SingleSlotAgent(BaseAgent):
     Single-slot Agent: Performs a single LLM call per turn, but with full context.
     Suitable as a baseline for zero-shot performance with history.
     """
-    def __init__(self, model_name="gemini-3.1-flash-lite", system_instruction=None):
+    def __init__(self, model_name="gemma-4-31b-it", system_instruction=None):
         super().__init__(model_name, system_instruction)
         self.simulator = ToolSimulator()
 

@@ -75,9 +75,13 @@ class ToolSimulator:
             }
         }
 
-    def apply_refund(self, case_id, order_id):
+    def apply_refund(self, case_id, order_id, reason="Customer request"):
         """
         Simulates applying for a refund.
+        Parameters:
+          - case_id: The case ID for lookup
+          - order_id: The order ID (ORDxxx)
+          - reason: Reason for refund (optional)
         """
         case_data = self._get_case_data(case_id)
         if not case_data:
@@ -93,8 +97,33 @@ class ToolSimulator:
         
         return {
             "status": "success",
-            "message": "Refund request submitted successfully.",
+            "message": f"Refund request submitted successfully for reason: {reason}",
             "data": refund_info
+        }
+
+    def cancel_order(self, case_id, order_id, reason="Customer request"):
+        """
+        Simulates cancelling an order.
+        Parameters:
+          - case_id: The case ID for lookup
+          - order_id: The order ID (ORDxxx)
+          - reason: Reason for cancellation (optional)
+        """
+        case_data = self._get_case_data(case_id)
+        if not case_data:
+            return {"error": f"Case ID {case_id} not found."}
+
+        ground_truth_order_id = case_data["ground_truth"]["order_info"]["order_number"]
+        
+        # Robust fuzzy matching
+        if order_id.strip().upper() != ground_truth_order_id.strip().upper():
+            return {"error": f"Order cancellation failed: Order '{order_id}' not found in Case {case_id}."}
+
+        return {
+            "status": "success",
+            "message": f"Order successfully cancelled for reason: {reason}",
+            "order_id": order_id,
+            "cancellation_timestamp": "2024-05-14T12:00:00Z"
         }
 
 # Example usage for testing

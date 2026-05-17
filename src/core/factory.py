@@ -5,7 +5,7 @@ from src.agents.plan_execute_agent import PlanExecuteAgent
 
 class AgentFactory:
     @staticmethod
-    def create_agent(agent_type, model_name="gemma-4-31b-it", system_instruction=None):
+    def create_agent(agent_type, model_name="llama3.1:8b", system_instruction=None):
         """
         Factory method to create an agent based on the specified type.
         """

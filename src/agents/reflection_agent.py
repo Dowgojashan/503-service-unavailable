@@ -3,37 +3,18 @@ from src.tools.simulator import ToolSimulator
 import re
 
 class ReflectionAgent(BaseAgent):
-    def __init__(self, model_name="gemma-4-31b-it", system_instruction=None):
+    def __init__(self, model_name="llama3.1:8b", system_instruction=None):
         super().__init__(model_name, system_instruction)
         self.simulator = ToolSimulator()
 
     def run(self, user_input, case_id=None):
         # 1. Update History
-        # If user_input starts with "Observation:", it's a tool result injection
-        if user_input.startswith("Observation:"):
-             self.history.append({"role": "user", "content": user_input})
-        else:
-             self.history.append({"role": "user", "content": user_input})
+        self.history.append({"role": "user", "content": user_input})
 
         total_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         
-        # 2. Build context from history
-        # We include previous turns to ensure the agent remembers the context and tool results
-        history_context = ""
-        for h in self.history[-6:]:
-            role = h['role'].upper()
-            content = h['content']
-            # Clean up content for the prompt to avoid confusing the agent with its own internal traces
-            if role == "ASSISTANT" and "Final Response:" in content:
-                 # Extract only the Final Response for history context to keep it clean
-                 # but keep the full trace in self.history
-                 clean_content = content.split("Final Response:")[-1].strip()
-                 history_context += f"{role}: {clean_content}\n"
-            else:
-                 history_context += f"{role}: {content}\n"
-
-        # 3. Reflection Process
-        prompt = f"Dialogue History:\n{history_context}\n\nPlease follow the Reflection pattern: Initial Draft -> Reflection -> Final Response."
+        # 2. Build current instruction (History is handled by BaseAgent via messages)
+        prompt = "Please follow the Reflection pattern: Initial Draft -> Reflection -> Final Response."
         
         # [OPTIMIZATION] Simplify reflection for end-stage
         farewell_keywords = ["thank you", "bye", "goodbye", "have a nice day", "that is all"]
@@ -90,7 +71,12 @@ class ReflectionAgent(BaseAgent):
 
     def _execute_tool(self, tool_name, tool_args, case_id):
         if not case_id: return "Error: case_id is required."
-        if tool_name == "query_order": return self.simulator.query_order(case_id, tool_args)
-        elif tool_name == "track_shipping": return self.simulator.track_shipping(case_id, tool_args)
-        elif tool_name == "apply_refund": return self.simulator.apply_refund(case_id, tool_args)
-        return f"Error: Tool {tool_name} not found."
+        if tool_name == "query_order": 
+            return self.simulator.query_order(case_id, tool_args)
+        elif tool_name == "track_shipping": 
+            return self.simulator.track_shipping(case_id, tool_args)
+        elif tool_name == "apply_refund": 
+            return self.simulator.apply_refund(case_id, tool_args)
+        elif tool_name == "cancel_order":
+            return self.simulator.cancel_order(case_id, tool_args)
+        return f"Error: Tool '{tool_name}' not found. Only query_order, track_shipping, apply_refund, cancel_order are allowed."

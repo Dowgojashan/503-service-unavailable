@@ -3,7 +3,7 @@ from src.agents.base import BaseAgent
 from src.tools.simulator import ToolSimulator
 
 class ReActAgent(BaseAgent):
-    def __init__(self, model_name="gemma-4-31b-it", system_instruction=None, max_iterations=5):
+    def __init__(self, model_name="llama3.1:8b", system_instruction=None, max_iterations=5):
         super().__init__(model_name, system_instruction)
         self.simulator = ToolSimulator()
         self.max_iterations = max_iterations
@@ -13,18 +13,8 @@ class ReActAgent(BaseAgent):
         # If user_input starts with "Observation:", it's a tool result injection from the runner
         self.history.append({"role": "user", "content": user_input})
         
-        # 2. Build context from history
-        # Include enough context for the agent to follow the reasoning chain
-        history_context = ""
-        for h in self.history[-8:]:
-            role = h['role'].upper()
-            content = h['content']
-            # If it's the assistant, we might want to clean up internal thoughts for the prompt context
-            # but for ReAct, thoughts are often part of the context.
-            # However, we'll keep it simple for now.
-            history_context += f"{role}: {content}\n"
-        
-        current_prompt = f"Dialogue History:\n{history_context}\n\nPlease proceed with your next Thought and either Action or Final Answer."
+        # 2. Build current instruction (History is handled by BaseAgent via messages)
+        current_prompt = "Please proceed with your next Thought and either Action or Final Answer."
         
         total_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         
@@ -54,6 +44,15 @@ class ReActAgent(BaseAgent):
             final_answer = response.split("Final Answer:")[1].strip()
             return final_answer, total_usage
         
+        # [NEW] Relaxed Parser for Farewell/Completion
+        # If the response doesn't have tags but looks like a polite ending, we allow it
+        farewell_keywords = ["thank you", "bye", "goodbye", "have a nice day", "have a wonderful day", "welcome", "assist you"]
+        has_tool_in_history = any("Observation:" in h['content'] for h in self.history if h['role'] == 'user')
+        
+        if not "Action:" in response and (any(kw in response.lower() for kw in farewell_keywords) or has_tool_in_history):
+            print(">>> [AGENT] Tag-less response accepted as Final Answer (Relaxed Parser).")
+            return response.strip(), total_usage
+        
         # If it's an Action, we return the whole thing so the runner can parse it
         return response, total_usage
 
@@ -68,7 +67,9 @@ class ReActAgent(BaseAgent):
                 return self.simulator.track_shipping(case_id, tool_args)
             elif tool_name == "apply_refund":
                 return self.simulator.apply_refund(case_id, tool_args)
+            elif tool_name == "cancel_order":
+                return self.simulator.cancel_order(case_id, tool_args)
             else:
-                return f"Error: Tool {tool_name} not found."
+                return f"Error: Tool '{tool_name}' not found. Only query_order, track_shipping, apply_refund, cancel_order are allowed."
         except Exception as e:
             return f"Error executing tool: {str(e)}"

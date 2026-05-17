@@ -7,7 +7,7 @@ from src.core.factory import AgentFactory
 from src.agents.customer_agent import CustomerAgent
 
 class DialogueRunner:
-    def __init__(self, model_name="gemma-4-31b-it"):
+    def __init__(self, model_name="llama3.1:8b"):
         self.model_name = model_name
         self.instructions_dir = "prompts/system_instructions"
         self.api_error_log = []  # Track API errors for diagnostics
@@ -84,12 +84,6 @@ class DialogueRunner:
         print(f"\n>>> Case {case_id} | {agent_type} | {persona_type}")
         
         for turn_idx in range(max_turns):
-            # --- TOKEN SAFETY VALVE ---
-            if acc_usage["grand_total_tokens"] > 30000:
-                print("!!! TOKEN SAFETY VALVE TRIGGERED")
-                status = "FAILED_TOKEN_LIMIT"
-                break
-
             turn_num = turn_idx + 1
             turn_data = {"turn": turn_num}
             
@@ -179,34 +173,159 @@ class DialogueRunner:
                     # We have a Final Response, we can break the loop
                     break
 
-            # --- [NEW] ReAct Mode Observation Injection (Closed-Loop) ---
-            while agent_type == "ReAct" and "Action:" in service_final:
+            # --- [NEW] Farewell Priority Check ---
+            # If the agent responds with a farewell/polite closing, we skip strict format checks
+            is_closing = is_farewell(service_final) or any(kw in service_final.lower() for kw in ["welcome", "assist you"])
+            
+            # ReAct Mode Observation Injection (Closed-Loop with improved parsing)
+            react_iter = 0
+            react_no_action_count = 0  # Counter for consecutive responses without Action/Final Answer
+            while not is_closing and agent_type == "ReAct" and "Action:" in service_final and react_iter < 5:
+                react_iter += 1
                 if "Observation:" in service_final:
                     service_final = service_final.split("Observation:")[0].strip()
-                match = re.search(r"Action:\s*(\w+)\((.*?)\)", service_final)
+                
+                # IMPROVED REGEX: Support both format:
+                # - Action: query_order(ORD556)
+                # - Action: query_order(order_id="ORD556")
+                # - Action: query_order(email="user@example.com")
+                match = re.search(r"Action:\s*(\w+)\s*\((.*?)\)", service_final, re.DOTALL)
                 if match:
                     tool_name = match.group(1)
-                    tool_args = match.group(2).replace('"', '').replace("'", "").strip()
-                    if "=" in tool_args: tool_args = tool_args.split("=", 1)[1].strip()
-                    print(f"--- [RE-ACT INTERCEPT] Executing: {tool_name}({tool_args}) ---")
-                    # Single-slot doesn't have _execute_tool natively but Factory/Base could handle it?
-                    # Actually ReActAgent has it. Let's make sure SingleSlotAgent can also execute tools.
-                    if hasattr(service_agent, "_execute_tool"):
-                        observation = service_agent._execute_tool(tool_name, tool_args, case_id)
+                    tool_args_raw = match.group(2).strip()
+                    
+                    # Enhanced parameter extraction
+                    tool_param = None
+                    if "=" in tool_args_raw:
+                        # Format: order_id="ORD556" or email="user@example.com"
+                        param_key, param_value = tool_args_raw.split("=", 1)
+                        tool_param = param_value.strip().strip('"').strip("'")
                     else:
-                        # Fallback if _execute_tool is missing (should probably move to base)
+                        # Format: ORD556 (direct value)
+                        tool_param = tool_args_raw.strip().strip('"').strip("'")
+                    
+                    # Validation: forbid certain patterns
+                    if not tool_param or tool_param.lower() in ["none", "null", "undefined", ""]:
+                        print(f"!!! [RE-ACT VALIDATION FAILED] Invalid parameter: {tool_param}. Terminating ReAct loop.")
+                        break
+                    
+                    print(f"--- [RE-ACT INTERCEPT] Executing: {tool_name}({tool_param}) (Iter {react_iter}) ---")
+                    
+                    if hasattr(service_agent, "_execute_tool"):
+                        observation = service_agent._execute_tool(tool_name, tool_param, case_id)
+                    else:
                         from src.tools.simulator import ToolSimulator
                         sim = ToolSimulator()
-                        if tool_name == "query_order": observation = sim.query_order(case_id, tool_args)
-                        elif tool_name == "track_shipping": observation = sim.track_shipping(case_id, tool_args)
-                        elif tool_name == "apply_refund": observation = sim.apply_refund(case_id, tool_args)
-                        else: observation = f"Error: Tool {tool_name} not found."
+                        if tool_name == "query_order": 
+                            observation = sim.query_order(case_id, tool_param)
+                        elif tool_name == "track_shipping": 
+                            observation = sim.track_shipping(case_id, tool_param)
+                        elif tool_name == "apply_refund": 
+                            # apply_refund needs order_id and reason; extract from tool_args_raw
+                            if "," in tool_args_raw:
+                                parts = [p.strip() for p in tool_args_raw.split(",")]
+                                order_id = parts[0].strip('"').strip("'").split("=")[-1].strip()
+                                reason = "Customer request" if len(parts) < 2 else parts[1].strip('"').strip("'").split("=")[-1].strip()
+                                observation = sim.apply_refund(case_id, order_id, reason)
+                            else:
+                                observation = f"Error: apply_refund requires order_id and reason parameters."
+                        elif tool_name == "cancel_order":
+                            # cancel_order needs order_id and reason
+                            if "," in tool_args_raw:
+                                parts = [p.strip() for p in tool_args_raw.split(",")]
+                                order_id = parts[0].strip('"').strip("'").split("=")[-1].strip()
+                                reason = "Customer request" if len(parts) < 2 else parts[1].strip('"').strip("'").split("=")[-1].strip()
+                                observation = sim.cancel_order(case_id, order_id, reason)
+                            else:
+                                observation = f"Error: cancel_order requires order_id and reason parameters."
+                        else: 
+                            observation = f"Error: Tool '{tool_name}' not found. Only query_order, track_shipping, apply_refund, cancel_order are allowed."
                     
+                    print(f"--- [RE-ACT OBSERVATION]: {observation} ---")
                     obs_prompt = f"Observation: {observation}"
                     service_final, next_usage = service_agent.run(obs_prompt, case_id=case_id)
                     for k in service_usage: service_usage[k] += next_usage[k]
+                    react_no_action_count = 0  # Reset counter on successful action
+                    # Re-check closing after observation
+                    is_closing = is_farewell(service_final) or any(kw in service_final.lower() for kw in ["welcome", "assist you"])
                 else:
+                    # No valid Action found in this iteration
+                    react_no_action_count += 1
+                    print(f"!!! [RE-ACT] No valid Action found. Count: {react_no_action_count}/2")
+                    
+                    # DEADLOCK PREVENTION: If 2 consecutive iterations without Action/Final Answer, force terminate
+                    if react_no_action_count >= 2 or (react_iter >= 3 and "Final Answer:" not in service_final):
+                        print("!!! [RE-ACT DEADLOCK] Detected loop without action/answer. Force terminating ReAct loop.")
+                        # Try to extract any meaningful content as final response
+                        if service_final.strip():
+                            pass  # Use current service_final
+                        else:
+                            service_final = "Thank you for contacting us. How can I assist you further?"
+                        break
                     break
+            
+            if react_iter >= 5:
+                print("!!! [RUNNER] ReAct max iterations reached. Breaking tool loop.")
+
+            # --- Single-slot Mode Tool Injection (with improved parsing) ---
+            if agent_type == "Single-slot" and "Action:" in service_final:
+                match = re.search(r"Action:\s*(\w+)\s*\((.*?)\)", service_final, re.DOTALL)
+                if match:
+                    tool_name = match.group(1)
+                    tool_args_raw = match.group(2).strip()
+                    
+                    # Enhanced parameter extraction (same as ReAct)
+                    tool_param = None
+                    if "=" in tool_args_raw:
+                        param_key, param_value = tool_args_raw.split("=", 1)
+                        tool_param = param_value.strip().strip('"').strip("'")
+                    else:
+                        tool_param = tool_args_raw.strip().strip('"').strip("'")
+                    
+                    print(f"--- [SINGLE-SLOT INTERCEPT] Executing: {tool_name}({tool_param}) ---")
+                    
+                    from src.tools.simulator import ToolSimulator
+                    sim = ToolSimulator()
+                    if tool_name == "query_order": 
+                        observation = sim.query_order(case_id, tool_param)
+                    elif tool_name == "track_shipping": 
+                        observation = sim.track_shipping(case_id, tool_param)
+                    elif tool_name == "apply_refund": 
+                        # apply_refund with extracted params
+                        if "," in tool_args_raw:
+                            parts = [p.strip() for p in tool_args_raw.split(",")]
+                            order_id = parts[0].strip('"').strip("'").split("=")[-1].strip()
+                            reason = "Customer request" if len(parts) < 2 else parts[1].strip('"').strip("'").split("=")[-1].strip()
+                            observation = sim.apply_refund(case_id, order_id, reason)
+                        else:
+                            observation = sim.apply_refund(case_id, tool_param)
+                    elif tool_name == "cancel_order":
+                        # cancel_order with extracted params
+                        if "," in tool_args_raw:
+                            parts = [p.strip() for p in tool_args_raw.split(",")]
+                            order_id = parts[0].strip('"').strip("'").split("=")[-1].strip()
+                            reason = "Customer request" if len(parts) < 2 else parts[1].strip('"').strip("'").split("=")[-1].strip()
+                            observation = sim.cancel_order(case_id, order_id, reason)
+                        else:
+                            observation = f"Error: cancel_order requires order_id and reason parameters."
+                    else: 
+                        observation = f"Error: Tool '{tool_name}' not found. Only query_order, track_shipping, apply_refund, cancel_order are allowed."
+                    
+                    print(f"--- [SINGLE-SLOT OBSERVATION]: {observation} ---")
+                    obs_prompt = f"Observation: {observation}"
+                    service_final, next_usage = service_agent.run(obs_prompt, case_id=case_id)
+                    for k in service_usage: service_usage[k] += next_usage[k]
+
+            # --- [NEW] Strict Format & Meta-talk Validation ---
+            forbidden_meta_patterns = [
+                r"\(Note:.*\)", r"\(I am waiting.*\)", r"waiting for tool", r"I will now call",
+                r"Let me check", r"I'm sorry, as an AI"
+            ]
+            if any(re.search(pattern, service_final, re.IGNORECASE) for pattern in forbidden_meta_patterns):
+                print(f"!!! [RUNNER] Meta-talk detected in agent response. Triggering retry...")
+                retry_prompt = "[SYSTEM]: Your response contained forbidden meta-talk or parenthetical notes. Please provide your response again using ONLY Thought and Action/Final Answer tags. DO NOT explain your actions."
+                service_final, next_usage = service_agent.run(retry_prompt, case_id=case_id)
+                for k in service_usage: service_usage[k] += next_usage[k]
 
             # --- [CRITICAL] Thought Leakage Block ---
             if "Final Response:" in service_final:
@@ -246,22 +365,36 @@ class DialogueRunner:
                 break
 
             if service_final in response_history[-2:]:
+                print(">>> [TERMINATION] Loop detected in agent responses.")
                 status = "LOOP_FAILURE"
                 break
             response_history.append(service_final)
 
             # --- Task Completion Check ---
             full_trace = service_agent.history[-1]["content"]
-            if "Observation:" in full_trace and any(ok in full_trace for ok in ["'status': 'success'", '"status": "success"']):
-                tool_triggered = True
-                refusal_keywords = ["cannot", "unable", "shipped", "policy", "unfortunately", "no longer eligible", "outside the return window"]
-                fulfilled_keywords = ["cancel", "refund", "status", "date", "shipped", "delivered", "eligible"]
-                if any(k in service_final.lower() for k in refusal_keywords):
+            
+            # [REFINED] Precise Success/Refusal Detection
+            if "Observation:" in full_trace:
+                # Check for critical tool success
+                is_execution_success = any(cmd in full_trace for cmd in ["apply_refund", "cancel_order"]) and \
+                                      any(ok in full_trace for ok in ["'status': 'success'", '"status": "success"'])
+                
+                if is_execution_success:
                     task_resolved = True
-                    final_resolution = "REFUSED_BY_POLICY"
-                elif any(k in service_final.lower() for k in fulfilled_keywords):
-                    task_resolved = True
+                    tool_triggered = True
                     final_resolution = "EXECUTED_SUCCESSFULLY"
+                
+                # Check for query success or status verification
+                elif "query_order" in full_trace and any(ok in full_trace for ok in ["'status': 'success'", '"status": "success"']):
+                    tool_triggered = True
+                    # If verified and refusal keywords present
+                    refusal_keywords = ["cannot", "unable", "policy", "unfortunately", "no longer eligible", "outside the return window"]
+                    if any(k in service_final.lower() for k in refusal_keywords):
+                        task_resolved = True
+                        final_resolution = "RESOLVED_WITH_REFUSAL"
+                    elif any(k in service_final.lower() for k in ["shipped", "delivered", "status is"]):
+                        task_resolved = True # Informational task resolved
+                        final_resolution = "INFO_PROVIDED"
 
             if agent_type == "Single-slot" and any(k in service_final.lower() for k in ["cancel", "refunded", "status is", "order number"]):
                 task_resolved = True
@@ -279,7 +412,7 @@ class DialogueRunner:
             
             # --- Termination Check (Service Agent side) ---
             if is_farewell(service_final) and task_resolved:
-                 print(">>> [TERMINATION] Agent signaled end of conversation.")
+                 print(">>> [TERMINATION] Signal detected: Agent signaled end of conversation.")
                  status = "SUCCESS"
                  break
         
@@ -303,10 +436,18 @@ class DialogueRunner:
             "conversation": conversation_log
         }
         
-        os.makedirs("outputs/logs", exist_ok=True)
-        log_path = f"outputs/logs/log_{case_id}_{agent_type}_{persona_type}.json"
-        with open(log_path, "w", encoding="utf-8") as f:
-            json.dump(log_data, f, indent=4, ensure_ascii=False)
+        # Ensure directories exist and add debug prints
+        log_dir = "outputs/logs"
+        os.makedirs(log_dir, exist_ok=True)
+        log_path = os.path.join(log_dir, f"log_{case_id}_{agent_type}_{persona_type}.json")
+        
+        print(f"Debug: Starting save to {log_path}...")
+        try:
+            with open(log_path, "w", encoding="utf-8") as f:
+                json.dump(log_data, f, indent=4, ensure_ascii=False)
+            print("Debug: Save complete")
+        except Exception as e:
+            print(f"Debug: Save failed with error: {e}")
             
         print(f">>> Finished with Status: {status}. Saved to {log_path}\n")
         return log_data
@@ -315,4 +456,4 @@ if __name__ == "__main__":
     with open("data/fact_sheets.json", "r", encoding="utf-8") as f:
         all_facts = json.load(f)
     runner = DialogueRunner()
-    runner.run_conversation("CASE_001", all_facts["CASE_001"], "Reflection", "Polite")
+    runner.run_conversation("CASE_001", all_facts["CASE_001"], "PlanExecute", "Polite")

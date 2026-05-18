@@ -13,28 +13,53 @@ class SingleSlotAgent(BaseAgent):
     def run(self, user_input, case_id=None):
         # Check if this is an observation response
         if "Observation:" in user_input:
-            # This is a tool result, provide final answer
-            prompt = f"Observation received: {user_input}\n\nBased on this data, provide a final response to the user. If the issue is resolved, end politely. Do NOT mention tools or internal processes."
+            prompt = (
+                f"{user_input}\n\n"
+                "The system has returned the above Observation. "
+                "Use ONLY the data in that Observation to write your response to the customer. "
+                "Do NOT mention tools, 'Action', 'Observation', or any internal process. "
+                "Respond naturally and professionally. If the task is complete, end the conversation politely."
+            )
         else:
             # Normal user input
-            prompt = f"""Current User Input: {user_input}
+            prompt = f"""Customer message: {user_input}
 
-[DECISION LOGIC]
-1. Check dialogue history for Order ID (ORDxxx) or Email.
-2. If ID/Email present and you need order data, you MUST output: Action: query_order(order_id="ORDxxx")
-3. If you just received an Observation from a tool, use that data to give a FINAL ANSWER.
-4. If ID is missing, ask for it politely.
-5. For refunds/cancellations: NO date checking needed. Only verify Order ID exists.
+[YOUR DECISION — choose exactly one option and output only that]:
 
-[AVAILABLE TOOLS] (See tools_whitelist.txt)
-- query_order(order_id="ORDxxx") or query_order(email="user@example.com")
-- track_shipping(order_id="ORDxxx")
-- apply_refund(order_id="ORDxxx", reason="reason")
-- cancel_order(order_id="ORDxxx", reason="reason")
+OPTION A — Order ID or Email IS in the dialogue history and you need order data:
+  Output exactly: Action: query_order(order_id="ORDxxx")
+  Then STOP. Write absolutely nothing after the Action line.
+  DO NOT say "I've checked", "I can see", "Your order is", or anything implying you already have data.
 
-FORBIDDEN: exchange_option, initiate_return, or any tool NOT listed above.
+OPTION B — Order ID/Email is NOT in the dialogue history:
+  Ask the customer for their Order ID (ORDxxx format) or registered email. Nothing else.
 
-IMPORTANT: If you need to use a tool, output ONLY the Action line and STOP. If you have enough info, output ONLY the Final Answer. Do NOT explain or add extra text."""
+OPTION C — You already received an Observation earlier in this conversation and need to take a follow-up action:
+  Based on the Observation data, call the appropriate next tool:
+  - apply_refund(order_id="ORDxxx", reason="Customer request")
+  - cancel_order(order_id="ORDxxx", reason="Customer request")
+  - track_shipping(order_id="ORDxxx")
+  Then STOP. Write nothing after the Action line.
+
+[FORBIDDEN — these are hallucinations]:
+- "I've checked your order..." (before receiving Observation)
+- "I can confirm..." (before receiving Observation)
+- "Your order is currently..." (before receiving Observation)
+- Writing any order details, status, amount, or item names you have NOT seen in an Observation.
+- Simulating or predicting what the tool result might be.
+
+[TOOLS — exact format required]:
+  Action: query_order(order_id="ORDxxx")
+  Action: query_order(email="user@example.com")
+  Action: apply_refund(order_id="ORDxxx", reason="Customer request")
+  Action: cancel_order(order_id="ORDxxx", reason="Customer request")
+  Action: track_shipping(order_id="ORDxxx")
+
+[OUTPUT DISCIPLINE — strictly enforced]:
+- Your response is ONLY the words you speak to the customer. Nothing else.
+- NEVER say things like "Since the Order ID is not in the dialogue history..." or "Based on OPTION A..." — that is internal reasoning and must never appear in your output.
+- NEVER say "I'm going to process X" or "I will now call X" — just output the Action line and stop. Do it, don't announce it.
+- If the task is complete, end with one polite closing sentence. Then stop. Do NOT say "This conversation is now closed" as a system announcement."""
         
         response_text, usage = self._call_llm(prompt)
         

@@ -25,6 +25,23 @@ class DialogueRunner:
         emails = re.findall(r"[\w\.-]+@[\w\.-]+\.\w+", text)
         return list(set(order_ids + emails))
 
+    @staticmethod
+    def _parse_order_action_args(tool_args_raw):
+        """
+        Robustly extract (order_id, reason) from tool arg strings like:
+          order_id="ORD60227680", reason="Customer request"
+          ORD60227680, reason="Customer request"
+          ORD60227680
+        Returns (order_id_str_or_None, reason_str).
+        """
+        order_match = re.search(r'(?:order_id\s*=\s*)?["\']?(ORD[\w]+)["\']?', tool_args_raw)
+        order_id = order_match.group(1) if order_match else None
+
+        reason_match = re.search(r'reason\s*=\s*["\']([^"\']+)["\']', tool_args_raw)
+        reason = reason_match.group(1) if reason_match else "Customer request"
+
+        return order_id, reason
+
     def run_conversation(self, case_id, fact_sheet, agent_type, persona_type, max_turns=6):
         """
         Runs a multi-turn conversation with ReAct Atomicity and State Protection.
@@ -61,9 +78,10 @@ class DialogueRunner:
         
         # 3. Dialogue Loop
         conversation_log = []
-        last_service_response = "" 
+        last_service_response = ""
         task_resolved = False
         tool_triggered = False
+        query_verified = False   # True once query_order returns success
         known_info = []
         response_history = []
         
@@ -78,7 +96,13 @@ class DialogueRunner:
 
         def is_farewell(text):
             if not text: return False
-            farewell_keywords = ["thank you", "bye", "goodbye", "have a nice day", "have a wonderful day", "that is all", "that's all", "i understand"]
+            farewell_keywords = [
+                "thank you", "bye", "goodbye", "have a nice day", "have a wonderful day",
+                "that is all", "that's all", "i understand",
+                "conversation is now closed", "matter is now closed", "case is now closed",
+                "have a great day", "have a good day", "take care",
+                "is there anything else i can help", "feel free to reach out",
+            ]
             return any(w in text.lower() for w in farewell_keywords)
         
         print(f"\n>>> Case {case_id} | {agent_type} | {persona_type}")
@@ -118,7 +142,29 @@ class DialogueRunner:
                 
             # --- Service Agent Turn (Atomic Loop) ---
             info_str = ", ".join(known_info) if known_info else "None yet"
-            agent_input = f"{customer_msg}\n\n[MANDATORY HINT]: Known info: {info_str}. If ID is present, you MUST use tools to provide the FINAL solution. Do NOT just say 'thank you' or 'how can I help'."
+            if not known_info:
+                sys_hint = (
+                    "[SYSTEM CONTEXT — INTERNAL]: No Order ID or Email detected yet. "
+                    "Ask the customer for their Order ID (ORDxxx format) or registered email. Nothing else."
+                )
+            elif not query_verified:
+                # ID present but order not yet queried — force query_order
+                sys_hint = (
+                    f"[SYSTEM CONTEXT — INTERNAL, DO NOT REPEAT TO CUSTOMER]: "
+                    f"Order ID / Email detected: {info_str}. "
+                    f"This is ONLY an identifier. You have NO order data yet. "
+                    f"Your ONLY valid next output is: Action: query_order(order_id=\"{known_info[0]}\")"
+                )
+            else:
+                # Order already queried successfully — guide toward resolution
+                sys_hint = (
+                    f"[SYSTEM CONTEXT — INTERNAL]: Order {info_str} has already been verified. "
+                    f"The order data is in your conversation history. "
+                    f"Do NOT call query_order again. "
+                    f"Focus on resolving the customer's request using the data you already have, "
+                    f"or clearly explain why it cannot be fulfilled and offer the best alternative."
+                )
+            agent_input = f"{customer_msg}\n\n{sys_hint}"
             
             service_final, service_usage = service_agent.run(agent_input, case_id=case_id)
 
@@ -220,28 +266,29 @@ class DialogueRunner:
                             observation = sim.query_order(case_id, tool_param)
                         elif tool_name == "track_shipping": 
                             observation = sim.track_shipping(case_id, tool_param)
-                        elif tool_name == "apply_refund": 
-                            # apply_refund needs order_id and reason; extract from tool_args_raw
-                            if "," in tool_args_raw:
-                                parts = [p.strip() for p in tool_args_raw.split(",")]
-                                order_id = parts[0].strip('"').strip("'").split("=")[-1].strip()
-                                reason = "Customer request" if len(parts) < 2 else parts[1].strip('"').strip("'").split("=")[-1].strip()
+                        elif tool_name == "apply_refund":
+                            order_id, reason = self._parse_order_action_args(tool_args_raw)
+                            if order_id:
                                 observation = sim.apply_refund(case_id, order_id, reason)
                             else:
-                                observation = f"Error: apply_refund requires order_id and reason parameters."
+                                observation = "Error: apply_refund requires a valid order_id (ORDxxx format)."
                         elif tool_name == "cancel_order":
-                            # cancel_order needs order_id and reason
-                            if "," in tool_args_raw:
-                                parts = [p.strip() for p in tool_args_raw.split(",")]
-                                order_id = parts[0].strip('"').strip("'").split("=")[-1].strip()
-                                reason = "Customer request" if len(parts) < 2 else parts[1].strip('"').strip("'").split("=")[-1].strip()
+                            order_id, reason = self._parse_order_action_args(tool_args_raw)
+                            if order_id:
                                 observation = sim.cancel_order(case_id, order_id, reason)
                             else:
-                                observation = f"Error: cancel_order requires order_id and reason parameters."
-                        else: 
+                                observation = "Error: cancel_order requires a valid order_id (ORDxxx format)."
+                        else:
                             observation = f"Error: Tool '{tool_name}' not found. Only query_order, track_shipping, apply_refund, cancel_order are allowed."
                     
                     print(f"--- [RE-ACT OBSERVATION]: {observation} ---")
+                    if isinstance(observation, dict) and observation.get("status") == "success":
+                        if tool_name == "query_order":
+                            query_verified = True
+                        elif tool_name in ("apply_refund", "cancel_order"):
+                            task_resolved = True
+                            tool_triggered = True
+                            final_resolution = "EXECUTED_SUCCESSFULLY"
                     obs_prompt = f"Observation: {observation}"
                     service_final, next_usage = service_agent.run(obs_prompt, case_id=case_id)
                     for k in service_usage: service_usage[k] += next_usage[k]
@@ -286,32 +333,36 @@ class DialogueRunner:
                     
                     from src.tools.simulator import ToolSimulator
                     sim = ToolSimulator()
-                    if tool_name == "query_order": 
+                    if tool_name == "query_order":
                         observation = sim.query_order(case_id, tool_param)
-                    elif tool_name == "track_shipping": 
+                    elif tool_name == "track_shipping":
                         observation = sim.track_shipping(case_id, tool_param)
-                    elif tool_name == "apply_refund": 
-                        # apply_refund with extracted params
-                        if "," in tool_args_raw:
-                            parts = [p.strip() for p in tool_args_raw.split(",")]
-                            order_id = parts[0].strip('"').strip("'").split("=")[-1].strip()
-                            reason = "Customer request" if len(parts) < 2 else parts[1].strip('"').strip("'").split("=")[-1].strip()
+                    elif tool_name == "apply_refund":
+                        order_id, reason = self._parse_order_action_args(tool_args_raw)
+                        if order_id:
                             observation = sim.apply_refund(case_id, order_id, reason)
                         else:
-                            observation = sim.apply_refund(case_id, tool_param)
+                            observation = "Error: apply_refund requires a valid order_id (ORDxxx format)."
                     elif tool_name == "cancel_order":
-                        # cancel_order with extracted params
-                        if "," in tool_args_raw:
-                            parts = [p.strip() for p in tool_args_raw.split(",")]
-                            order_id = parts[0].strip('"').strip("'").split("=")[-1].strip()
-                            reason = "Customer request" if len(parts) < 2 else parts[1].strip('"').strip("'").split("=")[-1].strip()
+                        order_id, reason = self._parse_order_action_args(tool_args_raw)
+                        if order_id:
                             observation = sim.cancel_order(case_id, order_id, reason)
                         else:
-                            observation = f"Error: cancel_order requires order_id and reason parameters."
-                    else: 
+                            observation = "Error: cancel_order requires a valid order_id (ORDxxx format)."
+                    else:
                         observation = f"Error: Tool '{tool_name}' not found. Only query_order, track_shipping, apply_refund, cancel_order are allowed."
                     
                     print(f"--- [SINGLE-SLOT OBSERVATION]: {observation} ---")
+
+                    # Track actual tool execution — no keyword guessing needed
+                    tool_triggered = True
+                    if isinstance(observation, dict) and observation.get("status") == "success":
+                        if tool_name == "query_order":
+                            query_verified = True
+                        elif tool_name in ("apply_refund", "cancel_order"):
+                            task_resolved = True
+                            final_resolution = "EXECUTED_SUCCESSFULLY"
+
                     obs_prompt = f"Observation: {observation}"
                     service_final, next_usage = service_agent.run(obs_prompt, case_id=case_id)
                     for k in service_usage: service_usage[k] += next_usage[k]
@@ -319,7 +370,15 @@ class DialogueRunner:
             # --- [NEW] Strict Format & Meta-talk Validation ---
             forbidden_meta_patterns = [
                 r"\(Note:.*\)", r"\(I am waiting.*\)", r"waiting for tool", r"I will now call",
-                r"Let me check", r"I'm sorry, as an AI"
+                r"I'm sorry, as an AI",
+                # Instruction leakage: agent narrating its own decision logic
+                r"(?:Since|Because) the .{0,60}(?:is not|are not|isn't|aren't).{0,60}(?:dialogue|history|conversation)",
+                r"I will (?:ask them for|proceed to ask|now ask)",
+                r"(?:Based on |)OPTION [ABC]",
+                r"Option [ABC]\s*[—\-→🗙✓✗]",
+                r"(?:Since|Because) (?:no |the customer).{0,40}(?:Order ID|Email).{0,40}(?:present|provided|found|given)",
+                r"\[YOUR DECISION\]",
+                r"OPTION [ABC] —",
             ]
             if any(re.search(pattern, service_final, re.IGNORECASE) for pattern in forbidden_meta_patterns):
                 print(f"!!! [RUNNER] Meta-talk detected in agent response. Triggering retry...")
@@ -396,11 +455,6 @@ class DialogueRunner:
                         task_resolved = True # Informational task resolved
                         final_resolution = "INFO_PROVIDED"
 
-            if agent_type == "Single-slot" and any(k in service_final.lower() for k in ["cancel", "refunded", "status is", "order number"]):
-                task_resolved = True
-                tool_triggered = True 
-                final_resolution = "EXECUTED_SUCCESSFULLY"
-
             turn_data["service_agent"] = {
                 "final_answer": service_final,
                 "full_trace": full_trace,
@@ -456,4 +510,4 @@ if __name__ == "__main__":
     with open("data/fact_sheets.json", "r", encoding="utf-8") as f:
         all_facts = json.load(f)
     runner = DialogueRunner()
-    runner.run_conversation("CASE_001", all_facts["CASE_001"], "PlanExecute", "Polite")
+    runner.run_conversation("CASE_141", all_facts["CASE_141"], "Single-slot", "Polite")

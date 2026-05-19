@@ -40,7 +40,8 @@ class ReflectionAgent(BaseAgent):
         # If it does, we return the RAW response (including headers) so the runner can intercept it
         # The runner will handle the Observation injection
         if "[Tool Call:" in response:
-            self.history.append({"role": "assistant", "content": full_trace})
+            self.last_full_trace = full_trace
+            self.history.append({"role": "assistant", "content": response})  # raw response, not wrapper
             return response, total_usage
 
         # If no tool call, extract the Final Response correctly
@@ -48,7 +49,7 @@ class ReflectionAgent(BaseAgent):
         if "Final Response:" in response:
             parts = response.split("Final Response:")
             final_answer = parts[-1].strip()
-        
+
         # Cleanup internal thoughts for the customer
         cleanup_patterns = [
             r"Initial Draft:.*",
@@ -61,12 +62,13 @@ class ReflectionAgent(BaseAgent):
         ]
         for pattern in cleanup_patterns:
             final_answer = re.sub(pattern, "", final_answer, flags=re.IGNORECASE | re.DOTALL).strip()
-            
+
         if not final_answer:
             lines = [l for l in response.split("\n") if l.strip()]
             if lines: final_answer = lines[-1].strip()
 
-        self.history.append({"role": "assistant", "content": full_trace})
+        self.last_full_trace = full_trace
+        self.history.append({"role": "assistant", "content": final_answer})  # clean answer only
         return final_answer, total_usage
 
     def _execute_tool(self, tool_name, tool_args, case_id):

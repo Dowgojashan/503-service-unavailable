@@ -37,8 +37,9 @@ class BaseAgent(ABC):
         if self.system_instruction:
             messages.append({"role": "system", "content": self.system_instruction})
         
-        # Add conversation history
-        for entry in self.history:
+        # Add conversation history (windowed to last 8 entries to prevent context bloat)
+        history_window = self.history[-8:] if len(self.history) > 8 else self.history
+        for entry in history_window:
             role = "user" if entry["role"] == "user" else "assistant"
             messages.append({"role": role, "content": entry["content"]})
             
@@ -58,7 +59,7 @@ class BaseAgent(ABC):
                 response = requests.post(
                     self.ollama_url,
                     json=payload,
-                    timeout=60
+                    timeout=120
                 )
                 response.raise_for_status()
                 

@@ -8,13 +8,22 @@ class ReActAgent(BaseAgent):
         self.simulator = ToolSimulator()
         self.max_iterations = max_iterations
 
+    @staticmethod
+    def _parse_tool_args(tool_args_raw):
+        order_match = re.search(r'(?:order_id\s*=\s*)?["\']?(ORD[\w]+)["\']?', tool_args_raw)
+        order_id = order_match.group(1) if order_match else tool_args_raw.strip().strip('"').strip("'")
+        reason_match = re.search(r'reason\s*=\s*["\']([^"\']+)["\']', tool_args_raw)
+        reason = reason_match.group(1) if reason_match else "Customer request"
+        return order_id, reason
+
     def run(self, user_input, case_id=None):
-        # 1. Update History
-        # If user_input starts with "Observation:", it's a tool result injection from the runner
         self.history.append({"role": "user", "content": user_input})
-        
-        # 2. Build current instruction (History is handled by BaseAgent via messages)
-        current_prompt = "Please proceed with your next Thought and either Action or Final Answer."
+
+        current_prompt = (
+            "Please proceed with your next Thought and either Action or Final Answer.\n"
+            "REMINDER: Use plain text tags — write 'Thought:' not '**Thought:**'. "
+            "No bold markers on structural tags. Stop immediately after any Action: line."
+        )
         
         total_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         
@@ -59,16 +68,18 @@ class ReActAgent(BaseAgent):
     def _execute_tool(self, tool_name, tool_args, case_id):
         if not case_id:
             return "Error: case_id is required."
-            
+
         try:
             if tool_name == "query_order":
                 return self.simulator.query_order(case_id, tool_args)
             elif tool_name == "track_shipping":
                 return self.simulator.track_shipping(case_id, tool_args)
             elif tool_name == "apply_refund":
-                return self.simulator.apply_refund(case_id, tool_args)
+                order_id, reason = self._parse_tool_args(tool_args)
+                return self.simulator.apply_refund(case_id, order_id, reason)
             elif tool_name == "cancel_order":
-                return self.simulator.cancel_order(case_id, tool_args)
+                order_id, reason = self._parse_tool_args(tool_args)
+                return self.simulator.cancel_order(case_id, order_id, reason)
             else:
                 return f"Error: Tool '{tool_name}' not found. Only query_order, track_shipping, apply_refund, cancel_order are allowed."
         except Exception as e:

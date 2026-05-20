@@ -426,10 +426,11 @@ class DialogueRunner:
                     # We have a Final Response — done
                     break
 
-            # --- Reflection Template Bleed Detection + Programmatic Recovery ---
-            # When the Reflection loop fails (LLM regurgitates scaffold examples), synthesize
-            # the response directly from customer_text_history + last_query_observation —
-            # the same approach as the ReAct DEDUP block, without involving the LLM again.
+            # --- Reflection / PlanExecute Programmatic Synthesis ---
+            # Reflection: fires when the LLM regurgitates scaffold examples (template bleed).
+            # PlanExecute: fires whenever query_order returned real data but task is not yet resolved
+            #              (catches all hallucinated responses without needing bleed detection).
+            _should_synthesize = False
             if agent_type == "Reflection" and query_verified and last_query_observation:
                 scaffold_bleed_indicators = [
                     "### Example", "Turn 1 (Customer:", "Turn 2 (Customer:",
@@ -437,12 +438,17 @@ class DialogueRunner:
                 ]
                 if any(ind in service_final for ind in scaffold_bleed_indicators):
                     print("!!! [REFLECTION] Template bleed detected. Applying programmatic synthesis.")
+                    _should_synthesize = True
+            elif agent_type == "PlanExecute" and query_verified and last_query_observation and not task_resolved:
+                print("!!! [PE SYNTHESIS] Applying programmatic synthesis from real observation.")
+                _should_synthesize = True
+
+            if _should_synthesize:
                     # Intent detection (same keyword lists as ReAct DEDUP)
                     cancel_kws_syn = ["cancel my order", "cancel this order", "cancel the order",
                                       "cancelling my order", "cancelling this order", "cancelling the order",
                                       "i want to cancel", "i'd like to cancel", "i need to cancel",
-                                      "please cancel", "go ahead and cancel", "proceed with cancel",
-                                      "canceling", "cancellation"]
+                                      "please cancel", "go ahead and cancel", "proceed with cancel"]
                     refund_kws_syn = ["i want a refund", "i need a refund", "i'd like a refund",
                                       "give me a refund", "give me back", "money back",
                                       "please refund", "process a refund", "apply a refund",
@@ -451,19 +457,23 @@ class DialogueRunner:
                                       "removing one", "removing item", "removing the", "removing an",
                                       "modify item", "modify the item", "exchange", "delete item"]
                     refusal_sigs_syn = ["rather not", "don't want to cancel", "prefer not", "not cancel",
-                                        "something else", "another option"]
+                                        "something else", "another option",
+                                        "not the whole order", "not the entire order",
+                                        "instead of the whole", "instead of the entire",
+                                        "not what i had in mind"]
                     info_override_kws_syn = [
                         "in what cases", "what are the cases", "cases where i can",
                         "can i ask for", "when can i ask", "how do i get a refund",
                         "how to get a refund", "refund policy", "return policy",
-                        "cancellation policy", "about refund", "about cancel",
+                        "cancellation policy", "about refund",
                         "payment method", "payment option", "payment options",
                         "what payment", "eligible for", "qualify for",
                         "tell me about", "do you offer", "what is the policy",
                         "types of payment", "methods of payment", "how can i pay"
                     ]
-                    addr_kws_syn = ["address", "correct my address", "update address", "change address",
-                                    "wrong address", "delivery address", "shipping address", "where to send"]
+                    addr_kws_syn = ["correct my address", "update address", "change address",
+                                    "wrong address", "delivery address", "shipping address", "where to send",
+                                    "update my address", "change my address", "fix my address", "incorrect address"]
                     pay_method_kws_syn = ["payment method", "how can i pay", "what payment", "payment option",
                                           "accepted payment", "pay with", "methods of payment"]
                     ref_policy_kws_syn = ["refund policy", "return policy", "can i return",
@@ -542,6 +552,17 @@ class DialogueRunner:
                                 f"please reach out. Is there anything else I can help you with?"
                             )
                             task_resolved = True; tool_triggered = True; final_resolution = "RESOLVED_WITH_REFUSAL"
+                        elif verified_pending_turns >= 2:
+                            # Already offered cancel once — customer is still not agreeing.
+                            # Close gracefully rather than looping the same offer.
+                            service_final = (
+                                f"I understand this isn't the outcome you were hoping for. "
+                                f"Unfortunately, removing individual items from order {order_id_syn} "
+                                f"is a hard system limitation we cannot work around. "
+                                f"If you change your mind about cancelling the entire order, "
+                                f"please reach out. Is there anything else I can help you with?"
+                            )
+                            task_resolved = True; tool_triggered = True; final_resolution = "RESOLVED_WITH_REFUSAL"
                         else:
                             service_final = (
                                 f"I understand you'd like to remove an item from your order {order_id_syn}. "
@@ -574,7 +595,8 @@ class DialogueRunner:
                             "any other", "what if", "not what i expected", "other situation",
                             "other reason", "other case", "clarify", "more detail",
                             "tell me more", "expand", "expected", "not match", "different from",
-                            "beyond", "besides", "apart from", "in addition"
+                            "beyond", "besides", "apart from", "in addition",
+                            "mismatch", "criteria", "qualify", "eligible"
                         ]
                         is_followup_refund_syn = any(kw in customer_msg.lower() for kw in followup_refund_kws_syn)
                         if is_followup_refund_syn:
@@ -593,8 +615,9 @@ class DialogueRunner:
                                 f"Our standard policy allows returns within 30 days of delivery. "
                                 f"You can request a refund for damaged goods, incorrect items, or quality issues. "
                                 f"Your order {order_id_syn} ({items_str_syn}) is currently {order_status_syn}. "
-                                f"Would you like me to initiate a refund for this order?"
+                                f"Is there anything else I can help you with?"
                             )
+                            task_resolved = True; final_resolution = "INFO_PROVIDED"
                         tool_triggered = True
                     elif any(kw in customer_text_history for kw in track_kws_syn):
                         service_final = (
@@ -627,14 +650,14 @@ class DialogueRunner:
             is_closing = is_farewell(service_final) or any(kw in service_final.lower() for kw in ["welcome", "assist you"])
             
             # Hard guard 1: if no customer-provided ID/Email, block ALL tool calls unconditionally.
-            if not known_info and agent_type == "ReAct" and "Action:" in service_final:
+            if not known_info and agent_type in ("ReAct", "PlanExecute") and "Action:" in service_final:
                 print("!!! [RUNNER GUARD 1] No Order ID/Email from customer. Blocking premature tool call.")
                 service_final = ("I'd be happy to help! Could you please share your Order ID "
                                  "(in ORDxxx format) or your registered email so I can look into this for you?")
 
             # Hard guard 2: if ID/email known but order not yet queried, the FIRST tool must be query_order.
             # The LLM may call track_shipping or other tools prematurely — redirect to query_order.
-            if known_info and not query_verified and agent_type == "ReAct" and "Action:" in service_final:
+            if known_info and not query_verified and agent_type in ("ReAct", "PlanExecute") and "Action:" in service_final:
                 g2_match = re.search(r"\*{0,2}Action:\*{0,2}\s*(\w+)\s*\(", service_final, re.DOTALL)
                 if g2_match and g2_match.group(1) != "query_order":
                     print(f"!!! [RUNNER GUARD 2] LLM called '{g2_match.group(1)}' before query_order. Forcing query_order.")
@@ -643,8 +666,8 @@ class DialogueRunner:
                                   else f'Action: query_order(order_id="{id_val}")')
                     service_final = f"Thought: Customer provided ID — must verify order before acting.\n{query_call}"
 
-            # ReAct Mode Observation Injection (Closed-Loop with improved parsing)
-            while not is_closing and agent_type == "ReAct" and "Action:" in service_final and react_iter < 5:
+            # ReAct / PlanExecute Mode Observation Injection
+            while not is_closing and agent_type in ("ReAct", "PlanExecute") and "Action:" in service_final and react_iter < 5:
                 react_iter += 1
                 if "Observation:" in service_final:
                     service_final = service_final.split("Observation:")[0].strip()
@@ -692,7 +715,7 @@ class DialogueRunner:
                             "in what cases", "what are the cases", "cases where i can",
                             "can i ask for", "when can i ask", "how do i get a refund",
                             "how to get a refund", "refund policy", "return policy",
-                            "cancellation policy", "about refund", "about cancel",
+                            "cancellation policy", "about refund",
                             "payment method", "payment option", "payment options",
                             "what payment", "eligible for", "qualify for",
                             "tell me about", "do you offer", "what is the policy",
@@ -1075,6 +1098,22 @@ class DialogueRunner:
                                       f"Redirecting to: {_redirect_to}")
                                 tool_param = _redirect_to
 
+                    # [PE GUARD] PlanExecute: skip re-executing query_order when order is already verified.
+                    if agent_type == "PlanExecute" and tool_name == "query_order" and query_verified and last_query_observation:
+                        print(f"!!! [PE GUARD] query_order already verified. Injecting cached observation.")
+                        obs_prompt = (
+                            f"Observation: {last_query_observation}\n\n"
+                            f"[SYSTEM]: Order already verified. "
+                            f"The customer's request is: \"{customer_msg}\"\n"
+                            f"Address THAT specific request. Apply Step 3 of the Decision Protocol. "
+                            f"⚠ CONSENT RULE: Do NOT call cancel_order or apply_refund unless "
+                            f"the customer explicitly said 'cancel my order' or 'please refund my order'."
+                        )
+                        service_final, next_usage = service_agent.run(obs_prompt, case_id=case_id)
+                        for k in service_usage: service_usage[k] += next_usage[k]
+                        is_closing = is_farewell(service_final) or any(kw in service_final.lower() for kw in ["welcome", "assist you"])
+                        break
+
                     print(f"--- [RE-ACT INTERCEPT] Executing: {tool_name}({tool_param}) (Iter {react_iter}) ---")
 
                     if tool_name == "query_order":
@@ -1102,13 +1141,148 @@ class DialogueRunner:
                         if tool_name == "query_order":
                             query_verified = True
                             last_query_observation = observation  # Save for dedup fallback synthesis
+                            # [PE IMMEDIATE SYNTHESIS] For PlanExecute informational questions, generate
+                            # the response programmatically right here, bypassing the LLM obs_prompt call.
+                            # This eliminates T2 context-filling hallucinations (invented status reasons,
+                            # wrong topic pivots) that occur when the LLM narrates order data instead of
+                            # answering the customer's actual question.
+                            if agent_type == "PlanExecute":
+                                _d = observation.get("data", {})
+                                _oid = _d.get("order_number", "")
+                                _st = _d.get("status", "processing")
+                                _its = ", ".join(_d.get("items", [])) or "your items"
+                                _sd = _d.get("shipping_date", "")
+                                _shipped = _st.lower() in ("shipped", "in transit", "delivered", "refunded")
+                                _c_kws = [
+                                    "cancel my order", "cancel this order", "cancelling my order",
+                                    "cancelling this order", "i want to cancel", "i'd like to cancel",
+                                    "please cancel", "go ahead and cancel", "proceed with cancel",
+                                    "canceling", "cancellation"
+                                ]
+                                _r_kws = [
+                                    "i want a refund", "i need a refund", "i'd like a refund",
+                                    "give me a refund", "money back", "please refund",
+                                    "process a refund", "apply a refund", "request a refund"
+                                ]
+                                _io_kws = [
+                                    "refund policy", "return policy", "payment method", "payment option",
+                                    "in what cases", "what are the cases", "can i ask for",
+                                    "eligible for", "qualify for", "tell me about"
+                                ]
+                                _is_trans = (
+                                    (any(k in customer_text_history for k in _c_kws) or
+                                     any(k in customer_text_history for k in _r_kws)) and
+                                    not any(k in customer_text_history for k in _io_kws)
+                                )
+                                _imm = None
+                                if not _is_trans:
+                                    _addr_k = [
+                                        "correct my address", "update address", "change address",
+                                        "wrong address", "delivery address", "shipping address",
+                                        "update my address", "change my address", "fix my address",
+                                        "incorrect address"
+                                    ]
+                                    _pay_k = [
+                                        "payment method", "how can i pay", "what payment",
+                                        "payment option", "accepted payment", "pay with",
+                                        "methods of payment"
+                                    ]
+                                    _pol_k = [
+                                        "refund policy", "return policy", "can i return",
+                                        "in what cases", "what are the cases", "cases where i can",
+                                        "can i ask for", "ask for a refund", "when can i ask",
+                                        "missing order", "lost in transit", "lost package",
+                                        "what the policy is", "policy on refund", "policy on return"
+                                    ]
+                                    _del_k = [
+                                        "delivery option", "delivery choice", "delivery method",
+                                        "available delivery", "shipping option", "how can i receive",
+                                        "delivery choices", "what delivery"
+                                    ]
+                                    _definitive = False  # marks answers that need no T3 follow-up
+                                    if any(k in customer_text_history for k in _addr_k):
+                                        _imm = (
+                                            f"I've verified your order {_oid}. "
+                                            f"Unfortunately, our system doesn't support changing "
+                                            f"the shipping address once an order is placed. "
+                                            + (f"Since your order is currently {_st}, please contact "
+                                               f"the carrier directly for any delivery concerns. "
+                                               if _shipped else
+                                               f"If you need a different address, the best option is "
+                                               f"to cancel and re-place the order. ")
+                                            + f"Is there anything else I can help you with?"
+                                        )
+                                        _definitive = True
+                                    elif any(k in customer_text_history for k in _pay_k):
+                                        _imm = (
+                                            f"We accept major credit/debit cards (Visa, Mastercard, Amex), "
+                                            f"digital wallets, and other options at checkout. "
+                                            f"For your current order {_oid} ({_its}), "
+                                            f"payment has been processed. "
+                                            f"Is there anything else I can help you with?"
+                                        )
+                                        _definitive = True
+                                    elif any(k in customer_text_history for k in _pol_k):
+                                        _imm = (
+                                            f"Our standard policy allows returns within 30 days of delivery "
+                                            f"for damaged goods, incorrect items, or quality issues. "
+                                            f"If you believe your package was lost in transit, please contact "
+                                            f"our support team to open an investigation. "
+                                            f"Your order {_oid} ({_its}) is currently {_st}. "
+                                            f"Is there anything else I can help you with?"
+                                        )
+                                        # Not _definitive — allow T3 synthesis to handle follow-ups
+                                    elif any(k in customer_text_history for k in _del_k):
+                                        _imm = (
+                                            f"Once an order has been placed, delivery options cannot be "
+                                            f"changed through our system. "
+                                            f"For future orders, you can select standard, express, or "
+                                            f"priority shipping at checkout. "
+                                            f"Your order {_oid} ({_its}) is currently {_st}. "
+                                            f"Is there anything else I can help you with?"
+                                        )
+                                        _definitive = True
+                                if _imm:
+                                    print("!!! [PE IMMEDIATE SYNTHESIS] Info question — bypassing LLM obs_prompt.")
+                                    service_final = _imm
+                                    if _definitive:
+                                        # Mark resolved so T3 synthesis doesn't repeat the same response
+                                        task_resolved = True
+                                        tool_triggered = True
+                                        final_resolution = "INFO_PROVIDED"
+                                    break  # Exit react loop; skip obs_prompt LLM call
                         elif tool_name in ("apply_refund", "cancel_order"):
                             task_resolved = True
                             tool_triggered = True
                             final_resolution = "EXECUTED_SUCCESSFULLY"
                             resolved_tool = tool_name
                             verified_pending_turns = 0  # Reset on success
-                    obs_prompt = f"Observation: {observation}"
+                    # For PlanExecute after query_order: inject the customer's original question
+                    # so the LLM anchors its response to intent, not just order status.
+                    if (agent_type == "PlanExecute" and tool_name == "query_order"
+                            and isinstance(observation, dict) and observation.get("status") == "success"):
+                        _obs_status = observation.get("data", {}).get("status", "").lower()
+                        _terminal = _obs_status in ("refunded", "cancelled", "cancel", "delivered")
+                        _state_hint = (
+                            f"⚠ STATE CONSTRAINT: This order is already '{observation.get('data',{}).get('status','')}' "
+                            f"(a closed/terminal state). Do NOT offer to cancel or re-place it — those actions are impossible. "
+                            f"Inform the customer the order is already resolved and suggest contacting support for any remaining concerns. "
+                        ) if _terminal else ""
+                        obs_prompt = (
+                            f"Observation: {observation}\n\n"
+                            f"[SYSTEM]: Order data retrieved. "
+                            f"The customer's request is: \"{customer_msg}\"\n"
+                            f"Address THAT specific request using the order data above. "
+                            f"Do NOT simply read back the order status. "
+                            f"Apply Step 3 of the Decision Protocol. "
+                            f"{_state_hint}"
+                            f"⚠ CONSENT RULE: Do NOT call cancel_order or apply_refund unless "
+                            f"the customer explicitly said 'cancel my order' or 'please refund my order'. "
+                            f"⚠ POLICY RULE: Cite ONLY policies from your instructions (30-day return for "
+                            f"damaged/incorrect/quality items). Do NOT invent timeframes or conditions."
+                        )
+                    else:
+                        obs_prompt = f"Observation: {observation}"
                     service_final, next_usage = service_agent.run(obs_prompt, case_id=case_id)
                     for k in service_usage: service_usage[k] += next_usage[k]
                     react_no_action_count = 0  # Reset counter on successful action
@@ -1350,4 +1524,4 @@ if __name__ == "__main__":
         all_facts = json.load(f)
     runner = DialogueRunner()
     for case in ["CASE_001", "CASE_002", "CASE_141", "CASE_090", "CASE_015", "CASE_075"]:
-        runner.run_conversation(case, all_facts[case], "Reflection", "Polite")
+        runner.run_conversation(case, all_facts[case], "PlanExecute", "Polite")

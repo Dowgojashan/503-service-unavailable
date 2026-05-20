@@ -6,6 +6,12 @@ from datetime import datetime
 from src.core.factory import AgentFactory
 from src.agents.customer_agent import CustomerAgent
 
+try:
+    from eval.llm_judge import judge_single_case, save_results_csv
+    _JUDGE_AVAILABLE = True
+except ImportError:
+    _JUDGE_AVAILABLE = False
+
 class DialogueRunner:
     def __init__(self, model_name="llama3.1:8b"):
         self.model_name = model_name
@@ -1515,8 +1521,44 @@ class DialogueRunner:
             print("Debug: Save complete")
         except Exception as e:
             print(f"Debug: Save failed with error: {e}")
-            
-        print(f">>> Finished with Status: {status}. Saved to {log_path}\n")
+
+        print(f">>> Finished with Status: {status}. Saved to {log_path}")
+
+        # --- LLM-as-a-Judge (optional, requires GEMINI_API_KEY) ---
+        if _JUDGE_AVAILABLE and os.environ.get("GEMINI_API_KEY"):
+            fact_sheets_path = "data/fact_sheets.json"
+            judge_csv = "outputs/judge_results.csv"
+            try:
+                judge_result = judge_single_case(
+                    log_path, fact_sheets_path, verbose=False
+                )
+                scores = judge_result.get("scores", {})
+                final = judge_result.get("final_score_0_100", "?")
+                print(
+                    f">>> Judge: F={scores.get('fulfillment','?')} "
+                    f"L={scores.get('logic','?')} "
+                    f"T={scores.get('tone','?')} "
+                    f"→ {final}/100"
+                )
+                # Append to running CSV
+                csv_exists = os.path.exists(judge_csv)
+                existing = []
+                if csv_exists:
+                    import csv as _csv
+                    with open(judge_csv, encoding="utf-8") as _f:
+                        existing = list(_csv.DictReader(_f))
+                # Replace entry for same case+agent+persona if re-running
+                key = (judge_result.get("case_id"), judge_result.get("agent_type"),
+                       judge_result.get("persona_type"))
+                existing = [r for r in existing
+                            if (r.get("case_id"), r.get("agent_type"),
+                                r.get("persona_type")) != key]
+                existing.append(judge_result)
+                save_results_csv(existing, judge_csv)
+            except Exception as e:
+                print(f">>> Judge skipped ({e})")
+        print()
+
         return log_data
 
 if __name__ == "__main__":

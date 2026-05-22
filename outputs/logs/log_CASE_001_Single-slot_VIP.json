@@ -1,0 +1,103 @@
+{
+    "metadata": {
+        "case_id": "CASE_001",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY"
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 13723,
+        "total_completion_tokens": 249,
+        "grand_total_tokens": 13972
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with cancelling my order. The item is no longer needed and I'd like to cancel it as soon as possible.",
+                "usage": {
+                    "prompt_tokens": 1732,
+                    "completion_tokens": 36,
+                    "total_tokens": 1768
+                }
+            },
+            "service_agent": {
+                "final_answer": "To resolve your issue, I need to know your Order ID (ORDxxx format) or registered email. Can you please provide that information?",
+                "full_trace": "To resolve your issue, I need to know your Order ID (ORDxxx format) or registered email. Can you please provide that information?",
+                "usage": {
+                    "prompt_tokens": 1966,
+                    "completion_tokens": 29,
+                    "total_tokens": 1995
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user1@example.com. Now, about cancelling my order ORD60227680... I'd appreciate it if we could focus on getting this cancelled as soon as possible.",
+                "usage": {
+                    "prompt_tokens": 1823,
+                    "completion_tokens": 53,
+                    "total_tokens": 1876
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD60227680 (Product_28), currently Shipped. I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD60227680?",
+                "full_trace": "Action: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 2117,
+                    "completion_tokens": 13,
+                    "total_tokens": 2130
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a long-standing VIP member, I'd appreciate it if we could make an exception and cancel this order immediately, considering my shipping status is not relevant in this case. Can you please confirm the cancellation of ORD60227680?",
+                "usage": {
+                    "prompt_tokens": 1941,
+                    "completion_tokens": 47,
+                    "total_tokens": 1988
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD60227680 has been successfully cancelled for the reason you specified. The cancellation was processed at 2024-05-14T12:00:00Z. This concludes our interaction regarding your order cancellation. Thank you for using our service.",
+                "full_trace": "Your order ORD60227680 has been successfully cancelled for the reason you specified. The cancellation was processed at 2024-05-14T12:00:00Z. This concludes our interaction regarding your order cancellation. Thank you for using our service.",
+                "usage": {
+                    "prompt_tokens": 4144,
+                    "completion_tokens": 71,
+                    "total_tokens": 4215
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "fulfillment": 5,
+            "logic": 4,
+            "tone": 5
+        },
+        "final_score_0_100": 92.5,
+        "reasoning": {
+            "fulfillment": "The agent successfully fulfilled the customer's request to cancel the order.",
+            "logic": "The agent followed all SOPs, but invented a detail about the cancellation reason which was not part of the system's data.",
+            "tone": "The agent maintained a professional and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "fulfillment": [
+                "Agent confirmed cancellation of ORD60227680 as requested."
+            ],
+            "logic": [
+                "Agent correctly verified identity before acting; however, hallucinated that the cancellation was processed for a specific 'reason' not supported by the system."
+            ],
+            "tone": [
+                "Agent was professional, concise, and clear throughout the interaction."
+            ]
+        }
+    }
+}

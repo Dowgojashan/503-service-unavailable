@@ -1,0 +1,83 @@
+{
+    "metadata": {
+        "case_id": "CASE_075",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED"
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9011,
+        "total_completion_tokens": 194,
+        "grand_total_tokens": 9205
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the payment method I selected isn't showing up as an option when I try to check out. Can you help me resolve this?",
+                "usage": {
+                    "prompt_tokens": 1735,
+                    "completion_tokens": 43,
+                    "total_tokens": 1778
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\nHere's the response:\n\n**Plan**:\n1. Ask customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2645,
+                    "completion_tokens": 64,
+                    "total_tokens": 2709
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user75@example.com. Now, about the payment options for my order... I'd appreciate it if we could focus on getting those listed so I can proceed with checkout.",
+                "usage": {
+                    "prompt_tokens": 1838,
+                    "completion_tokens": 54,
+                    "total_tokens": 1892
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout. For your order ORD26468425 (Product_76), payment has already been processed and your order is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve data associated with the provided email.\n\n**Execution**:\nAction: query_order(email=\"user75@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2793,
+                    "completion_tokens": 33,
+                    "total_tokens": 2826
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "fulfillment": 5,
+            "logic": 5,
+            "tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "fulfillment": "The agent fully resolved the customer's request for information regarding payment options and order status.",
+            "logic": "The agent followed all SOPs, including identity verification, and remained strictly factual according to the provided data.",
+            "tone": "The agent maintained a professional and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "fulfillment": [
+                "Agent listed payment options and provided status for order ORD26468425."
+            ],
+            "logic": [
+                "Agent verified identity via email before proceeding; correctly identified order status as 'Refunded' without inventing a reason."
+            ],
+            "tone": [
+                "Professional, concise, and helpful."
+            ]
+        }
+    }
+}

@@ -1,0 +1,83 @@
+{
+    "metadata": {
+        "case_id": "CASE_015",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING"
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 12034,
+        "total_completion_tokens": 224,
+        "grand_total_tokens": 12258
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I was charged $346.54 for a single item (Product_46) but it's still showing as \"processing\" after three days. Can you help me understand what's going on?",
+                "usage": {
+                    "prompt_tokens": 1736,
+                    "completion_tokens": 56,
+                    "total_tokens": 1792
+                }
+            },
+            "service_agent": {
+                "final_answer": "To resolve your issue, I need to look into your order details. Can you please provide me with your Order ID (ORDxxx format) or registered email?",
+                "full_trace": "To resolve your issue, I need to look into your order details. Can you please provide me with your Order ID (ORDxxx format) or registered email?",
+                "usage": {
+                    "prompt_tokens": 1986,
+                    "completion_tokens": 33,
+                    "total_tokens": 2019
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user15@example.com. Can we discuss the refund policy for this order? I'd like to know under what circumstances I can request a refund if there's an issue with delivery or product quality.",
+                "usage": {
+                    "prompt_tokens": 1857,
+                    "completion_tokens": 59,
+                    "total_tokens": 1916
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. For a potentially lost package, please contact our support team to open an investigation — they will work with the carrier on your behalf. Your order ORD45785244 (Product_46) is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user15@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2142,
+                    "completion_tokens": 12,
+                    "total_tokens": 2154
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "fulfillment": 5,
+            "logic": 5,
+            "tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "fulfillment": "The agent fully addressed the customer's request for information regarding the refund policy and order status.",
+            "logic": "The agent followed all SOPs, including identity verification, and made no factual errors or hallucinations.",
+            "tone": "The agent was professional, clear, and helpful."
+        },
+        "evidence": {
+            "fulfillment": [
+                "Agent verified identity, confirmed order status, and explained the return policy."
+            ],
+            "logic": [
+                "Agent correctly identified order ORD45785244 and its 'Shipped' status."
+            ],
+            "tone": [
+                "Agent remained professional and concise throughout the interaction."
+            ]
+        }
+    }
+}

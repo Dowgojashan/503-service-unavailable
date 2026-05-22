@@ -1,0 +1,83 @@
+{
+    "metadata": {
+        "case_id": "CASE_075",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED"
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 7216,
+        "total_completion_tokens": 143,
+        "grand_total_tokens": 7359
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit. Can you please help me figure out what's going on with my delivery?",
+                "usage": {
+                    "prompt_tokens": 1510,
+                    "completion_tokens": 44,
+                    "total_tokens": 1554
+                }
+            },
+            "service_agent": {
+                "final_answer": "To proceed, could you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "full_trace": "To proceed, could you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "usage": {
+                    "prompt_tokens": 1974,
+                    "completion_tokens": 27,
+                    "total_tokens": 2001
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I don't have my Order ID handy right now, but I can give you my registered email if that helps. It's user75@example.com. Can we discuss the payment options for this order? I'd like to know what methods are available and which one is being used for this transaction.",
+                "usage": {
+                    "prompt_tokens": 1607,
+                    "completion_tokens": 60,
+                    "total_tokens": 1667
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD26468425 (Product_76), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user75@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2125,
+                    "completion_tokens": 12,
+                    "total_tokens": 2137
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "fulfillment": 3,
+            "logic": 5,
+            "tone": 5
+        },
+        "final_score_0_100": 75.0,
+        "reasoning": {
+            "fulfillment": "The agent addressed the secondary request but ignored the primary request regarding the delivery status.",
+            "logic": "The agent followed all SOPs and accurately reflected the information provided in the fact sheet.",
+            "tone": "The communication was professional, concise, and clear."
+        },
+        "evidence": {
+            "fulfillment": [
+                "Agent answered the payment question but failed to address the customer's initial concern about the delivery status."
+            ],
+            "logic": [
+                "Agent correctly verified identity and cited order details without hallucination."
+            ],
+            "tone": [
+                "The agent maintained a professional and helpful tone throughout."
+            ]
+        }
+    }
+}

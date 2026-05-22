@@ -9,19 +9,19 @@
         "final_resolution": "EXECUTED_SUCCESSFULLY"
     },
     "usage_summary": {
-        "total_prompt_tokens": 15411,
-        "total_completion_tokens": 3081,
-        "grand_total_tokens": 18492
+        "total_prompt_tokens": 15410,
+        "total_completion_tokens": 3080,
+        "grand_total_tokens": 18490
     },
     "conversation": [
         {
             "turn": 1,
             "customer": {
-                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit. Can you please help me figure out what's going on with my delivery?",
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit. Can you help me figure out what's going on with my delivery?",
                 "usage": {
                     "prompt_tokens": 1507,
-                    "completion_tokens": 44,
-                    "total_tokens": 1551
+                    "completion_tokens": 43,
+                    "total_tokens": 1550
                 }
             },
             "service_agent": {
@@ -39,9 +39,9 @@
             "customer": {
                 "content": "My Order ID is ORD60227680. I'd appreciate it if we could focus on cancelling this order instead of just checking on its status. Can you help me with that?",
                 "usage": {
-                    "prompt_tokens": 1616,
+                    "prompt_tokens": 1615,
                     "completion_tokens": 37,
-                    "total_tokens": 1653
+                    "total_tokens": 1652
                 }
             },
             "service_agent": {
@@ -54,5 +54,30 @@
                 }
             }
         }
-    ]
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "fulfillment": 5,
+            "logic": 5,
+            "tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "fulfillment": "The agent fully resolved the customer's request to cancel the order.",
+            "logic": "The agent followed the identity verification SOP and correctly applied the cancellation policy without any hallucinations.",
+            "tone": "The agent maintained a professional and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "fulfillment": [
+                "Agent successfully cancelled order ORD60227680 as requested."
+            ],
+            "logic": [
+                "Agent verified the Order ID before taking action; no order-specific facts were invented."
+            ],
+            "tone": [
+                "Agent was professional, concise, and helpful throughout the interaction."
+            ]
+        }
+    }
 }

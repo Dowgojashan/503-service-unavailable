@@ -203,7 +203,32 @@ class DialogueRunner:
             else:
                 # Order already queried successfully — guide toward resolution
                 verified_pending_turns += 1
-                if verified_pending_turns >= 2:
+                # Refusal detection: customer just explicitly declined the offered alternative
+                _refusal_sigs_sys = [
+                    "i don't want to cancel", "don't want to cancel",
+                    "not the whole order", "not the entire order",
+                    "that's not what i asked for", "not what i asked",
+                    "i'd rather not cancel", "prefer not to cancel",
+                    "don't cancel", "do not cancel",
+                    "don't want cancellation", "no cancellation", "without cancellation",
+                ]
+                _customer_just_refused = (
+                    any(sig in customer_msg.lower() for sig in _refusal_sigs_sys) or
+                    ("don't want" in customer_msg.lower() and "cancel" in customer_msg.lower())
+                )
+
+                if _customer_just_refused:
+                    sys_hint = (
+                        f"[SYSTEM CONTEXT — CRITICAL]: Order {info_str} has been verified. "
+                        f"The customer has EXPLICITLY REFUSED the cancellation option in their current message. "
+                        f"DO NOT call cancel_order, apply_refund, or any action tool. "
+                        f"Your ONLY valid output is Final Answer. "
+                        f"Acknowledge the limitation and close gracefully — the customer does not want to cancel: "
+                        f"'I understand. Unfortunately, removing individual items isn't supported. "
+                        f"If you change your mind, please don't hesitate to contact us. "
+                        f"Is there anything else I can help you with?'"
+                    )
+                elif verified_pending_turns >= 2:
                     # Customer has refused the alternative at least once — enforce consent before action
                     sys_hint = (
                         f"[SYSTEM CONTEXT — CRITICAL]: Order {info_str} has been verified. "
@@ -461,12 +486,14 @@ class DialogueRunner:
                                       "request a refund", "initiate a refund"]
                     remove_kws_syn = ["remove item", "remove one", "remove the item", "remove an item",
                                       "removing one", "removing item", "removing the", "removing an",
-                                      "modify item", "modify the item", "exchange", "delete item"]
+                                      "modify item", "modify the item", "exchange", "delete item",
+                                      "remove product", "removing product", "remove my item"]
                     refusal_sigs_syn = ["rather not", "don't want to cancel", "prefer not", "not cancel",
                                         "something else", "another option",
                                         "not the whole order", "not the entire order",
                                         "instead of the whole", "instead of the entire",
-                                        "not what i had in mind"]
+                                        "not what i had in mind",
+                                        "don't want cancellation", "no cancellation", "without cancellation"]
                     info_override_kws_syn = [
                         "in what cases", "what are the cases", "cases where i can",
                         "can i ask for", "when can i ask", "how do i get a refund",
@@ -484,7 +511,9 @@ class DialogueRunner:
                                           "accepted payment", "pay with", "methods of payment"]
                     ref_policy_kws_syn = ["refund policy", "return policy", "can i return",
                                           "in what cases", "what are the cases", "cases where i can",
-                                          "can i ask for", "ask for a refund", "when can i ask"]
+                                          "can i ask for", "ask for a refund", "when can i ask",
+                                          "eligible for", "circumstances", "under what",
+                                          "in what circumstances", "reimbursed", "reimbursement"]
                     track_kws_syn = ["where is", "where's my", "track", "tracking"]
                     delivery_opt_kws_syn = ["delivery option", "delivery choice", "delivery method",
                                             "available delivery", "shipping option", "how can i receive",
@@ -712,9 +741,11 @@ class DialogueRunner:
                                       "request a refund", "initiate a refund"]
                         remove_kws = ["remove item", "remove one", "remove the item", "remove an item",
                                       "removing one", "removing item", "removing the", "removing an",
-                                      "modify item", "modify the item", "exchange", "delete item"]
+                                      "modify item", "modify the item", "exchange", "delete item",
+                                      "remove product", "removing product", "remove my item"]
                         refusal_sigs = ["rather not", "don't want to cancel", "prefer not", "not cancel",
-                                        "something else", "another option"]
+                                        "something else", "another option",
+                                        "don't want cancellation", "no cancellation", "without cancellation"]
                         # Informational override: customer is ASKING ABOUT a policy, NOT requesting execution.
                         # Presence of any of these phrases overrides transactional detection.
                         info_override_kws = [
@@ -841,7 +872,9 @@ class DialogueRunner:
                                                   "in what cases", "what are the cases", "cases where i can",
                                                   "can i ask for", "ask for a refund", "when can i ask",
                                                   "qualify for refund", "how do i get a refund",
-                                                  "how to get a refund", "check in what cases"]
+                                                  "how to get a refund", "check in what cases",
+                                                  "eligible for", "circumstances", "under what",
+                                                  "in what circumstances", "reimbursed", "reimbursement"]
                                 pay_issue_kws  = ["payment failed", "payment issue", "payment problem", "wrong charge",
                                                   "double charged", "overcharged", "billing issue", "billing problem"]
                                 invoice_kws    = ["invoice", "tax invoice", "billing document", "need a receipt",
@@ -1069,8 +1102,13 @@ class DialogueRunner:
                             "rather not", "don't want to cancel", "prefer not", "not cancel",
                             "something else", "can we try", "another option", "any other way",
                             "without cancel", "without having to cancel", "i'd like to keep",
+                            "don't want cancellation", "no cancellation", "without cancellation",
                         ]
-                        if any(sig in customer_msg.lower() for sig in refusal_signals):
+                        _t2_refused = (
+                            any(sig in customer_msg.lower() for sig in refusal_signals) or
+                            ("don't want" in customer_msg.lower() and "cancel" in customer_msg.lower())
+                        )
+                        if _t2_refused:
                             print(f"!!! [CONSENT GUARD TIER-2] Customer refused {tool_name} in T{turn_num}. Blocking.")
                             consent_blocked = True
                             guard_prompt = (
@@ -1374,20 +1412,41 @@ class DialogueRunner:
                         else:
                             observation = "Error: apply_refund requires a valid order_id (ORDxxx format)."
                     elif tool_name == "cancel_order":
-                        order_id, reason = self._parse_order_action_args(tool_args_raw)
-                        if order_id:
-                            observation = sim.cancel_order(case_id, order_id, reason)
+                        _ss_cancel_refusal_sigs = [
+                            "i don't want to cancel", "don't want to cancel",
+                            "not the whole order", "not the entire order",
+                            "that's not what i asked for", "not what i asked",
+                            "i'd rather not cancel", "prefer not to cancel",
+                            "don't cancel", "do not cancel",
+                        ]
+                        if query_verified and any(sig in customer_msg.lower() for sig in _ss_cancel_refusal_sigs):
+                            print(f"!!! [SS CONSENT GUARD] Customer refused cancel_order. Blocking.")
+                            service_final = (
+                                "I understand. Unfortunately, removing individual items from an existing order "
+                                "isn't possible through our system, and I won't proceed with a cancellation you "
+                                "haven't agreed to. If you change your mind, please don't hesitate to reach out. "
+                                "Is there anything else I can help you with?"
+                            )
+                            task_resolved = True
+                            final_resolution = "RESOLVED_WITH_REFUSAL"
+                            observation = {"status": "consent_blocked"}
                         else:
-                            observation = "Error: cancel_order requires a valid order_id (ORDxxx format)."
+                            order_id, reason = self._parse_order_action_args(tool_args_raw)
+                            if order_id:
+                                observation = sim.cancel_order(case_id, order_id, reason)
+                            else:
+                                observation = "Error: cancel_order requires a valid order_id (ORDxxx format)."
                     else:
                         observation = f"Error: Tool '{tool_name}' not found. Only query_order, track_shipping, apply_refund, cancel_order are allowed."
-                    
+
                     print(f"--- [SINGLE-SLOT OBSERVATION]: {observation} ---")
 
                     # Track actual tool execution — no keyword guessing needed
                     tool_triggered = True
                     _ss_synthesized = False
-                    if isinstance(observation, dict) and observation.get("status") == "success":
+                    if isinstance(observation, dict) and observation.get("status") == "consent_blocked":
+                        _ss_synthesized = True  # service_final already set by consent guard; skip obs_prompt
+                    elif isinstance(observation, dict) and observation.get("status") == "success":
                         if tool_name == "query_order":
                             query_verified = True
 

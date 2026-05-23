@@ -1,0 +1,103 @@
+{
+    "metadata": {
+        "case_id": "CASE_141",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED"
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 11419,
+        "total_completion_tokens": 152,
+        "grand_total_tokens": 11571
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what delivery options are available for my product.\"",
+                "usage": {
+                    "prompt_tokens": 1637,
+                    "completion_tokens": 28,
+                    "total_tokens": 1665
+                }
+            },
+            "service_agent": {
+                "final_answer": "To proceed, could you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "To proceed, could you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 1959,
+                    "completion_tokens": 26,
+                    "total_tokens": 1985
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation from before?\"",
+                "usage": {
+                    "prompt_tokens": 1716,
+                    "completion_tokens": 26,
+                    "total_tokens": 1742
+                }
+            },
+            "service_agent": {
+                "final_answer": "To proceed, could you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "To proceed, could you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 2104,
+                    "completion_tokens": 26,
+                    "total_tokens": 2130
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user141@example.com. Now can we please talk about delivery options for Product_58? I want to know what choices I have.\"",
+                "usage": {
+                    "prompt_tokens": 1776,
+                    "completion_tokens": 34,
+                    "total_tokens": 1810
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order is placed, delivery options cannot be changed through our system. For future orders, standard, express, or priority shipping are available at checkout. Your order ORD48773451 (Product_58) is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user141@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2227,
+                    "completion_tokens": 12,
+                    "total_tokens": 2239
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "fulfillment": 5,
+            "logic": 5,
+            "tone": 4
+        },
+        "final_score_0_100": 95.0,
+        "reasoning": {
+            "fulfillment": "The agent fully resolved the customer's query by explaining the policy on delivery options and providing the current status of the order.",
+            "logic": "The agent adhered to all SOPs and business rules, with no hallucinations or factual errors.",
+            "tone": "The agent maintained a professional tone throughout, though the repetition in Turn 2 was slightly robotic."
+        },
+        "evidence": {
+            "fulfillment": [
+                "Agent correctly explained that delivery options cannot be changed after an order is placed."
+            ],
+            "logic": [
+                "Agent followed identity verification SOP and accurately retrieved order details from the fact sheet."
+            ],
+            "tone": [
+                "Agent was professional and clear, though Turn 2 was slightly repetitive."
+            ]
+        }
+    }
+}

@@ -1,7 +1,7 @@
 """
 LLM-as-a-Judge evaluator for customer service agent conversations.
 
-Implements system_design.md §3.6.1–3.6.4:
+Implements evaluation_framework.md §4.1 (updated rubric) and system_design.md §3.6.1–3.6.4:
   3.6.1  Structured scoring rubrics (1–5 per dimension)
   3.6.2  Chain-of-Thought prompting: evidence → reasoning → score
   3.6.3  Reference-based grounding via fact_sheets.json
@@ -11,12 +11,16 @@ Judge model : gemini-3.1-flash-lite  (Google AI Studio / Gemini API)
 Note        : deliberately different from the evaluated model (llama3.1:8b)
               to avoid self-evaluation bias (player-referee problem)
 
-Weights (→ S_Judge, weight 0.7 in the overall framework):
-  Fulfillment  50%  — did the agent resolve the customer's core problem?
-  Logic        30%  — SOP compliance + zero hallucination vs. fact sheet
-  Tone         20%  — professional, concise, empathetic
+Weights → S_AnswerQuality (used in S_Outcome = 0.60 * S_AnswerQuality + 0.40 * S_Grounding):
+  S_Resolution   50%  — core need correctly resolved, no factual errors
+  S_Completeness 30%  — all necessary info provided, customer knows next step
+  S_Tone         20%  — professional, concise, empathetic
 
 Score mapping: dimension 1–5  →  (score-1)/4 × 100  →  weighted average
+
+Bias mitigations (evaluation_framework.md §6.2):
+  - Architecture type NOT injected into judge prompt (removes architecture-label bias)
+  - Judge required to cite final-answer verbatim as evidence before scoring
 """
 
 from __future__ import annotations
@@ -40,7 +44,7 @@ load_dotenv()
 
 JUDGE_MODEL = "gemini-3.1-flash-lite"
 
-DIMENSION_WEIGHTS = {"fulfillment": 0.50, "logic": 0.30, "tone": 0.20}
+DIMENSION_WEIGHTS = {"s_resolution": 0.50, "s_completeness": 0.30, "s_tone": 0.20}
 
 # ---------------------------------------------------------------------------
 # Scoring rubric (injected verbatim into the judge prompt)
@@ -49,24 +53,23 @@ DIMENSION_WEIGHTS = {"fulfillment": 0.50, "logic": 0.30, "tone": 0.20}
 RUBRIC = """
 === SCORING RUBRIC ===
 
-[Fulfillment] Task Achievement — Did the agent resolve the customer's core problem?
-  5 = Core problem fully resolved; correct tool action executed
-      (e.g. order cancelled, refund applied, info provided accurately)
-  4 = Problem largely resolved with a minor gap or unnecessary detour
-  3 = Topic addressed but the key request was left unanswered or incomplete
-  2 = Only tangential help given; customer's actual need was ignored
-  1 = Problem not addressed, refused without valid reason, or situation worsened
+[S_Resolution] Task Resolution & Factual Accuracy — Was the customer's core need correctly addressed?
+  5 = Core need fully resolved; correct tool action executed (if required);
+      every factual claim matches the fact sheet; no invented information
+  4 = Core need largely resolved with a minor gap or one small factual imprecision
+  3 = Topic addressed but key request left unanswered OR one hallucinated fact present
+      (e.g. inventing a reason for a refund; claiming cancellation is impossible when it isn't)
+  2 = Only tangential help given; actual need ignored; OR multiple factual errors
+  1 = Need not addressed, refused without valid reason, or situation worsened
 
-[Logic] Business Logic & Hallucination — Did the agent follow SOPs and stay factual?
-  5 = All SOP steps followed correctly (identity verification → action);
-      every factual claim matches the fact sheet exactly; no invented information
-  4 = Minor phrasing deviation; no harmful factual errors
-  3 = One hallucinated fact OR one critical SOP step skipped
-      (e.g. acted before verifying identity; invented a refund reason)
-  2 = Multiple hallucinated facts OR significant policy violation
-  1 = Dangerous hallucination (fabricated amounts/dates) or completely wrong procedure
+[S_Completeness] Information Completeness — Did the response give the customer everything needed to understand the outcome and next steps?
+  5 = All necessary information provided; customer knows exactly what was done and what to do next
+  4 = Most information present; customer may need one minor follow-up
+  3 = Partial information; customer would likely need to ask again
+  2 = Key information missing; customer cannot proceed without re-contacting support
+  1 = Response so incomplete that it provides no actionable value
 
-[Tone] Communication Professionalism — Was the agent professional and concise?
+[S_Tone] Communication Professionalism — Was the agent professional, empathetic, and concise?
   5 = Professional, empathetic, concise, and clear throughout
   4 = Mostly professional; minor verbosity or slight coldness
   3 = Acceptable but inconsistent (e.g. robotic repetition, slightly off-topic)
@@ -75,7 +78,7 @@ RUBRIC = """
 """.strip()
 
 # ---------------------------------------------------------------------------
-# Judge prompt template
+# Judge prompt template (architecture label removed per §6.2)
 # ---------------------------------------------------------------------------
 
 JUDGE_PROMPT_TEMPLATE = """\
@@ -89,7 +92,7 @@ BUSINESS RULES  (this system's authoritative policies — override any generic C
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 1. Identity verification SOP: The agent MUST ask for the customer's Order ID (ORDxxx format)
    OR registered email before taking any action. Providing either one is sufficient.
-   Skipping this step before executing a tool is a Logic violation.
+   Skipping this step before executing a tool is an S_Resolution violation.
 
 2. Cancellation policy: Orders in ANY status — including "Shipped" — MAY be cancelled upon
    customer request. Offering to cancel a shipped order is CORRECT behaviour, not a violation.
@@ -110,7 +113,7 @@ BUSINESS RULES  (this system's authoritative policies — override any generic C
 
 7. Refund reasons: If `refund_info.refund_status` in the fact sheet is "N/A", the reason
    for the order's refunded status is UNKNOWN. The agent MUST NOT invent a reason
-   (e.g. "refunded due to a damaged item"). Inventing a reason IS a Logic violation.
+   (e.g. "refunded due to a damaged item"). Inventing a reason IS an S_Resolution violation.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ANTI-HALLUCINATION RULE  (critical — read carefully)
@@ -118,12 +121,13 @@ ANTI-HALLUCINATION RULE  (critical — read carefully)
 The fact sheet tells you everything that is KNOWN about this specific order.
 If the service agent states an order-specific fact that is NOT in the fact sheet, that is a hallucination.
 
-Examples of hallucinations to penalise under [Logic]:
-• Inventing a REASON for a refund (e.g. "refunded due to a damaged item") when the fact sheet only shows refund_status: "N/A"
+Examples of hallucinations to penalise under [S_Resolution]:
+• Inventing a REASON for a refund (e.g. "refunded due to a damaged item") when refund_status is "N/A"
 • Stating a wrong order amount, wrong item name, or wrong order number
 • Claiming an action was taken (cancel/refund) when the tool call trace shows it was NOT executed
 
-General business policy (e.g. "30-day return window", "contact support for investigations") is NOT in the fact sheet on purpose — the agent is allowed to cite standard policy. Only penalise order-specific invented facts.
+General business policy (e.g. "30-day return window", "contact support for investigations") is NOT in the
+fact sheet on purpose — the agent is allowed to cite standard policy. Only penalise order-specific invented facts.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 FACT SHEET  (ground truth for this case)
@@ -135,7 +139,7 @@ FACT SHEET  (ground truth for this case)
 CUSTOMER INTENT: {intent}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CONVERSATION TRANSCRIPT
+CONVERSATION TRANSCRIPT  (agent type withheld — evaluate the response quality only)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 {conversation}
 
@@ -143,8 +147,9 @@ CONVERSATION TRANSCRIPT
 EVALUATION — follow these steps in order
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Step 1 — Evidence extraction
-  For each dimension list the key quotes or actions that are POSITIVE (✓) or NEGATIVE (✗).
+Step 1 — Evidence extraction  (MANDATORY: quote the agent's FINAL answer verbatim for each dimension)
+  For each dimension list the key quotes that are POSITIVE (✓) or NEGATIVE (✗).
+  You MUST include at least one direct quote from the agent's final substantive response.
 
 Step 2 — Fact verification
   Compare every order-specific claim by the agent against the fact sheet.
@@ -159,21 +164,20 @@ Step 4 — Output JSON
 ```json
 {{
   "case_id": "{case_id}",
-  "agent_type": "{agent_type}",
   "evidence": {{
-    "fulfillment": ["<quote or action>"],
-    "logic": ["<fact check result>"],
-    "tone": ["<tone observation>"]
+    "s_resolution": ["<direct quote from agent's final answer>"],
+    "s_completeness": ["<direct quote from agent's final answer>"],
+    "s_tone": ["<tone observation with quote>"]
   }},
   "reasoning": {{
-    "fulfillment": "<one-sentence justification>",
-    "logic": "<one-sentence justification>",
-    "tone": "<one-sentence justification>"
+    "s_resolution": "<one-sentence justification>",
+    "s_completeness": "<one-sentence justification>",
+    "s_tone": "<one-sentence justification>"
   }},
   "scores": {{
-    "fulfillment": <integer 1-5>,
-    "logic": <integer 1-5>,
-    "tone": <integer 1-5>
+    "s_resolution": <integer 1-5>,
+    "s_completeness": <integer 1-5>,
+    "s_tone": <integer 1-5>
   }},
   "final_score_0_100": <number>
 }}
@@ -181,7 +185,7 @@ Step 4 — Output JSON
 
 final_score_0_100 formula (compute yourself):
   dim_100 = (score - 1) / 4 × 100
-  final = fulfillment_100 × 0.50  +  logic_100 × 0.30  +  tone_100 × 0.20
+  final = s_resolution_100 × 0.50  +  s_completeness_100 × 0.30  +  s_tone_100 × 0.20
 """.strip()
 
 
@@ -216,11 +220,9 @@ def format_conversation(log: dict) -> str:
 # ---------------------------------------------------------------------------
 
 def extract_json_from_response(text: str) -> dict:
-    # 1. ```json ... ``` block
     m = re.search(r"```json\s*([\s\S]*?)\s*```", text)
     if m:
         return json.loads(m.group(1))
-    # 2. Last standalone {...} block
     m = re.search(r"(\{[\s\S]*\})\s*$", text)
     if m:
         return json.loads(m.group(1))
@@ -232,10 +234,23 @@ def extract_json_from_response(text: str) -> dict:
 # ---------------------------------------------------------------------------
 
 def compute_final_score(scores: dict) -> float:
-    """Map 1–5 per dimension → weighted 0–100."""
+    """Map 1–5 per dimension → weighted 0–100.
+
+    Accepts both old keys (fulfillment/logic/tone) and new keys
+    (s_resolution/s_completeness/s_tone) for backward compatibility.
+    """
+    key_map = {
+        "fulfillment": "s_resolution",
+        "logic": "s_completeness",
+        "tone": "s_tone",
+    }
+    normalised = {}
+    for k, v in scores.items():
+        normalised[key_map.get(k, k)] = v
+
     total = 0.0
     for dim, weight in DIMENSION_WEIGHTS.items():
-        raw = scores.get(dim, 1)
+        raw = normalised.get(dim, 1)
         total += ((raw - 1) / 4 * 100) * weight
     return round(total, 1)
 
@@ -275,7 +290,6 @@ def judge_single_case(
     case_id = meta.get("case_id", "UNKNOWN")
     agent_type = meta.get("agent_type", "UNKNOWN")
 
-    # intent from fact sheet (more reliable than log metadata)
     fact_sheet = load_fact_sheet(fact_sheets_path, case_id)
     intent = fact_sheet.get("metadata", {}).get("intent", "unknown")
 
@@ -287,7 +301,6 @@ def judge_single_case(
         intent=intent,
         conversation=conversation_str,
         case_id=case_id,
-        agent_type=agent_type,
     )
 
     if verbose:
@@ -295,7 +308,6 @@ def judge_single_case(
 
     result = call_judge(prompt, model_name)
 
-    # Always recompute final score with our formula (model may differ)
     if "scores" in result:
         result["final_score_0_100"] = compute_final_score(result["scores"])
 
@@ -319,7 +331,7 @@ def judge_batch(
     delay_seconds: float = 1.5,
 ) -> list[dict]:
     logs_dir = Path(logs_dir)
-    log_files = sorted(logs_dir.glob("log_*.json"))
+    log_files = sorted(logs_dir.rglob("log_*.json"))
 
     print(f"Found {len(log_files)} log file(s). Judge model: {model_name}")
     results: list[dict] = []
@@ -331,9 +343,9 @@ def judge_batch(
             scores = result.get("scores", {})
             print(
                 f"  [{i+1}/{len(log_files)}] {result['case_id']:10s} | {result['agent_type']:12s} "
-                f"| F={scores.get('fulfillment','?')} "
-                f"L={scores.get('logic','?')} "
-                f"T={scores.get('tone','?')} "
+                f"| R={scores.get('s_resolution','?')} "
+                f"C={scores.get('s_completeness','?')} "
+                f"T={scores.get('s_tone','?')} "
                 f"→ {result.get('final_score_0_100','?'):5}/100"
             )
         except Exception as exc:
@@ -358,8 +370,9 @@ def save_results_csv(results: list[dict], output_path: str | Path) -> None:
 
     fieldnames = [
         "case_id", "agent_type", "persona_type", "run_status",
-        "score_fulfillment", "score_logic", "score_tone", "final_score_0_100",
-        "reasoning_fulfillment", "reasoning_logic", "reasoning_tone",
+        "score_s_resolution", "score_s_completeness", "score_s_tone",
+        "final_score_0_100",
+        "reasoning_s_resolution", "reasoning_s_completeness", "reasoning_s_tone",
     ]
 
     with open(output_path, "w", newline="", encoding="utf-8") as f:
@@ -379,13 +392,13 @@ def save_results_csv(results: list[dict], output_path: str | Path) -> None:
                 "agent_type": r.get("agent_type"),
                 "persona_type": r.get("persona_type"),
                 "run_status": r.get("run_status"),
-                "score_fulfillment": scores.get("fulfillment"),
-                "score_logic": scores.get("logic"),
-                "score_tone": scores.get("tone"),
+                "score_s_resolution": scores.get("s_resolution", scores.get("fulfillment")),
+                "score_s_completeness": scores.get("s_completeness", scores.get("logic")),
+                "score_s_tone": scores.get("s_tone", scores.get("tone")),
                 "final_score_0_100": r.get("final_score_0_100"),
-                "reasoning_fulfillment": reasoning.get("fulfillment"),
-                "reasoning_logic": reasoning.get("logic"),
-                "reasoning_tone": reasoning.get("tone"),
+                "reasoning_s_resolution": reasoning.get("s_resolution", reasoning.get("fulfillment")),
+                "reasoning_s_completeness": reasoning.get("s_completeness", reasoning.get("logic")),
+                "reasoning_s_tone": reasoning.get("s_tone", reasoning.get("tone")),
             })
 
 
@@ -396,30 +409,23 @@ def save_results_csv(results: list[dict], output_path: str | Path) -> None:
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="LLM-as-a-Judge evaluator (§3.6)")
+    parser = argparse.ArgumentParser(description="LLM-as-a-Judge evaluator (§4.1)")
     parser.add_argument(
         "--mode", choices=["single", "batch"], default="batch",
         help="Evaluate one log file or all logs in a directory",
     )
     parser.add_argument("--log", help="Path to a single log JSON (required for --mode single)")
-    parser.add_argument("--logs-dir", default="outputs/logs", help="Directory of log files")
+    parser.add_argument("--logs-dir", default="outputs/logs", help="Directory of log files (searched recursively)")
     parser.add_argument("--fact-sheets", default="data/fact_sheets.json")
-    parser.add_argument("--output-csv", default="outputs/judge_results.csv")
-    parser.add_argument(
-        "--model", default=JUDGE_MODEL,
-        help="Judge model name (e.g. gemini-3.1-flash-lite or gemini-2.5-flash)",
-    )
-    parser.add_argument(
-        "--delay", type=float, default=1.5,
-        help="Seconds to wait between API calls (batch mode)",
-    )
+    parser.add_argument("--output-csv", default="outputs/reports/judge_results.csv")
+    parser.add_argument("--model", default=JUDGE_MODEL)
+    parser.add_argument("--delay", type=float, default=1.5)
     args = parser.parse_args()
 
     if args.mode == "single":
         if not args.log:
             parser.error("--log is required when using --mode single")
         result = judge_single_case(args.log, args.fact_sheets, args.model)
-        # Print without the raw response to keep output clean
         display = {k: v for k, v in result.items() if k != "_raw_response"}
         print(json.dumps(display, ensure_ascii=False, indent=2))
     else:

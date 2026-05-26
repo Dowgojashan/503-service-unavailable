@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_015",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 40.37
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 21755,
+        "total_completion_tokens": 459,
+        "grand_total_tokens": 22214
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it.\"",
+                "usage": {
+                    "prompt_tokens": 1639,
+                    "completion_tokens": 26,
+                    "total_tokens": 1665
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help you with your order, could you please provide me with either your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To help you with your order, could you please provide me with either your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2628,
+                    "completion_tokens": 61,
+                    "total_tokens": 2689
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do you need that? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1727,
+                    "completion_tokens": 18,
+                    "total_tokens": 1745
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help you with your order, could you please provide me with either your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask customer for Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To help you with your order, could you please provide me with either your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2770,
+                    "completion_tokens": 59,
+                    "total_tokens": 2829
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user15@example.com. Now can we please talk about refunds? I want to know under what circumstances I can ask for one.\"",
+                "usage": {
+                    "prompt_tokens": 1784,
+                    "completion_tokens": 33,
+                    "total_tokens": 1817
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"According to our policy, you can ask for a refund if an item in your order is damaged or incorrect. Since your order status is 'Shipped', please contact us within 30 days of receiving the item if it doesn't meet these conditions.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's request about refunds.\n\n**Execution**:\nFinal Response: \"According to our policy, you can ask for a refund if an item in your order is damaged or incorrect. Since your order status is 'Shipped', please contact us within 30 days of receiving the item if it doesn't meet these conditions.\"",
+                "usage": {
+                    "prompt_tokens": 6040,
+                    "completion_tokens": 103,
+                    "total_tokens": 6143
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not good enough. I want to know if there are ANY other circumstances under which I can get a refund. You're just giving me a bunch of fine print and expecting me to take it at face value. What about if the item is defective? Or if I simply change my mind?\"",
+                "usage": {
+                    "prompt_tokens": 1959,
+                    "completion_tokens": 61,
+                    "total_tokens": 2020
+                }
+            },
+            "service_agent": {
+                "final_answer": "Beyond damaged goods, incorrect items, and quality issues, refunds may also apply when a product significantly differs from its listing description. For example, receiving a red item when the listing showed blue, or a product missing a key advertised feature. Items that simply don't meet personal expectations are generally not eligible. Your order ORD45785244 (Product_46) is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain the policy regarding refunds for defective items.\n2. Address the customer's concern about changing their mind.\n\n**Execution**:\nFinal Response: \"Our policy allows for a refund if an item is damaged, incorrect, or defective. However, we do not offer refunds for simply changing your mind. If you believe the item is defective, please contact us within 30 days of receiving it and we'll be happy to assist you with a return or exchange.\"",
+                "usage": {
+                    "prompt_tokens": 3208,
+                    "completion_tokens": 98,
+                    "total_tokens": 3306
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer, provided accurate policy information, and avoided any hallucinations regarding the order.",
+            "s_completeness": "The agent fully answered the customer's questions regarding refund eligibility and provided the current status of their order.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction, even when the customer was initially resistant to verification."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD45785244 (Product_46) is currently Shipped."
+            ],
+            "s_completeness": [
+                "Beyond damaged goods, incorrect items, and quality issues, refunds may also apply when a product significantly differs from its listing description."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

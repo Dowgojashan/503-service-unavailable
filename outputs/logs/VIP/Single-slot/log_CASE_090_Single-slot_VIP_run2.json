@@ -1,0 +1,118 @@
+{
+    "metadata": {
+        "case_id": "CASE_090",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 14.66
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 7735,
+        "total_completion_tokens": 133,
+        "grand_total_tokens": 7868
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the shipping address is incorrect and I need it changed ASAP.",
+                "usage": {
+                    "prompt_tokens": 1787,
+                    "completion_tokens": 29,
+                    "total_tokens": 1816
+                }
+            },
+            "service_agent": {
+                "final_answer": "To resolve your issue, I need to know your Order ID (ORDxxx format) or registered email. Can you please provide that information?",
+                "full_trace": "To resolve your issue, I need to know your Order ID (ORDxxx format) or registered email. Can you please provide that information?",
+                "usage": {
+                    "prompt_tokens": 1959,
+                    "completion_tokens": 29,
+                    "total_tokens": 1988
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user90@example.com. Now, about correcting the shipping address... I don't know what steps I need to take or what information you require from me to make this change. Can you walk me through the process?",
+                "usage": {
+                    "prompt_tokens": 1874,
+                    "completion_tokens": 63,
+                    "total_tokens": 1937
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user90@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2115,
+                    "completion_tokens": 12,
+                    "total_tokens": 2127
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 4,
+            "s_tone": 5
+        },
+        "final_score_0_100": 67.5,
+        "reasoning": {
+            "s_resolution": "The agent correctly stated the address change policy but provided illogical advice by suggesting the customer contact a carrier for an order that is already refunded.",
+            "s_completeness": "The agent provided the necessary information regarding the address change policy, though the additional advice was confusing.",
+            "s_tone": "The agent maintained a professional, empathetic, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Shipping addresses cannot be changed once an order is placed."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-26T05:28:22.246499+00:00",
+        "s_answer_quality": 67.5,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true,
+            "policy_no_forbidden_claim": true
+        },
+        "s_outcome": 80.5,
+        "s_tool": 100.0,
+        "tool_detail": {
+            "tool_f1": 1.0,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 93.2,
+        "s_agent": 93.2,
+        "proxy_cost": 46.42,
+        "net_value": 1.3998
+    }
+}

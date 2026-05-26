@@ -192,61 +192,72 @@ ecommerce-agent-eval/
 
 ---
 
-## 🔄 階段五：精簡版評估指標實作
+## ✅ 階段五：精簡版評估指標實作
 **目標**：依據 `evaluation_framework.md` 的精簡架構，將新的評估指標整合至 Runner 與 Judge。
 
-- [ ] **5.1 更新 LLM Judge Rubric（3 維度）**：
-    - 將現有的 Fulfillment / Logic / Tone 調整為 `S_Resolution`（50%）/ `S_Completeness`（30%）/ `S_Tone`（20%）。
-    - 在 `eval/llm_judge.py` 更新 rubric 定義與換算公式。
-    - 在 judge prompt 中移除架構標籤，加入「引用 final answer 原文作為 evidence」的強制要求。
+- ✅ **5.1 更新 LLM Judge Rubric（3 維度）**：
+    - Fulfillment / Logic / Tone 對應至 `S_Resolution`（50%）/ `S_Completeness`（30%）/ `S_Tone`（20%）。
+    - `eval/llm_judge.py` rubric 定義與換算公式完成；judge prompt 不帶架構標籤，強制引用 final answer 原文作為 evidence。
 
-- [ ] **5.2 實作 rule-based S_Grounding**：
-    - 建立 `data/policy_ground_truth.json`，定義每個 case 的合法政策條件（如 CASE_015 的退款條件清單）。
-    - 在 `eval/metrics.py` 實作自動比對邏輯：
-        - **Tool observation 層**：final answer 中的 status / order_id / items / amount 是否與 tool 回傳一致。
-        - **Policy 層**：final answer 是否引用了 policy_ground_truth 以外的條件。
-    - 計算公式：`S_Grounding = 100 * (passed_checks / total_applicable_checks)`
+- ✅ **5.2 實作 rule-based S_Grounding**：
+    - `data/policy_ground_truth.json` 建立完成，定義每個 case 的合法政策條件。
+    - `eval/metrics.py` 實作 tool observation 層（status / order_id / items / amount 比對）與 policy 層比對。
+    - `S_Grounding = 100 * (passed_checks / total_applicable_checks)`
 
-- [ ] **5.3 實作 S_Tool（F1 + Argument + ResultUsage）**：
-    - 在 `data/fact_sheets.json` 各 case 中新增 `expected_tools` 欄位。
-    - 在 `eval/metrics.py` 實作 ToolPrecision / ToolRecall / F1 計算。
-    - 實作 ArgumentCorrectness（參數是否正確）與 ResultUsage（工具結果是否代入推理）的評分邏輯。
+- ✅ **5.3 實作 S_Tool（F1 + Argument + ResultUsage）**：
+    - `data/fact_sheets.json` 各 case 已有 `expected_tools` 欄位。
+    - `eval/metrics.py` 完成 ToolPrecision / ToolRecall / F1、ArgumentCorrectness、ResultUsage 計算。
 
-- [ ] **5.4 實作 S_Trajectory（rule-based）**：
-    - 在 `eval/metrics.py` 實作：
-        - 流程順序檢查（query_order 是否在 cancel/refund 之前）
-        - 無效循環偵測（同一 tool 呼叫超過 2 次）
-        - 冗餘步驟計算
+- ✅ **5.4 實作 S_Trajectory（rule-based）**：
+    - 流程順序檢查、無效循環偵測、冗餘步驟計算均已實作於 `eval/metrics.py`。
 
-- [ ] **5.5 實作 S_Efficiency**：
-    - 每次對話記錄 latency（整體執行時間）。
-    - 以同難度 Single-slot 的 median latency 作為 baseline 計算效率分數。
+- ✅ **5.5 實作 S_Efficiency**：
+    - 每次對話記錄 `execution_seconds`（run2/3）及 `grand_total_tokens`（run1 fallback）。
+    - 以同難度 Single-slot median 作為 baseline；支援 `--baseline-logs-dir` 指定跨架構的基準目錄（解決混合單位 bug）。
 
-- [ ] **5.6 整合 S_Agent 最終分數計算**：
+- ✅ **5.6 整合 S_Agent 最終分數計算**：
     - `S_raw = 0.35 * S_Outcome + 0.25 * S_Tool + 0.20 * S_Trajectory + 0.20 * S_Efficiency`
     - I_fatal gate：觸發則 `S_Agent = min(S_raw, 40)`
 
 ---
 
-## [ ] 階段六：穩定性驗證與 Phase 2 擴大實驗
-**目標**：確認結果可重現，並擴大測試規模以支持統計分析。
+## ✅ 階段六（6.1）：穩定性驗證
+**目標**：確認 Phase 1（6 cases × 4 architectures × 3 personas）結果可重現。
 
-- [ ] **6.1 多次執行穩定性驗證**：
-    - 對所有 case × architecture × persona 組合各執行 **3 次**，記錄 mean ± SD。
-    - 若 SD > 20：排查 temperature 設定，或增加至 5 次執行。
-    - 建議：若模型支援，固定 `temperature=0` 以提高可重現性。
+- ✅ **6.1 多次執行穩定性驗證（全部完成）**：
+    - 所有組合各執行 **3 次**（run1 / run2 / run3），記錄 mean ± SD。
+    - 判斷標準：SD ≤ 10 [OK]，10 < SD ≤ 20 [~]，SD > 20 [!!]
+
+    **穩定性結果總覽：**
+
+    | 架構 | Polite | Adversarial | VIP |
+    |------|--------|-------------|-----|
+    | Single-slot | ✅ 全 OK（最大 SD=9.5） | ✅ 全 OK | ✅ 全 OK（最大 SD=3.2） |
+    | ReAct | ✅ 全 OK（最大 SD=4.9） | ✅ 全 OK（最大 SD=4.9） | ✅ 全 OK（最大 SD=4.3） |
+    | Reflection | ✅ 5 OK, 1 [~]（CASE_090 SD=13.2） | ✅ 全 OK（最大 SD=7.1） | ✅ 5 OK, 1 [~]（CASE_075 SD=12.5） |
+    | PlanExecute | ✅ 全 OK（最大 SD=6.5） | ✅ 5 OK, 1 [~]（CASE_075 SD=12.8） | ✅ 全 OK（最大 SD=3.9） |
+
+    > 共 72 組合，70 組 [OK]，2 組 [~]（皆在允許範圍內），無 [!!]。
+
+    > **技術補充**：ReAct / Reflection / PlanExecute 計算 S_Efficiency 時需透過 `--baseline-logs-dir` 指向對應 Persona 的 Single-slot 目錄，避免混合單位導致 S_Efficiency 崩潰。
+
+---
+
+## [ ] 階段六（6.2–6.4）及 Phase 2 擴大實驗
 
 - [ ] **6.2 LLM Judge 信度驗證**：
     - 對 final score 落在 60–75 區間的 case 進行 10% 人工抽樣複核。
     - 計算 judge 與人工評分的 Spearman 相關係數，目標 ρ ≥ 0.75。
+    - `eval/stability.py --judge-check` 可產生待填寫的 checklist；`--spearman` 可在填寫後計算 ρ。
 
-- [ ] **6.3 擴大測試規模（Phase 2）**：
-    - 根據 Phase 1 的穩定架構，擴展至更多測試案例（目標：涵蓋 Easy / Medium / Hard 各難度充足樣本）。
-    - 需確立 Task Complexity Index（見 evaluation_framework.md §6.5）後再執行分組。
+- [ ] **6.3 擴大測試規模（Phase 2，150 筆）**：
+    - Phase 1 穩定性驗證通過，可執行完整 150 筆測試。
+    - 前置條件：確立 Task Complexity Index（見 evaluation_framework.md §6.5）後分組執行。
 
 - [ ] **6.4 I_fatal Cap 敏感度分析**：
-    - 對現有資料分別套用 hard zero、cap=30、cap=40、severity penalty 四種設定。
+    - 對現有資料套用 hard zero、cap=30、cap=40、severity penalty 四種設定。
     - 比較各設定下架構 NetValue 排名是否一致，決定最終 Cap 值。
+    - `eval/stability.py --sensitivity` 可執行此分析。
 
 ---
 

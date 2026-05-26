@@ -1,0 +1,118 @@
+{
+    "metadata": {
+        "case_id": "CASE_015",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 22.52
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 12201,
+        "total_completion_tokens": 236,
+        "grand_total_tokens": 12437
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - it's been over a week since I placed it, but I still haven't received the Product_46 I ordered. Can you help me figure out what's going on?",
+                "usage": {
+                    "prompt_tokens": 1787,
+                    "completion_tokens": 52,
+                    "total_tokens": 1839
+                }
+            },
+            "service_agent": {
+                "final_answer": "To resolve your issue, I need to look into your order details first. Can you please provide me with your Order ID (ORDxxx format) or registered email?",
+                "full_trace": "To resolve your issue, I need to look into your order details first. Can you please provide me with your Order ID (ORDxxx format) or registered email?",
+                "usage": {
+                    "prompt_tokens": 1982,
+                    "completion_tokens": 34,
+                    "total_tokens": 2016
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user15@example.com. And as for the order, I'm more concerned about understanding the refund policy in case there's an issue with the product or delivery. Can you tell me under what circumstances I can ask for a refund?",
+                "usage": {
+                    "prompt_tokens": 1906,
+                    "completion_tokens": 66,
+                    "total_tokens": 1972
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. For a potentially lost package, please contact our support team to open an investigation — they will work with the carrier on your behalf. Your order ORD45785244 (Product_46) is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user15@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2146,
+                    "completion_tokens": 12,
+                    "total_tokens": 2158
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly addressed the customer's intent, verified identity, and provided accurate information without any hallucinations.",
+            "s_completeness": "The response provided clear, actionable next steps for the customer's delivery issue and explained the return policy.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Our policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. For a potentially lost package, please contact our support team to open an investigation"
+            ],
+            "s_completeness": [
+                "For a potentially lost package, please contact our support team to open an investigation — they will work with the carrier on your behalf."
+            ],
+            "s_tone": [
+                "To resolve your issue, I need to look into your order details first. Can you please provide me with your Order ID (ORDxxx format) or registered email?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-26T05:28:22.244481+00:00",
+        "s_answer_quality": 100.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true,
+            "policy_no_hallucinated_condition": true
+        },
+        "s_outcome": 100.0,
+        "s_tool": 100.0,
+        "tool_detail": {
+            "tool_f1": 1.0,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 65.1,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 93.0,
+        "s_agent": 93.0,
+        "proxy_cost": 54.79,
+        "net_value": 0.3821
+    }
+}

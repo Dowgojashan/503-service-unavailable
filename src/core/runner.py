@@ -3,6 +3,7 @@ import json
 import re
 import time
 from datetime import datetime
+from typing import Optional
 from src.core.factory import AgentFactory
 from src.agents.customer_agent import CustomerAgent
 
@@ -48,7 +49,7 @@ class DialogueRunner:
 
         return order_id, reason
 
-    def run_conversation(self, case_id, fact_sheet, agent_type, persona_type, max_turns=6):
+    def run_conversation(self, case_id, fact_sheet, agent_type, persona_type, max_turns=6, run_id: Optional[int] = None):
         """
         Runs a multi-turn conversation with ReAct Atomicity and State Protection.
         """
@@ -83,6 +84,7 @@ class DialogueRunner:
         )
         
         # 3. Dialogue Loop
+        _case_start_time = time.perf_counter()
         conversation_log = []
         last_service_response = ""
         task_resolved = False
@@ -1699,18 +1701,20 @@ class DialogueRunner:
         log_data = {
             "metadata": {
                 "case_id": case_id, "agent_type": agent_type, "persona_type": persona_type,
-                "model": self.model_name, "status": status, 
+                "model": self.model_name, "status": status,
                 "task_status": "TOOL_TRIGGERED" if tool_triggered else "NO_TOOL",
-                "final_resolution": final_resolution
+                "final_resolution": final_resolution,
+                "execution_seconds": round(time.perf_counter() - _case_start_time, 2)
             },
             "usage_summary": acc_usage,
             "conversation": conversation_log
         }
         
-        # Ensure directories exist and add debug prints
-        log_dir = "outputs/logs"
+        # Save to organised subdirectory: outputs/logs/{persona_type}/{agent_type}/
+        log_dir = os.path.join("outputs", "logs", persona_type, agent_type)
         os.makedirs(log_dir, exist_ok=True)
-        log_path = os.path.join(log_dir, f"log_{case_id}_{agent_type}_{persona_type}.json")
+        _run_suffix = f"_run{run_id}" if run_id is not None else ""
+        log_path = os.path.join(log_dir, f"log_{case_id}_{agent_type}_{persona_type}{_run_suffix}.json")
         
         print(f"Debug: Starting save to {log_path}...")
         try:
@@ -1732,12 +1736,11 @@ class DialogueRunner:
                 )
                 scores = judge_result.get("scores", {})
                 final = judge_result.get("final_score_0_100", "?")
-                print(
-                    f">>> Judge: F={scores.get('fulfillment','?')} "
-                    f"L={scores.get('logic','?')} "
-                    f"T={scores.get('tone','?')} "
-                    f"→ {final}/100"
-                )
+                # Support both old (fulfillment/logic/tone) and new (s_resolution/…) keys
+                r = scores.get("s_resolution", scores.get("fulfillment", "?"))
+                c = scores.get("s_completeness", scores.get("logic", "?"))
+                t = scores.get("s_tone", scores.get("tone", "?"))
+                print(f">>> Judge: F={r} L={c} T={t} → {final}/100")
                 # Write judge scores back into the log JSON
                 log_data["judge"] = {
                     "model": judge_result.get("_raw_response", "")[:0] or "gemini-3.1-flash-lite",
@@ -1768,8 +1771,35 @@ class DialogueRunner:
         return log_data
 
 if __name__ == "__main__":
-    with open("data/fact_sheets.json", "r", encoding="utf-8") as f:
-        all_facts = json.load(f)
-    runner = DialogueRunner()
-    for case in ["CASE_001", "CASE_002", "CASE_141", "CASE_090", "CASE_015", "CASE_075"]:
-        runner.run_conversation(case, all_facts[case], "PlanExecute", "Polite")
+    import argparse as _ap
+
+    _CASES_DEFAULT    = ["CASE_001", "CASE_002", "CASE_015", "CASE_075", "CASE_090", "CASE_141"]
+    _AGENTS_DEFAULT   = ["Single-slot", "ReAct", "Reflection", "PlanExecute"]
+    _PERSONAS_DEFAULT = ["Polite", "Adversarial", "VIP"]
+
+    _parser = _ap.ArgumentParser(description="Run dialogue experiments (Phase 1–6)")
+    _parser.add_argument("--cases",    nargs="*", default=_CASES_DEFAULT,
+                         help="Case IDs to run (default: all 6 Phase-1 cases)")
+    _parser.add_argument("--agents",   nargs="*", default=_AGENTS_DEFAULT,
+                         help="Agent architectures to run")
+    _parser.add_argument("--personas", nargs="*", default=_PERSONAS_DEFAULT,
+                         help="Customer personas to run")
+    _parser.add_argument("--run-id",   type=int,  default=None,
+                         help="Run index for stability experiments (e.g. 2 → _run2 suffix). "
+                              "Omit for baseline run (no suffix).")
+    _parser.add_argument("--model",    default="llama3.1:8b",
+                         help="Ollama model name")
+    _args = _parser.parse_args()
+
+    with open("data/fact_sheets.json", "r", encoding="utf-8") as _f:
+        _all_facts = json.load(_f)
+
+    _runner = DialogueRunner(model_name=_args.model)
+    for _persona in _args.personas:
+        for _agent in _args.agents:
+            for _case in _args.cases:
+                if _case in _all_facts:
+                    _runner.run_conversation(
+                        _case, _all_facts[_case], _agent, _persona,
+                        run_id=_args.run_id,
+                    )

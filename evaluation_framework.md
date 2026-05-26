@@ -328,6 +328,8 @@ S_Agent = min(S_raw, 40)           （若 I_fatal = 1）
 
 ### 4.8 ProxyCost、NetValue、Delta_MB
 
+**核心公式：**
+
 ```
 TokenNorm    = Token_a,i / max(Token)
 LLMCallNorm  = N_LLM,a,i / max(N_LLM)
@@ -338,6 +340,43 @@ ProxyCost = 100 * (0.5 * TokenNorm + 0.3 * LLMCallNorm + 0.2 * ToolCallNorm)
 NetValue(a, i)  = V_i * S_Agent(a, i) / 100 - λ * ProxyCost(a, i)   （λ = 0.01）
 Delta_MB(a, i)  = NetValue(a, i) - NetValue(Single-slot, i)
 ```
+
+**λ = 0.01 的尺度說明：**
+
+V_i × S_Agent / 100 的範圍是 0–3（V_i 最大 3，S_Agent 最大 100）；ProxyCost 範圍是 0–100。λ = 0.01 使 ProxyCost 的最大貢獻為 1，與 V_i 項尺度相當，避免成本項完全主導排名。
+
+---
+
+**各量的具體定義與實作說明：**
+
+| 量 | 定義 | 資料來源 | 實作注意事項 |
+|----|------|----------|------------|
+| Token_a,i | 該 case 所有 LLM call 的 grand_total_tokens | `usage_summary.grand_total_tokens` | 包含 Customer Simulator 的 token，但因各架構 Customer Simulator 邏輯相同，同一 case 的客戶 token 近似恆定，不影響架構間比較 |
+| N_LLM_a,i | LLM API 呼叫次數 | 以 conversation turn 數代理 | **近似值**：Single-slot 每 turn = 1 次 agent call，準確；ReAct/Reflection 每 turn 含多個內部 thought-action cycle，此代理會低估。因 token 數已涵蓋所有 call 的消耗，影響有限 |
+| N_Tool_a,i | 工具呼叫次數（含重複） | 從 `full_trace` 的 `Action:` 行解析 | Reflection 架構的 tool call 由 runner intercept 執行，非來自 `full_trace`，改用 metadata 推斷 |
+| max(Token) | 當次評估批次中所有 log 的 token 最大值 | batch 內計算 | **跨批次比較限制**：見下方說明 |
+| max(N_LLM) | 當次評估批次中所有 log 的 turn 數最大值 | batch 內計算 | 同上 |
+| max(N_Tool) | 當次評估批次中所有 log 的 tool call 數最大值 | batch 內計算 | 同上 |
+
+**跨批次 Normalization 問題：**
+
+目前 `max()` 在每次 `batch_evaluate()` 呼叫的批次內動態計算。若分批跑（如先跑 Single-slot 後跑 PlanExecute），max 值不同，不同批次的 ProxyCost 無法直接比較。
+
+**解決方案（Phase 2 前執行）：** 分析最終報告時，應一次讀入全部 log（所有架構 × 所有 Persona × 所有 case），用全域 max 值重新計算 ProxyCost，確保比較基準一致。
+
+---
+
+**Delta_MB 計算程序：**
+
+Delta_MB 需要 Single-slot 的 NetValue 作為基準，建議計算步驟如下：
+
+1. 先收集所有架構的 NetValue（含 Single-slot）到同一張表
+2. 對每個 (case_id, persona_type) 組合，查找 agent_type = "Single-slot" 的 NetValue 作為基準
+3. `Delta_MB(a, i) = NetValue(a, i) - NetValue(Single-slot, i)`
+
+正值代表該架構在此 case 的成本調整後價值高於 Single-slot（值得升級）；負值代表不合算。
+
+---
 
 **任務難度與價值 V_i：**
 

@@ -1,0 +1,164 @@
+{
+    "metadata": {
+        "case_id": "CASE_066",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "FAILED_INCOMPLETE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 49.75
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 29916,
+        "total_completion_tokens": 437,
+        "grand_total_tokens": 30353
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit.\"",
+                "usage": {
+                    "prompt_tokens": 1508,
+                    "completion_tokens": 30,
+                    "total_tokens": 1538
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4390,
+                    "completion_tokens": 56,
+                    "total_tokens": 4446
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email is user66@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1577,
+                    "completion_tokens": 10,
+                    "total_tokens": 1587
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. For a potentially lost package, please contact our support team to open an investigation — they will work with the carrier on your behalf. Your order ORD96215509 (Product_83) is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user66@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2331,
+                    "completion_tokens": 12,
+                    "total_tokens": 2343
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I'm glad my order is refunded, but I'd like to know where I can receive the refund of money. Can you tell me how and when I'll get it?\"",
+                "usage": {
+                    "prompt_tokens": 1722,
+                    "completion_tokens": 36,
+                    "total_tokens": 1758
+                }
+            },
+            "service_agent": {
+                "final_answer": "According to our refund policy, you're eligible for a full refund upon request, regardless of the order status. Refunds are processed within 5-7 business days and will be credited back to your original payment method.\n\nIs there anything else I can assist you with?",
+                "full_trace": "According to our refund policy, you're eligible for a full refund upon request, regardless of the order status. Refunds are processed within 5-7 business days and will be credited back to your original payment method.\n\nIs there anything else I can assist you with?",
+                "usage": {
+                    "prompt_tokens": 4565,
+                    "completion_tokens": 65,
+                    "total_tokens": 4630
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"Thank you for explaining the refund process, but I'm still unsure about where I'll receive the refund of money. Will it be deposited directly into my bank account or will I get a check in the mail?\"",
+                "usage": {
+                    "prompt_tokens": 1864,
+                    "completion_tokens": 44,
+                    "total_tokens": 1908
+                }
+            },
+            "service_agent": {
+                "final_answer": "The refund will be credited back to your original payment method.",
+                "full_trace": "The refund will be credited back to your original payment method.",
+                "usage": {
+                    "prompt_tokens": 2586,
+                    "completion_tokens": 13,
+                    "total_tokens": 2599
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"I appreciate your help, but I'm still unclear about where exactly the refund will be deposited. Could you please confirm if it's directly into my bank account or another location?\"",
+                "usage": {
+                    "prompt_tokens": 1887,
+                    "completion_tokens": 36,
+                    "total_tokens": 1923
+                }
+            },
+            "service_agent": {
+                "final_answer": "The refund will be credited back to your original payment method.\n\nI understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "The refund will be credited back to your original payment method.\n\nI understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2696,
+                    "completion_tokens": 49,
+                    "total_tokens": 2745
+                }
+            }
+        },
+        {
+            "turn": 6,
+            "customer": {
+                "content": "\"Thank you for trying to help me understand how the refund will work. However, I'm still not clear on where exactly the money will be deposited. Could you please just confirm if it's directly into my bank account or another location?\"",
+                "usage": {
+                    "prompt_tokens": 1957,
+                    "completion_tokens": 49,
+                    "total_tokens": 2006
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2833,
+                    "completion_tokens": 37,
+                    "total_tokens": 2870
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 2
+        },
+        "final_score_0_100": 25.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's specific question about the deposit location, instead repeating a canned response until the conversation stalled.",
+            "s_completeness": "The agent failed to provide the necessary information to resolve the customer's confusion, leaving the request unanswered.",
+            "s_tone": "The agent became robotic and dismissive, using canned responses that were inappropriate for the context of the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "The refund will be credited back to your original payment method."
+            ],
+            "s_completeness": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for."
+            ]
+        }
+    }
+}

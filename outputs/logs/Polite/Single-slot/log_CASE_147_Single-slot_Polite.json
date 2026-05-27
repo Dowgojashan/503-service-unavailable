@@ -1,0 +1,85 @@
+{
+    "metadata": {
+        "case_id": "CASE_147",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 17.56
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9903,
+        "total_completion_tokens": 157,
+        "grand_total_tokens": 10060
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm trying to figure out what's going on with the delivery options. Can you help me check on the status of my shipment?",
+                "usage": {
+                    "prompt_tokens": 1507,
+                    "completion_tokens": 45,
+                    "total_tokens": 1552
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4422,
+                    "completion_tokens": 60,
+                    "total_tokens": 4482
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user147@example.com. Can we discuss the delivery options for my order? I'd like to know what shipping methods are available and which one will be used for my package.",
+                "usage": {
+                    "prompt_tokens": 1595,
+                    "completion_tokens": 40,
+                    "total_tokens": 1635
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order is placed, delivery options cannot be changed through our system. For future orders, standard, express, or priority shipping are available at checkout. Your order ORD44256487 (Product_85) is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user147@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2379,
+                    "completion_tokens": 12,
+                    "total_tokens": 2391
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order details and accurately communicated the business policy regarding delivery options.",
+            "s_completeness": "The agent provided the order status and clearly explained why the customer's request could not be fulfilled.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order is placed, delivery options cannot be changed through our system.",
+                "Your order ORD44256487 (Product_85) is currently Processing."
+            ],
+            "s_completeness": [
+                "Once an order is placed, delivery options cannot be changed through our system. For future orders, standard, express, or priority shipping are available at checkout."
+            ],
+            "s_tone": [
+                "Your order ORD44256487 (Product_85) is currently Processing. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

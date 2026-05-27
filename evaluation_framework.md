@@ -478,6 +478,18 @@ scoring:
 
 對 final score 落在 60–75 區間（灰色地帶，最容易誤判）的 case 做 10% 人工複核，計算 judge 與人工評分的 Spearman 相關係數。建議信度門檻：ρ ≥ 0.75 才採用大規模 LLM judge 評分。
 
+**Phase 1 實驗結果（Phase 6.2 驗證，2026-05-27）：**
+
+- 灰色地帶樣本：15 筆（S_Agent 60–75 區間，6 cases × 4 architectures × 3 personas 去重後）
+- Spearman ρ（human vs S_Agent）= **0.193**（FAIL，未達 ρ ≥ 0.75 門檻）
+- 進一步診斷：human vs s_answer_quality（n=15）ρ = 0.451；排除 3 筆明顯 judge failure 後（n=12）ρ = 0.719（臨界）
+- Judge failure 案例（llama3.1:8b 給 0–10，人工評分 85–100）：
+  - CASE_001 / Single-slot / Adversarial（s_answer_quality=10，human=85）
+  - CASE_075 / Reflection / VIP（s_answer_quality=0，human=92.5）
+  - CASE_075 / PlanExecute / Adversarial（s_answer_quality=0，human=100）
+
+**研究限制聲明（Option A）：** 由於 llama3.1:8b 作為 LLM judge 在灰色地帶案例表現不穩（ρ=0.193），本研究的 LLM judge 分數（S_Outcome 組成的 s_answer_quality 部分）僅作為輔助指標，主要結論依賴規則式指標（S_Grounding、S_Tool、S_Trajectory）。Phase 2 大規模評估中，LLM judge 結果應謹慎解讀。
+
 ---
 
 ### 6.3 多次執行穩定性（已有建議）

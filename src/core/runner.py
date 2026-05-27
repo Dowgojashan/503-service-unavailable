@@ -183,11 +183,13 @@ class DialogueRunner:
                 )
             elif not known_info:
                 sys_hint = (
-                    "[SYSTEM CONTEXT — CRITICAL, MANDATORY]: "
+                    "[SYSTEM CONTEXT — CRITICAL]: "
                     "The customer has NOT provided any Order ID or Email yet. "
-                    "You have ZERO order data. Calling any tool right now would require fabricating an Order ID — STRICTLY FORBIDDEN. "
-                    "Your ONLY valid output is Final Answer asking for their Order ID (ORDxxx format) or registered email. "
-                    "DO NOT call any tool. DO NOT use example Order IDs from your instructions."
+                    "If the customer's request is about policy (refund policy, payment methods, delivery options, password reset): "
+                    "call get_policy(policy_type=...) or get_account_info() immediately — NO order ID required. "
+                    "If the request is order-specific (check order, cancel, refund, track shipping): "
+                    "ask for their Order ID (ORDxxx format) or registered email FIRST. "
+                    "NEVER fabricate an Order ID. NEVER call query_order, apply_refund, cancel_order, or track_shipping without a real Order ID."
                 )
             elif not query_verified:
                 # ID present but order not yet queried — force query_order with correct parameter name
@@ -293,7 +295,7 @@ class DialogueRunner:
                             tool_param = tool_args_raw.strip().strip('"').strip("'")
 
                         # Guard R2: force query_order if order not yet verified
-                        if not query_verified and tool_name != "query_order":
+                        if not query_verified and tool_name not in ("query_order", "get_policy", "get_account_info"):
                             print(f"!!! [REFLECTION GUARD 2] Called '{tool_name}' before query_order. Forcing query_order.")
                             id_val = known_info[0]
                             tool_name = "query_order"
@@ -406,8 +408,12 @@ class DialogueRunner:
                                 observation = _sim.cancel_order(case_id, order_id_parsed, reason_parsed)
                             else:
                                 observation = "Error: cancel_order requires a valid order_id (ORDxxx format)."
+                        elif tool_name == "get_policy":
+                            observation = _sim.get_policy(case_id, tool_param)
+                        elif tool_name == "get_account_info":
+                            observation = _sim.get_account_info(case_id)
                         else:
-                            observation = f"Error: Tool '{tool_name}' not found. Only query_order, track_shipping, apply_refund, cancel_order are allowed."
+                            observation = f"Error: Tool '{tool_name}' not found. Available: query_order, track_shipping, apply_refund, cancel_order, get_policy, get_account_info."
 
                         print(f"--- [REFLECTION OBSERVATION]: {observation} ---")
                         tools_called_this_turn.add(tool_name)
@@ -1177,8 +1183,12 @@ class DialogueRunner:
                             observation = _sim.cancel_order(case_id, order_id, reason)
                         else:
                             observation = "Error: cancel_order requires a valid order_id (ORDxxx format)."
+                    elif tool_name == "get_policy":
+                        observation = _sim.get_policy(case_id, tool_param)
+                    elif tool_name == "get_account_info":
+                        observation = _sim.get_account_info(case_id)
                     else:
-                        observation = f"Error: Tool '{tool_name}' not found. Only query_order, track_shipping, apply_refund, cancel_order are allowed."
+                        observation = f"Error: Tool '{tool_name}' not found. Available: query_order, track_shipping, apply_refund, cancel_order, get_policy, get_account_info."
                     
                     print(f"--- [RE-ACT OBSERVATION]: {observation} ---")
                     tools_called_this_turn.add(tool_name)
@@ -1413,6 +1423,10 @@ class DialogueRunner:
                             observation = sim.apply_refund(case_id, order_id, reason)
                         else:
                             observation = "Error: apply_refund requires a valid order_id (ORDxxx format)."
+                    elif tool_name == "get_policy":
+                        observation = sim.get_policy(case_id, tool_param)
+                    elif tool_name == "get_account_info":
+                        observation = sim.get_account_info(case_id)
                     elif tool_name == "cancel_order":
                         _ss_cancel_refusal_sigs = [
                             "i don't want to cancel", "don't want to cancel",
@@ -1439,7 +1453,7 @@ class DialogueRunner:
                             else:
                                 observation = "Error: cancel_order requires a valid order_id (ORDxxx format)."
                     else:
-                        observation = f"Error: Tool '{tool_name}' not found. Only query_order, track_shipping, apply_refund, cancel_order are allowed."
+                        observation = f"Error: Tool '{tool_name}' not found. Available: query_order, track_shipping, apply_refund, cancel_order, get_policy, get_account_info."
 
                     print(f"--- [SINGLE-SLOT OBSERVATION]: {observation} ---")
 
@@ -1777,27 +1791,31 @@ if __name__ == "__main__":
     _AGENTS_DEFAULT   = ["Single-slot", "ReAct", "Reflection", "PlanExecute"]
     _PERSONAS_DEFAULT = ["Polite", "Adversarial", "VIP"]
 
-    _parser = _ap.ArgumentParser(description="Run dialogue experiments (Phase 1–6)")
-    _parser.add_argument("--cases",    nargs="*", default=_CASES_DEFAULT,
+    _parser = _ap.ArgumentParser(description="Run dialogue experiments")
+    _parser.add_argument("--cases",     nargs="*", default=_CASES_DEFAULT,
                          help="Case IDs to run (default: all 6 Phase-1 cases)")
-    _parser.add_argument("--agents",   nargs="*", default=_AGENTS_DEFAULT,
+    _parser.add_argument("--all-cases", action="store_true",
+                         help="Run all cases found in fact_sheets.json (overrides --cases)")
+    _parser.add_argument("--agents",    nargs="*", default=_AGENTS_DEFAULT,
                          help="Agent architectures to run")
-    _parser.add_argument("--personas", nargs="*", default=_PERSONAS_DEFAULT,
+    _parser.add_argument("--personas",  nargs="*", default=_PERSONAS_DEFAULT,
                          help="Customer personas to run")
-    _parser.add_argument("--run-id",   type=int,  default=None,
-                         help="Run index for stability experiments (e.g. 2 → _run2 suffix). "
+    _parser.add_argument("--run-id",    type=int,  default=None,
+                         help="Run index for stability experiments (e.g. 2 => _run2 suffix). "
                               "Omit for baseline run (no suffix).")
-    _parser.add_argument("--model",    default="llama3.1:8b",
+    _parser.add_argument("--model",     default="llama3.1:8b",
                          help="Ollama model name")
     _args = _parser.parse_args()
 
     with open("data/fact_sheets.json", "r", encoding="utf-8") as _f:
         _all_facts = json.load(_f)
 
+    _cases_to_run = sorted(_all_facts.keys()) if _args.all_cases else _args.cases
+
     _runner = DialogueRunner(model_name=_args.model)
     for _persona in _args.personas:
         for _agent in _args.agents:
-            for _case in _args.cases:
+            for _case in _cases_to_run:
                 if _case in _all_facts:
                     _runner.run_conversation(
                         _case, _all_facts[_case], _agent, _persona,

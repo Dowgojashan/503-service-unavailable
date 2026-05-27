@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_091",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 16.57
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9803,
+        "total_completion_tokens": 113,
+        "grand_total_tokens": 9916
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I placed an order about a week ago but haven't received it yet and I'm getting worried about the delivery options for my item.\"",
+                "usage": {
+                    "prompt_tokens": 1502,
+                    "completion_tokens": 31,
+                    "total_tokens": 1533
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4394,
+                    "completion_tokens": 60,
+                    "total_tokens": 4454
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email is user91@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1571,
+                    "completion_tokens": 10,
+                    "total_tokens": 1581
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order is placed, delivery options cannot be changed through our system. For future orders, standard, express, or priority shipping are available at checkout. Your order ORD25471685 (Product_30) is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user91@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2336,
+                    "completion_tokens": 12,
+                    "total_tokens": 2348
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order details and adhered to all business rules, including avoiding speculation on the refund reason.",
+            "s_completeness": "The agent provided all necessary information regarding the order status and the requested policy information.",
+            "s_tone": "The agent maintained a professional, concise, and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order is placed, delivery options cannot be changed through our system. Your order ORD25471685 (Product_30) is currently Refunded."
+            ],
+            "s_completeness": [
+                "Once an order is placed, delivery options cannot be changed through our system. For future orders, standard, express, or priority shipping are available at checkout."
+            ],
+            "s_tone": [
+                "Once an order is placed, delivery options cannot be changed through our system. For future orders, standard, express, or priority shipping are available at checkout. Your order ORD25471685 (Product_30) is currently Refunded. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

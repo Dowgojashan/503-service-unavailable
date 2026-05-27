@@ -1,0 +1,144 @@
+{
+    "metadata": {
+        "case_id": "CASE_078",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 46.32
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 27419,
+        "total_completion_tokens": 425,
+        "grand_total_tokens": 27844
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I placed an order about a week ago but haven't received it yet and I'm getting worried about the delivery status.\"",
+                "usage": {
+                    "prompt_tokens": 1511,
+                    "completion_tokens": 28,
+                    "total_tokens": 1539
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4386,
+                    "completion_tokens": 56,
+                    "total_tokens": 4442
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email is user78@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1581,
+                    "completion_tokens": 10,
+                    "total_tokens": 1591
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on your order and it's currently marked as shipped with a shipping date of May 1st. The total amount for this order is $189.02 USD. You can expect to receive Product_57 soon.\n\nIs there anything else I can assist you with regarding this order?",
+                "full_trace": "I've checked on your order and it's currently marked as shipped with a shipping date of May 1st. The total amount for this order is $189.02 USD. You can expect to receive Product_57 soon.\n\nIs there anything else I can assist you with regarding this order?",
+                "usage": {
+                    "prompt_tokens": 4307,
+                    "completion_tokens": 72,
+                    "total_tokens": 4379
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Actually, I was wondering about my payment options. Can you tell me if there are any issues with my payment method? I'd like to confirm everything is okay before receiving the product.\"",
+                "usage": {
+                    "prompt_tokens": 1698,
+                    "completion_tokens": 39,
+                    "total_tokens": 1737
+                }
+            },
+            "service_agent": {
+                "final_answer": "According to our payment policy, we accept a variety of methods including Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security.\n\nIs there anything else I can assist you with? Your order is currently marked as shipped, so you should receive your product soon.",
+                "full_trace": "According to our payment policy, we accept a variety of methods including Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security.\n\nIs there anything else I can assist you with? Your order is currently marked as shipped, so you should receive your product soon.",
+                "usage": {
+                    "prompt_tokens": 4637,
+                    "completion_tokens": 82,
+                    "total_tokens": 4719
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"Thank you for explaining our payment policy, but I'm still concerned about my specific situation. Can you please confirm if there were any issues with processing my payment? I'd appreciate it if you could look into this further.\"",
+                "usage": {
+                    "prompt_tokens": 1891,
+                    "completion_tokens": 46,
+                    "total_tokens": 1937
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2671,
+                    "completion_tokens": 37,
+                    "total_tokens": 2708
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"Actually, I think we've gotten off track a bit. I still want to confirm if there were any issues with processing my payment for this order. Can you please just check on that for me?\"",
+                "usage": {
+                    "prompt_tokens": 1947,
+                    "completion_tokens": 42,
+                    "total_tokens": 1989
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD63666768 (Product_57), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(order_id=\"ORD63666768\")",
+                "usage": {
+                    "prompt_tokens": 2790,
+                    "completion_tokens": 13,
+                    "total_tokens": 2803
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 3
+        },
+        "final_score_0_100": 90.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly confirmed the payment status, resolving the customer's concern without any factual errors.",
+            "s_completeness": "The agent provided the specific confirmation requested by the customer regarding their payment status.",
+            "s_tone": "The agent was professional but used an inappropriate, generic canned response in Turn 4 that did not address the customer's specific inquiry."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD63666768 (Product_57), payment has already been processed."
+            ],
+            "s_completeness": [
+                "For your order ORD63666768 (Product_57), payment has already been processed."
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ]
+        }
+    }
+}

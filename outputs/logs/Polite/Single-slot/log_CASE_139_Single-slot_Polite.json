@@ -1,0 +1,86 @@
+{
+    "metadata": {
+        "case_id": "CASE_139",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 17.6
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9913,
+        "total_completion_tokens": 154,
+        "grand_total_tokens": 10067
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm trying to figure out why there's no secondary delivery address set up for my package. Can you help me with that?",
+                "usage": {
+                    "prompt_tokens": 1513,
+                    "completion_tokens": 44,
+                    "total_tokens": 1557
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4420,
+                    "completion_tokens": 60,
+                    "total_tokens": 4480
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user139@example.com. I'd appreciate it if we could focus on setting up a secondary delivery address for my order. Can you tell me how to do that?",
+                "usage": {
+                    "prompt_tokens": 1604,
+                    "completion_tokens": 38,
+                    "total_tokens": 1642
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD89711948 is currently Shipped, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user139@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2376,
+                    "completion_tokens": 12,
+                    "total_tokens": 2388
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly applied the business rules regarding address changes and accurately referenced the order status.",
+            "s_completeness": "The response clearly explained the limitation and provided the appropriate next step for the customer.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "Since your order ORD89711948 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?"
+            ]
+        }
+    }
+}

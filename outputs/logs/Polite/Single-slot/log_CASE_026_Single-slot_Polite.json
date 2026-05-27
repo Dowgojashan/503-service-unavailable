@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_026",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 28.67
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 16436,
+        "total_completion_tokens": 300,
+        "grand_total_tokens": 16736
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might not have gone through properly. Can you help me figure out what's going on with my order?",
+                "usage": {
+                    "prompt_tokens": 1507,
+                    "completion_tokens": 43,
+                    "total_tokens": 1550
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4418,
+                    "completion_tokens": 60,
+                    "total_tokens": 4478
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I don't have my Order ID handy right now, but I can give you my registered email if that helps. It's user26@example.com. Can we talk about payment methods for this order? I'd like to know what options are available.",
+                "usage": {
+                    "prompt_tokens": 1592,
+                    "completion_tokens": 51,
+                    "total_tokens": 1643
+                }
+            },
+            "service_agent": {
+                "final_answer": "Based on our company's payment policy, we accept several methods for processing payments, including Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. Payment is processed immediately upon order placement, and all transactions are encrypted and secure. We also accept a variety of currencies, including USD, EUR, GBP, and others.\n\nIs there anything else I can assist you with regarding your order?",
+                "full_trace": "Based on our company's payment policy, we accept several methods for processing payments, including Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. Payment is processed immediately upon order placement, and all transactions are encrypted and secure. We also accept a variety of currencies, including USD, EUR, GBP, and others.\n\nIs there anything else I can assist you with regarding your order?",
+                "usage": {
+                    "prompt_tokens": 4445,
+                    "completion_tokens": 93,
+                    "total_tokens": 4538
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "Actually, I was hoping for a list of available payment methods specifically for my order, since I'm still waiting to hear about its status. Can you confirm which payment options are applicable to my order?",
+                "usage": {
+                    "prompt_tokens": 1794,
+                    "completion_tokens": 41,
+                    "total_tokens": 1835
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD95851138 (Product_32), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user26@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2680,
+                    "completion_tokens": 12,
+                    "total_tokens": 2692
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order details and confirmed the payment status without any factual errors or hallucinations.",
+            "s_completeness": "The agent provided a comprehensive list of payment methods and confirmed the status of the specific order requested.",
+            "s_tone": "The agent maintained a professional, polite, and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD95851138 (Product_32), payment has already been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

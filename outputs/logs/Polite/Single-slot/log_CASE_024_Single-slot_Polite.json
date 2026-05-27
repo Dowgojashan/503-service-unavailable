@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_024",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 17.52
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9907,
+        "total_completion_tokens": 159,
+        "grand_total_tokens": 10066
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm trying to figure out why my payment method wasn't accepted when I checked the allowed options on the website.",
+                "usage": {
+                    "prompt_tokens": 1512,
+                    "completion_tokens": 41,
+                    "total_tokens": 1553
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4414,
+                    "completion_tokens": 60,
+                    "total_tokens": 4474
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user24@example.com. However, I'd appreciate it if we could focus on how I can list the allowed payment options for my order, as I'm still unsure about why my method wasn't accepted.",
+                "usage": {
+                    "prompt_tokens": 1600,
+                    "completion_tokens": 46,
+                    "total_tokens": 1646
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD71223685 (Product_55), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user24@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2381,
+                    "completion_tokens": 12,
+                    "total_tokens": 2393
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer's identity and provided accurate information regarding payment methods and the specific order status.",
+            "s_completeness": "The response fully addressed the customer's inquiry and provided all necessary context regarding their order.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD71223685 (Product_55), payment has already been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD71223685 (Product_55), payment has already been processed. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD71223685 (Product_55), payment has already been processed. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

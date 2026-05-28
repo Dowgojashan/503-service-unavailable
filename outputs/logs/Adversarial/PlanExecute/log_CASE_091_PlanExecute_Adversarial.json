@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_091",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 26.85
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14153,
+        "total_completion_tokens": 287,
+        "grand_total_tokens": 14440
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know when it's going to arrive, but the tracking info is useless.\"",
+                "usage": {
+                    "prompt_tokens": 1630,
+                    "completion_tokens": 33,
+                    "total_tokens": 1663
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help me better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's not provided yet.\n\n**Execution**\nFinal Response: \"To help me better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 2830,
+                    "completion_tokens": 66,
+                    "total_tokens": 2896
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1720,
+                    "completion_tokens": 32,
+                    "total_tokens": 1752
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help me better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Confirm the customer's request is order-specific (check order, cancel, refund, track shipping).\n2. Ask for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To help me better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 3021,
+                    "completion_tokens": 81,
+                    "total_tokens": 3102
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user91@example.com. Now can we please talk about getting this order delivered to {{Delivery City}}? I want to know if there are any delivery options available for that area.\"",
+                "usage": {
+                    "prompt_tokens": 1792,
+                    "completion_tokens": 43,
+                    "total_tokens": 1835
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout. Your order ORD25471685 (Product_30) is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Verify the order exists using the provided email address.\n\n**Execution**:\nAction: query_order(email=\"user91@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3160,
+                    "completion_tokens": 32,
+                    "total_tokens": 3192
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status and addressed the customer's query about delivery options without any hallucinations.",
+            "s_completeness": "The agent provided the order status and clearly explained the policy regarding delivery options, leaving no ambiguity.",
+            "s_tone": "The agent remained professional and helpful throughout the interaction, even when the customer was initially difficult."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD25471685 (Product_30) is currently Refunded."
+            ],
+            "s_completeness": [
+                "Once an order has been placed, delivery options cannot be changed through our system."
+            ],
+            "s_tone": [
+                "Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout."
+            ]
+        }
+    }
+}

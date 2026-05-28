@@ -6,12 +6,13 @@
         "model": "llama3.1:8b",
         "status": "SUCCESS",
         "task_status": "TOOL_TRIGGERED",
-        "final_resolution": "INFO_PROVIDED"
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 16.47
     },
     "usage_summary": {
         "total_prompt_tokens": 11323,
-        "total_completion_tokens": 173,
-        "grand_total_tokens": 11496
+        "total_completion_tokens": 165,
+        "grand_total_tokens": 11488
     },
     "conversation": [
         {
@@ -37,11 +38,11 @@
         {
             "turn": 2,
             "customer": {
-                "content": "I don't have my Order ID handy right now, but I can give you my email address if that's okay? It's user90@example.com. But actually, I'm more concerned about making sure the shipping address is correct - can we talk about how to fix that first?",
+                "content": "I don't have my Order ID handy right now, but I can give you my email address if that's okay. It's user90@example.com. Can we talk about how I might be able to correct the shipping address on my order?",
                 "usage": {
                     "prompt_tokens": 1620,
-                    "completion_tokens": 58,
-                    "total_tokens": 1678
+                    "completion_tokens": 50,
+                    "total_tokens": 1670
                 }
             },
             "service_agent": {
@@ -58,62 +59,27 @@
     "judge": {
         "model": "gemini-3.1-flash-lite",
         "scores": {
-            "fulfillment": 3,
-            "logic": 3,
-            "tone": 5
+            "s_resolution": 3,
+            "s_completeness": 2,
+            "s_tone": 5
         },
-        "final_score_0_100": 60.0,
+        "final_score_0_100": 52.5,
         "reasoning": {
-            "fulfillment": "The agent correctly addressed the address change policy but provided illogical advice regarding the delivery of a refunded order.",
-            "logic": "The agent followed the verification SOP but failed to recognize that a 'Refunded' order is not in transit, leading to a logical error in the advice provided.",
-            "tone": "The agent maintained a professional and polite tone throughout the conversation."
+            "s_resolution": "The agent correctly stated the address change policy but provided a nonsensical instruction to contact a carrier for an order that is already marked as refunded.",
+            "s_completeness": "The response is incomplete and confusing because it directs the customer to a carrier for a delivery that is not occurring due to the refund status.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation."
         },
         "evidence": {
-            "fulfillment": [
-                "Correctly stated address change policy",
-                "Advised contacting carrier for a refunded order, which is unhelpful"
+            "s_resolution": [
+                "Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns."
             ],
-            "logic": [
-                "Followed identity verification SOP",
-                "Hallucinated that a refunded order requires carrier contact for delivery concerns"
+            "s_completeness": [
+                "Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns."
             ],
-            "tone": [
-                "Professional and clear throughout"
+            "s_tone": [
+                "I'd be happy to help!",
+                "Is there anything else I can help you with?"
             ]
         }
-    },
-    "evaluation": {
-        "evaluated_at": "2026-05-26T06:36:47.292795+00:00",
-        "s_answer_quality": 60.0,
-        "s_grounding": 100.0,
-        "grounding_checks": {
-            "order_id_match": true,
-            "status_match": true,
-            "policy_no_forbidden_claim": true
-        },
-        "s_outcome": 76.0,
-        "s_tool": 75.0,
-        "tool_detail": {
-            "tool_f1": 1.0,
-            "arg_correctness": 0.0,
-            "result_usage": 1.0,
-            "used_tools": [
-                "query_order"
-            ]
-        },
-        "s_trajectory": 75.0,
-        "trajectory_checks": {
-            "flow_order": true,
-            "no_excessive_loops": true,
-            "no_redundancy": true,
-            "identity_verified": false
-        },
-        "s_efficiency": 100.0,
-        "i_fatal": 0,
-        "fatal_reasons": [],
-        "s_raw": 80.3,
-        "s_agent": 80.3,
-        "proxy_cost": 55.67,
-        "net_value": 1.0493
     }
 }

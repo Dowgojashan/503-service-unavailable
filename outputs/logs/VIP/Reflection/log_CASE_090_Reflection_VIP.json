@@ -6,12 +6,13 @@
         "model": "llama3.1:8b",
         "status": "SUCCESS",
         "task_status": "TOOL_TRIGGERED",
-        "final_resolution": "EXECUTED_SUCCESSFULLY"
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 80.8
     },
     "usage_summary": {
-        "total_prompt_tokens": 15857,
+        "total_prompt_tokens": 15959,
         "total_completion_tokens": 3086,
-        "grand_total_tokens": 18943
+        "grand_total_tokens": 19045
     },
     "conversation": [
         {
@@ -19,9 +20,9 @@
             "customer": {
                 "content": "Hi, I'm a VIP member and I have an issue with my order - the shipping address is incorrect and I need it changed ASAP.",
                 "usage": {
-                    "prompt_tokens": 1736,
+                    "prompt_tokens": 1787,
                     "completion_tokens": 29,
-                    "total_tokens": 1765
+                    "total_tokens": 1816
                 }
             },
             "service_agent": {
@@ -39,9 +40,9 @@
             "customer": {
                 "content": "I would have thought my VIP account details were already on file, but fine — my email is user90@example.com. Can we please focus on correcting the shipping address? I don't know what steps I need to take or what information you require from me to make this change.",
                 "usage": {
-                    "prompt_tokens": 1833,
+                    "prompt_tokens": 1884,
                     "completion_tokens": 57,
-                    "total_tokens": 1890
+                    "total_tokens": 1941
                 }
             },
             "service_agent": {
@@ -58,27 +59,25 @@
     "judge": {
         "model": "gemini-3.1-flash-lite",
         "scores": {
-            "fulfillment": 3,
-            "logic": 4,
-            "tone": 5
+            "s_resolution": 3,
+            "s_completeness": 4,
+            "s_tone": 5
         },
         "final_score_0_100": 67.5,
         "reasoning": {
-            "fulfillment": "The agent correctly identified the policy regarding address changes but gave illogical advice to contact a carrier for an order that is already refunded.",
-            "logic": "The agent followed verification SOPs but provided a nonsensical instruction regarding the carrier, which contradicts the order status.",
-            "tone": "The agent maintained a professional and helpful tone throughout the conversation."
+            "s_resolution": "The agent correctly stated the address change policy but provided illogical advice to contact a carrier for an order that is already refunded.",
+            "s_completeness": "The agent provided the necessary information regarding the address change limitation, though the next steps were irrelevant.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction."
         },
         "evidence": {
-            "fulfillment": [
-                "Correctly stated address cannot be changed",
-                "Incorrectly advised contacting carrier for a refunded order"
+            "s_resolution": [
+                "Since your order is currently Refunded, please contact the carrier directly for any delivery concerns."
             ],
-            "logic": [
-                "Verified identity correctly",
-                "Hallucinated that the carrier is relevant for a refunded order"
+            "s_completeness": [
+                "Unfortunately, our system doesn't support changing the shipping address once placed."
             ],
-            "tone": [
-                "Professional and concise"
+            "s_tone": [
+                "I've verified your order ORD49006026 with Product_68, currently Refunded."
             ]
         }
     }

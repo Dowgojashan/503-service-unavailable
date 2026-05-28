@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_115",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 25.67
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 13677,
+        "total_completion_tokens": 262,
+        "grand_total_tokens": 13939
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit.\"",
+                "usage": {
+                    "prompt_tokens": 1516,
+                    "completion_tokens": 30,
+                    "total_tokens": 1546
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can look into this further?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's an order-specific request.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can look into this further?\"",
+                "usage": {
+                    "prompt_tokens": 2827,
+                    "completion_tokens": 62,
+                    "total_tokens": 2889
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email is user115@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1607,
+                    "completion_tokens": 10,
+                    "total_tokens": 1617
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. If you believe your package was lost in transit, please contact our support team to open an investigation. Your order ORD45809889 (Product_48) is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the customer's order.\n\n**Execution**:\nAction: query_order(email=\"user115@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2929,
+                    "completion_tokens": 33,
+                    "total_tokens": 2962
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I'm concerned about getting a refund since my order was shipped but I haven't received it. Can we discuss how to proceed with a refund for this order?\"",
+                "usage": {
+                    "prompt_tokens": 1735,
+                    "completion_tokens": 33,
+                    "total_tokens": 1768
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD45809889 with Product_48, currently Shipped. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to understand its status and potential refund options.\n\n**Execution**:\nFinal Response: \"I've checked on your order, user115@example.com. Since it was shipped but you haven't received it, I can process a refund for you. However, please note that our standard policy is 30 days from delivery date for returns due to lost-in-transit issues. Would you like me to proceed with the refund?\"",
+                "usage": {
+                    "prompt_tokens": 3063,
+                    "completion_tokens": 94,
+                    "total_tokens": 3157
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 40.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's request for a refund or acknowledge the existing pending refund status, failing to resolve the core intent.",
+            "s_completeness": "The response was incomplete as it offered to help with a refund but did not actually provide the status or initiate the process, leaving the customer without actionable information.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I can help with tracking, cancellation, or refund requests."
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD45809889 with Product_48, currently Shipped."
+            ]
+        }
+    }
+}

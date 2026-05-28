@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_147",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 45.79
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 26185,
+        "total_completion_tokens": 537,
+        "grand_total_tokens": 26722
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I need to check the shipment methods because it's taking way too long.\"",
+                "usage": {
+                    "prompt_tokens": 1635,
+                    "completion_tokens": 29,
+                    "total_tokens": 1664
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help me assist you with your shipment, could you please provide your Order ID (ORDxxx format) or the email address associated with your account?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's an order-specific request.\n\n**Execution**\nFinal Response: \"To help me assist you with your shipment, could you please provide your Order ID (ORDxxx format) or the email address associated with your account?\"",
+                "usage": {
+                    "prompt_tokens": 2826,
+                    "completion_tokens": 66,
+                    "total_tokens": 2892
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1724,
+                    "completion_tokens": 32,
+                    "total_tokens": 1756
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you with your shipment, could you please provide your Order ID (ORDxxx format) or the email address associated with your account?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Confirm the customer's request is order-specific (check order, cancel, refund, track shipping).\n2. Ask for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To better assist you with your shipment, could you please provide your Order ID (ORDxxx format) or the email address associated with your account?\"",
+                "usage": {
+                    "prompt_tokens": 3016,
+                    "completion_tokens": 79,
+                    "total_tokens": 3095
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user147@example.com. Now can we please talk about the shipment methods? I want to know if there are any options for faster delivery.\"",
+                "usage": {
+                    "prompt_tokens": 1793,
+                    "completion_tokens": 35,
+                    "total_tokens": 1828
+                }
+            },
+            "service_agent": {
+                "final_answer": "Unfortunately, our standard shipping method takes approximately 7-10 business days for domestic deliveries. However, we do offer expedited shipping as an option at checkout for an additional fee. If you'd like to upgrade your shipping speed, please let me know and I can assist with the change.",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's request about shipment methods.\n\n**Execution**:\nFinal Response: Unfortunately, our standard shipping method takes approximately 7-10 business days for domestic deliveries. However, we do offer expedited shipping as an option at checkout for an additional fee. If you'd like to upgrade your shipping speed, please let me know and I can assist with the change.",
+                "usage": {
+                    "prompt_tokens": 9878,
+                    "completion_tokens": 201,
+                    "total_tokens": 10079
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not what I'm asking for. I want to know about the shipment methods available for my order, not how much extra it costs to make it faster. Can you just tell me what options are available for my specific order?\"",
+                "usage": {
+                    "prompt_tokens": 1985,
+                    "completion_tokens": 48,
+                    "total_tokens": 2033
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD44256487 with Product_85, currently Processing. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to determine available shipment methods.\n\n**Execution**:\nFinal Response: \"Based on your order details, our standard shipping method is currently in effect for your order ORD44256487.\"",
+                "usage": {
+                    "prompt_tokens": 3328,
+                    "completion_tokens": 47,
+                    "total_tokens": 3375
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to answer the customer's question and incorrectly offered to change shipping speeds, which violates business policy.",
+            "s_completeness": "The agent failed to clarify that delivery options cannot be changed, leaving the customer's core inquiry unresolved.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD44256487 with Product_85, currently Processing. I can help with tracking, cancellation, or refund requests."
+            ],
+            "s_completeness": [
+                "I've verified your order ORD44256487 with Product_85, currently Processing. I can help with tracking, cancellation, or refund requests."
+            ],
+            "s_tone": [
+                "I've verified your order ORD44256487 with Product_85, currently Processing. I can help with tracking, cancellation, or refund requests."
+            ]
+        }
+    }
+}

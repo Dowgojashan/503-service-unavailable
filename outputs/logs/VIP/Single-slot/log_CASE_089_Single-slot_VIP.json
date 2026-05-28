@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_089",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 19.19
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 10442,
+        "total_completion_tokens": 161,
+        "grand_total_tokens": 10603
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order that I'd like resolved promptly. My shipping address isn't set up correctly for the item I ordered - Product_14.",
+                "usage": {
+                    "prompt_tokens": 1784,
+                    "completion_tokens": 41,
+                    "total_tokens": 1825
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4412,
+                    "completion_tokens": 56,
+                    "total_tokens": 4468
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user89@example.com. Can we please focus on setting up the shipping address for Product_14? I'd appreciate it if you could help me with that.",
+                "usage": {
+                    "prompt_tokens": 1863,
+                    "completion_tokens": 52,
+                    "total_tokens": 1915
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD90785490 is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user89@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2383,
+                    "completion_tokens": 12,
+                    "total_tokens": 2395
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 3,
+            "s_tone": 5
+        },
+        "final_score_0_100": 60.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly stated the address change policy but provided illogical advice to contact a carrier for a refunded order.",
+            "s_completeness": "The response is confusing because it directs the customer to a carrier for a refunded order, leaving the customer without clear next steps.",
+            "s_tone": "The agent was professional, concise, and followed the identity verification SOP."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Since your order ORD90785490 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Since your order ORD90785490 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further."
+            ]
+        }
+    }
+}

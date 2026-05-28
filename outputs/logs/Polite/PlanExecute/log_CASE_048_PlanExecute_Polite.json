@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_048",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 29.38
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 17024,
+        "total_completion_tokens": 335,
+        "grand_total_tokens": 17359
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I placed an order about a week ago but haven't received it yet and I'm getting worried about the status.\"",
+                "usage": {
+                    "prompt_tokens": 1504,
+                    "completion_tokens": 27,
+                    "total_tokens": 1531
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (in the format ORDxxxx) or your registered email address so I can assist you with your order status?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (in the format ORDxxxx) or your registered email address so I can assist you with your order status?\"",
+                "usage": {
+                    "prompt_tokens": 2824,
+                    "completion_tokens": 58,
+                    "total_tokens": 2882
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email address is user48@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1587,
+                    "completion_tokens": 11,
+                    "total_tokens": 1598
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I see that your order (ORD35388196) is currently in processing status. Since it has been a week since you placed the order, I'd like to confirm if everything is okay with your delivery. If there are any issues or concerns, please let me know so we can assist you further.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the customer's request based on their initial message.\n\n**Execution**:\nFinal Response: \"I see that your order (ORD35388196) is currently in processing status. Since it has been a week since you placed the order, I'd like to confirm if everything is okay with your delivery. If there are any issues or concerns, please let me know so we can assist you further.\"",
+                "usage": {
+                    "prompt_tokens": 6085,
+                    "completion_tokens": 120,
+                    "total_tokens": 6205
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I appreciate your help, but I'm actually concerned about getting my invoice for this order. Can you tell me when I can expect to receive an invoice or where I can find it online?\"",
+                "usage": {
+                    "prompt_tokens": 1700,
+                    "completion_tokens": 39,
+                    "total_tokens": 1739
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD35388196 with Product_94, currently Processing. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Check the order data for any information about invoices.\n\n**Execution**:\nFinal Response: \"According to your order details (ORD35388196), you should receive an invoice via email once the order has shipped. Since it's still in processing status, please allow some time for this to happen. If you have any further questions or concerns, feel free to ask.\"",
+                "usage": {
+                    "prompt_tokens": 3324,
+                    "completion_tokens": 80,
+                    "total_tokens": 3404
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 40.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's explicit request for an invoice, instead offering irrelevant services.",
+            "s_completeness": "The response provided no information regarding the invoice, leaving the customer's need entirely unfulfilled.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD35388196 with Product_94, currently Processing. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD35388196 with Product_94, currently Processing."
+            ]
+        }
+    }
+}

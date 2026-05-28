@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_004",
+        "agent_type": "ReAct",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 21.05
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 15962,
+        "total_completion_tokens": 195,
+        "grand_total_tokens": 16157
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I need to cancel it because the item is no longer needed. Can you assist me with this?",
+                "usage": {
+                    "prompt_tokens": 1785,
+                    "completion_tokens": 37,
+                    "total_tokens": 1822
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user4@example.com. The order I'd like to cancel is ORD02683106. Can we please focus on the cancellation process?",
+                "usage": {
+                    "prompt_tokens": 1889,
+                    "completion_tokens": 47,
+                    "total_tokens": 1936
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD02683106 has been successfully cancelled as requested. Is there anything else I can help you with?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent followed all business rules, including identity verification, and successfully performed the requested cancellation.",
+            "s_completeness": "The response clearly confirmed the outcome of the request and invited further questions.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD02683106 has been successfully cancelled as requested."
+            ],
+            "s_completeness": [
+                "Your order ORD02683106 has been successfully cancelled as requested. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?"
+            ]
+        }
+    }
+}

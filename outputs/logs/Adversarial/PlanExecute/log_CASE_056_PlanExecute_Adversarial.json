@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_056",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 46.12
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 26212,
+        "total_completion_tokens": 543,
+        "grand_total_tokens": 26755
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it.\"",
+                "usage": {
+                    "prompt_tokens": 1638,
+                    "completion_tokens": 26,
+                    "total_tokens": 1664
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2823,
+                    "completion_tokens": 58,
+                    "total_tokens": 2881
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1725,
+                    "completion_tokens": 32,
+                    "total_tokens": 1757
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand your concern, but to better assist you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine if the customer's request is about policy or an order-specific issue.\n\n**Execution**:\nFinal Response: \"I understand your concern, but to better assist you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 3012,
+                    "completion_tokens": 66,
+                    "total_tokens": 3078
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user56@example.com. Now can you tell me why I haven't received my order yet? I just want to know when it's going to arrive.\"",
+                "usage": {
+                    "prompt_tokens": 1809,
+                    "completion_tokens": 38,
+                    "total_tokens": 1847
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Your order is currently in processing for shipping. According to our records, it should be delivered on 2024-05-01. If you have any further questions or concerns, please let me know.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. The customer's request was about delivery and the shipping status is still Processing.\n\n**Execution**:\nFinal Response: \"Your order is currently in processing for shipping. According to our records, it should be delivered on 2024-05-01. If you have any further questions or concerns, please let me know.\"",
+                "usage": {
+                    "prompt_tokens": 9913,
+                    "completion_tokens": 161,
+                    "total_tokens": 10074
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not good enough. I want my order now, not in two days. And even if I did get it on time, this is ridiculous. I'm going to leave the worst review possible for this company.\"",
+                "usage": {
+                    "prompt_tokens": 1965,
+                    "completion_tokens": 45,
+                    "total_tokens": 2010
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD10948406 with Product_73, currently Processing. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Acknowledge the customer's frustration and apologize for any inconvenience caused.\n2. Explain that shipping times are estimated and may vary due to circumstances beyond our control.\n3. Offer a solution by providing tracking information, which can help the customer stay updated on their order's status.\n\n**Execution**:\nFinal Response: \"I understand your concern and apologize for any frustration caused. Unfortunately, shipping times can be unpredictable. However, I can provide you with tracking information to keep you updated on your order's status. Would you like me to share that with you?\"",
+                "usage": {
+                    "prompt_tokens": 3327,
+                    "completion_tokens": 117,
+                    "total_tokens": 3444
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order and status without any hallucinations or policy violations.",
+            "s_completeness": "The agent provided the necessary status information and offered clear next steps for the customer.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD10948406 with Product_73, currently Processing."
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD10948406 with Product_73, currently Processing."
+            ]
+        }
+    }
+}

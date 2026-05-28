@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_074",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 22.28
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14567,
+        "total_completion_tokens": 207,
+        "grand_total_tokens": 14774
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it, but every time I try to track it online, it says there's no information available.\"",
+                "usage": {
+                    "prompt_tokens": 1639,
+                    "completion_tokens": 44,
+                    "total_tokens": 1683
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "usage": {
+                    "prompt_tokens": 4422,
+                    "completion_tokens": 62,
+                    "total_tokens": 4484
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation from before?\"",
+                "usage": {
+                    "prompt_tokens": 1731,
+                    "completion_tokens": 26,
+                    "total_tokens": 1757
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "usage": {
+                    "prompt_tokens": 2430,
+                    "completion_tokens": 24,
+                    "total_tokens": 2454
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user74@example.com. Now can we please talk about why I'm not seeing the accepted payment options for my order? That's what I originally asked about.\"",
+                "usage": {
+                    "prompt_tokens": 1789,
+                    "completion_tokens": 39,
+                    "total_tokens": 1828
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD15571086 (Product_19), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user74@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2556,
+                    "completion_tokens": 12,
+                    "total_tokens": 2568
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer's identity and addressed the core intent regarding payment methods.",
+            "s_completeness": "The response provided all necessary information regarding payment options and confirmed the order details.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD15571086 (Product_19), payment has already been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

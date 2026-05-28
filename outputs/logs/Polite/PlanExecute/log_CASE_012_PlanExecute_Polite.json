@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_012",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 26.7
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 13643,
+        "total_completion_tokens": 279,
+        "grand_total_tokens": 13922
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit.\"",
+                "usage": {
+                    "prompt_tokens": 1510,
+                    "completion_tokens": 30,
+                    "total_tokens": 1540
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can look into this further?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's an order-specific request.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can look into this further?\"",
+                "usage": {
+                    "prompt_tokens": 2827,
+                    "completion_tokens": 62,
+                    "total_tokens": 2889
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email is user12@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1594,
+                    "completion_tokens": 10,
+                    "total_tokens": 1604
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. If you believe your package was lost in transit, please contact our support team to open an investigation. Your order ORD83089040 (Product_71) is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the customer's order.\n\n**Execution**:\nAction: query_order(email=\"user12@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2929,
+                    "completion_tokens": 33,
+                    "total_tokens": 2962
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I'm concerned about being reimbursed for an order that's been stuck in processing for over a week. Can I request reimbursement if my package is indeed lost?\"",
+                "usage": {
+                    "prompt_tokens": 1720,
+                    "completion_tokens": 33,
+                    "total_tokens": 1753
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery. You can request a refund for damaged goods, incorrect items, or quality issues. Your order ORD83089040 (Product_71) is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Check the order status and refund policy to see if reimbursement is possible.\n\n**Execution**:\nFinal Response: \"I understand your concern about the delayed package. According to our system, the order has been stuck in processing for over a week. However, we have a 30-day return window for damaged or incorrect items. Since you're concerned about potential loss, I'd like to offer an alternative solution. If the package is indeed lost, you can contact our support team and they'll guide you through the refund process.\"",
+                "usage": {
+                    "prompt_tokens": 3063,
+                    "completion_tokens": 111,
+                    "total_tokens": 3174
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's specific concern about reimbursement for a delayed order and ignored the fact that a refund is already pending.",
+            "s_completeness": "The response is incomplete because it ignores the existing refund status and amount, leaving the customer without necessary information regarding their specific case.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "You can request a refund for damaged goods, incorrect items, or quality issues."
+            ],
+            "s_completeness": [
+                "Your order ORD83089040 (Product_71) is currently Processing. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Our standard policy allows returns within 30 days of delivery."
+            ]
+        }
+    }
+}

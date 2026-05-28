@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_081",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 19.71
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 10453,
+        "total_completion_tokens": 178,
+        "grand_total_tokens": 10631
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm having trouble submitting my new shipping address for an order and it's not letting me proceed with the checkout process as a VIP member. Can you please assist me with this?",
+                "usage": {
+                    "prompt_tokens": 1782,
+                    "completion_tokens": 39,
+                    "total_tokens": 1821
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4410,
+                    "completion_tokens": 60,
+                    "total_tokens": 4470
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user81@example.com. Now, about the issue with submitting my new shipping address... I'm trying to update it for an order containing Product_61, and it's not letting me proceed with checkout. Can you help resolve this?",
+                "usage": {
+                    "prompt_tokens": 1861,
+                    "completion_tokens": 67,
+                    "total_tokens": 1928
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD37054665 is currently Shipped, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user81@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2400,
+                    "completion_tokens": 12,
+                    "total_tokens": 2412
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly applied the business policy regarding address changes and provided accurate information based on the order status.",
+            "s_completeness": "The response fully addressed the customer's issue by explaining the limitation and providing the correct next step.",
+            "s_tone": "The agent maintained a professional, concise, and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD37054665 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD37054665 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD37054665 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ]
+        }
+    }
+}

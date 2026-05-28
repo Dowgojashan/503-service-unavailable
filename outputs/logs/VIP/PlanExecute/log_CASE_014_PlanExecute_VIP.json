@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_014",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 26.18
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14733,
+        "total_completion_tokens": 350,
+        "grand_total_tokens": 15083
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - it was supposed to arrive yesterday but there's no tracking info yet. Can you look into this for me?",
+                "usage": {
+                    "prompt_tokens": 1786,
+                    "completion_tokens": 39,
+                    "total_tokens": 1825
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To better assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2836,
+                    "completion_tokens": 61,
+                    "total_tokens": 2897
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user14@example.com. Now, regarding my issue with the missing order, I'd appreciate it if we could discuss the refund policy in case it's lost or delayed. Can you explain when and how I can request a refund for an item that hasn't arrived?",
+                "usage": {
+                    "prompt_tokens": 1886,
+                    "completion_tokens": 73,
+                    "total_tokens": 1959
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. If you believe your package was lost in transit, please contact our support team to open an investigation. Your order ORD23522062 (Product_31) is currently Delivered. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the missing shipment.\n\n**Execution**:\nAction: query_order(email=\"user14@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3004,
+                    "completion_tokens": 32,
+                    "total_tokens": 3036
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a long-standing VIP member, is there an exception for situations where the item was never delivered, not just damaged or incorrect? I'd appreciate clarity on when and how I can request a refund in such cases.",
+                "usage": {
+                    "prompt_tokens": 2073,
+                    "completion_tokens": 44,
+                    "total_tokens": 2117
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery. You can request a refund for damaged goods, incorrect items, or quality issues. Your order ORD23522062 (Product_31) is currently Delivered. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to understand the current status and any relevant details.\n2. Explain our refund policy for situations where an item was never delivered.\n\n**Execution**:\nFinal Response: \"As a VIP member, you're eligible for a full refund if your item is lost or never delivered. Our standard 30-day return window applies in such cases. If you'd like to proceed with the refund request, please let me know and I'll guide you through the process.\"",
+                "usage": {
+                    "prompt_tokens": 3148,
+                    "completion_tokens": 101,
+                    "total_tokens": 3249
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 30.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's specific question about non-delivery, instead repeating irrelevant policy information.",
+            "s_completeness": "The response failed to provide actionable information regarding the customer's concern about a missing order, leaving the request unanswered.",
+            "s_tone": "The agent was professional but became robotic and dismissive by repeating the exact same response in the final turn."
+        },
+        "evidence": {
+            "s_resolution": [
+                "You can request a refund for damaged goods, incorrect items, or quality issues."
+            ],
+            "s_completeness": [
+                "Your order ORD23522062 (Product_31) is currently Delivered. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Your order ORD23522062 (Product_31) is currently Delivered. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

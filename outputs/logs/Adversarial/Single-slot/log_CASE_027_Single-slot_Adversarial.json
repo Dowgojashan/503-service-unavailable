@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_027",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 22.1
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14532,
+        "total_completion_tokens": 197,
+        "grand_total_tokens": 14729
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been trying to check the allowed payment methods for my order, but I don't know what options are available. This is ridiculous - it's not like I'm asking for something complicated.\"",
+                "usage": {
+                    "prompt_tokens": 1640,
+                    "completion_tokens": 40,
+                    "total_tokens": 1680
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4411,
+                    "completion_tokens": 56,
+                    "total_tokens": 4467
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1723,
+                    "completion_tokens": 33,
+                    "total_tokens": 1756
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2427,
+                    "completion_tokens": 21,
+                    "total_tokens": 2448
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user27@example.com. Now can we please focus on getting me the information I need about payment methods? This is taking way too long.\"",
+                "usage": {
+                    "prompt_tokens": 1785,
+                    "completion_tokens": 35,
+                    "total_tokens": 1820
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD63589792 (Product_4), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user27@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2546,
+                    "completion_tokens": 12,
+                    "total_tokens": 2558
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 3
+        },
+        "final_score_0_100": 90.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer's identity and provided accurate information regarding payment methods and order status.",
+            "s_completeness": "The response fully addressed the customer's intent and provided necessary context regarding their specific order.",
+            "s_tone": "The agent was professional but relied on robotic, verbatim repetition of the verification request, failing to acknowledge the customer's frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD63589792 (Product_4), payment has already been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD63589792 (Product_4), payment has already been processed."
+            ],
+            "s_tone": [
+                "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further."
+            ]
+        }
+    }
+}

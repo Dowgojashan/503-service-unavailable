@@ -1,0 +1,86 @@
+{
+    "metadata": {
+        "case_id": "CASE_143",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 18.11
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 8991,
+        "total_completion_tokens": 208,
+        "grand_total_tokens": 9199
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm trying to figure out what's going on with the delivery options. Can you tell me how to check the status of my shipment?",
+                "usage": {
+                    "prompt_tokens": 1509,
+                    "completion_tokens": 46,
+                    "total_tokens": 1555
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To check the status of your shipment, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address? This will help me assist you better.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To check the status of your shipment, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address? This will help me assist you better.\"",
+                "usage": {
+                    "prompt_tokens": 2843,
+                    "completion_tokens": 69,
+                    "total_tokens": 2912
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I don't have my Order ID handy right now, but I can give you my registered email address if that's okay. It's user143@example.com. Can we talk about the delivery options for my order? I'd like to know what shipping methods are available and how to choose one.",
+                "usage": {
+                    "prompt_tokens": 1633,
+                    "completion_tokens": 60,
+                    "total_tokens": 1693
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout. Your order ORD64007851 (Product_41) is currently Delivered. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the customer's order.\n\n**Execution**:\nAction: query_order(email=\"user143@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3006,
+                    "completion_tokens": 33,
+                    "total_tokens": 3039
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order, followed verification protocols, and accurately explained the policy regarding delivery options.",
+            "s_completeness": "The agent provided all necessary information, including the current status and future shipping options, leaving no gaps.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order has been placed, delivery options cannot be changed through our system.",
+                "Your order ORD64007851 (Product_41) is currently Delivered."
+            ],
+            "s_completeness": [
+                "For future orders, you can select standard, express, or priority shipping at checkout.",
+                "Your order ORD64007851 (Product_41) is currently Delivered."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

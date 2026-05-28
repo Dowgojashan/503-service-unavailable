@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_061",
+        "agent_type": "ReAct",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 21.16
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 15970,
+        "total_completion_tokens": 213,
+        "grand_total_tokens": 16183
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the product I received is not what I ordered (Product_77). The total amount was $246.99, but it's clearly not the right item.",
+                "usage": {
+                    "prompt_tokens": 1784,
+                    "completion_tokens": 49,
+                    "total_tokens": 1833
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user61@example.com. Now, about the issue with my order: I'd like to request a refund for the incorrect product. Can you assist me with that?",
+                "usage": {
+                    "prompt_tokens": 1898,
+                    "completion_tokens": 53,
+                    "total_tokens": 1951
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD75894434 has already been refunded. Please allow 5–10 business days for the amount to appear on your original payment method. Is there anything else I can help you with?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status and avoided inventing any reasons for the refund, adhering strictly to the fact sheet.",
+            "s_completeness": "The agent provided the current status and the standard timeline for the refund, fully addressing the customer's inquiry.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD75894434 has already been refunded. Please allow 5–10 business days for the amount to appear on your original payment method."
+            ],
+            "s_completeness": [
+                "Your order ORD75894434 has already been refunded. Please allow 5–10 business days for the amount to appear on your original payment method. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I'd be happy to help! Could you please share your Order ID... Your order ORD75894434 has already been refunded."
+            ]
+        }
+    }
+}

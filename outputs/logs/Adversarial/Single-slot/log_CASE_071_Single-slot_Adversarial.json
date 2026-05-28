@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_071",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 34.65
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 21497,
+        "total_completion_tokens": 369,
+        "grand_total_tokens": 21866
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it, but every time I try to track it online, it says there's no information available.\"",
+                "usage": {
+                    "prompt_tokens": 1639,
+                    "completion_tokens": 44,
+                    "total_tokens": 1683
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "usage": {
+                    "prompt_tokens": 4422,
+                    "completion_tokens": 62,
+                    "total_tokens": 4484
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1731,
+                    "completion_tokens": 26,
+                    "total_tokens": 1757
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "usage": {
+                    "prompt_tokens": 2430,
+                    "completion_tokens": 24,
+                    "total_tokens": 2454
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user71@example.com. Now can we please talk about my payment options? I want to know what methods are available for this order.\"",
+                "usage": {
+                    "prompt_tokens": 1789,
+                    "completion_tokens": 34,
+                    "total_tokens": 1823
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for providing your email address. I've checked our payment options for you.\n\nWe accept a variety of payment methods, including Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security.\n\nIf you have any other questions or concerns about your order, please let me know. Otherwise, I'll be happy to assist you further if needed.",
+                "full_trace": "Thank you for providing your email address. I've checked our payment options for you.\n\nWe accept a variety of payment methods, including Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security.\n\nIf you have any other questions or concerns about your order, please let me know. Otherwise, I'll be happy to assist you further if needed.",
+                "usage": {
+                    "prompt_tokens": 4771,
+                    "completion_tokens": 99,
+                    "total_tokens": 4870
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's great, I appreciate the list of payment options. However, I'm still waiting for my order to be processed. Can you tell me why there's no information available when I try to track it online? And what about my original question - can I get a refund if I choose not to use one of these payment methods?\"",
+                "usage": {
+                    "prompt_tokens": 2047,
+                    "completion_tokens": 68,
+                    "total_tokens": 2115
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD90189072 (Product_87), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user71@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2668,
+                    "completion_tokens": 12,
+                    "total_tokens": 2680
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 30.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's questions about tracking issues and refund eligibility, focusing only on payment status.",
+            "s_completeness": "The response failed to provide any information regarding the tracking error or the refund inquiry, leaving the customer's core needs unaddressed.",
+            "s_tone": "The agent was professional but dismissive, failing to acknowledge the customer's specific questions and instead providing a repetitive, robotic response."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD90189072 (Product_87), payment has already been processed."
+            ],
+            "s_completeness": [
+                "For your order ORD90189072 (Product_87), payment has already been processed. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "For your order ORD90189072 (Product_87), payment has already been processed. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

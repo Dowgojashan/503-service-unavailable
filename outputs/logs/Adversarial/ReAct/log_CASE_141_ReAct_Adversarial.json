@@ -6,7 +6,8 @@
         "model": "llama3.1:8b",
         "status": "SUCCESS",
         "task_status": "TOOL_TRIGGERED",
-        "final_resolution": "INFO_PROVIDED"
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 44.67
     },
     "usage_summary": {
         "total_prompt_tokens": 31745,
@@ -98,60 +99,27 @@
     "judge": {
         "model": "gemini-3.1-flash-lite",
         "scores": {
-            "fulfillment": 5,
-            "logic": 5,
-            "tone": 4
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
         },
-        "final_score_0_100": 95.0,
+        "final_score_0_100": 100.0,
         "reasoning": {
-            "fulfillment": "The agent fully resolved the customer's query by explaining the policy regarding delivery options for existing orders.",
-            "logic": "The agent followed all SOPs and business rules perfectly, with no hallucinations.",
-            "tone": "The agent maintained a professional and helpful tone throughout the interaction."
+            "s_resolution": "The agent correctly identified the order and accurately explained the policy regarding delivery options for existing orders.",
+            "s_completeness": "The agent provided a clear explanation of why the request could not be fulfilled and confirmed the order details.",
+            "s_tone": "The agent maintained a professional, transparent, and helpful tone throughout the conversation."
         },
         "evidence": {
-            "fulfillment": [
-                "Agent correctly explained that delivery options are selected at checkout and cannot be changed for placed orders."
+            "s_resolution": [
+                "Your order ORD48773451 (Product_58) shipped on 2024-05-01 and is currently Shipped.",
+                "Delivery choices are selected at checkout for new orders."
             ],
-            "logic": [
-                "Agent verified identity before accessing order details; all order-specific facts match the fact sheet."
+            "s_completeness": [
+                "I want to be completely transparent: our system doesn't list available delivery options for orders already placed."
             ],
-            "tone": [
-                "Professional and transparent, though Turn 2 was slightly repetitive."
+            "s_tone": [
+                "I want to be completely transparent: our system doesn't list available delivery options for orders already placed."
             ]
         }
-    },
-    "evaluation": {
-        "evaluated_at": "2026-05-26T06:36:47.525940+00:00",
-        "s_answer_quality": 95.0,
-        "s_grounding": 100.0,
-        "grounding_checks": {
-            "order_id_match": true,
-            "status_match": true,
-            "policy_no_forbidden_claim": true
-        },
-        "s_outcome": 97.0,
-        "s_tool": 75.0,
-        "tool_detail": {
-            "tool_f1": 1.0,
-            "arg_correctness": 0.0,
-            "result_usage": 1.0,
-            "used_tools": [
-                "query_order"
-            ]
-        },
-        "s_trajectory": 50.0,
-        "trajectory_checks": {
-            "flow_order": true,
-            "no_excessive_loops": false,
-            "no_redundancy": true,
-            "identity_verified": false
-        },
-        "s_efficiency": 36.3,
-        "i_fatal": 0,
-        "fatal_reasons": [],
-        "s_raw": 70.0,
-        "s_agent": 70.0,
-        "proxy_cost": 99.86,
-        "net_value": -0.2986
     }
 }

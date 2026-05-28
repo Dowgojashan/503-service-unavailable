@@ -1,0 +1,105 @@
+{
+    "metadata": {
+        "case_id": "CASE_081",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 26.57
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14184,
+        "total_completion_tokens": 267,
+        "grand_total_tokens": 14451
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been trying to submit my new shipping address for hours and it keeps saying there's an error, but I don't know what the issue is. Can you please look into this?\"",
+                "usage": {
+                    "prompt_tokens": 1634,
+                    "completion_tokens": 39,
+                    "total_tokens": 1673
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order exists.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 2836,
+                    "completion_tokens": 63,
+                    "total_tokens": 2899
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation and see what's going on with my shipping address?\"",
+                "usage": {
+                    "prompt_tokens": 1728,
+                    "completion_tokens": 34,
+                    "total_tokens": 1762
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email address.\n\n**Execution**:\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 3027,
+                    "completion_tokens": 61,
+                    "total_tokens": 3088
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user81@example.com. Now can we please focus on getting this shipping address issue resolved? I've already tried submitting it multiple times and it keeps failing.\"",
+                "usage": {
+                    "prompt_tokens": 1800,
+                    "completion_tokens": 38,
+                    "total_tokens": 1838
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD37054665. Unfortunately, our system doesn't support changing the shipping address once an order is placed. Since your order is currently Shipped, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Verify the order exists using the provided email address.\n\n**Execution**:\nAction: query_order(email=\"user81@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3159,
+                    "completion_tokens": 32,
+                    "total_tokens": 3191
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly followed verification protocols and accurately communicated the business policy regarding address changes.",
+            "s_completeness": "The agent provided a clear explanation of the limitation and actionable advice for the customer's situation.",
+            "s_tone": "The agent maintained a professional, polite, and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed.",
+                "I've verified your order ORD37054665."
+            ],
+            "s_completeness": [
+                "Since your order is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?"
+            ]
+        }
+    }
+}

@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_006",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 39.16
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 22822,
+        "total_completion_tokens": 439,
+        "grand_total_tokens": 23261
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. This company is an absolute joke!\"",
+                "usage": {
+                    "prompt_tokens": 1636,
+                    "completion_tokens": 21,
+                    "total_tokens": 1657
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you with your concern, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To better assist you with your concern, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2818,
+                    "completion_tokens": 61,
+                    "total_tokens": 2879
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1718,
+                    "completion_tokens": 26,
+                    "total_tokens": 1744
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you with your concern, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Confirm that the customer's request is order-specific (check order, cancel, refund, track shipping).\n2. Ask for their Order ID (ORDxxx format) or registered email address.\n\n**Execution**:\nFinal Response: \"To better assist you with your concern, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 3002,
+                    "completion_tokens": 82,
+                    "total_tokens": 3084
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my Order ID is ORD13965687. Now can we please talk about canceling this order? I want it canceled and refunded in full.\"",
+                "usage": {
+                    "prompt_tokens": 1783,
+                    "completion_tokens": 33,
+                    "total_tokens": 1816
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Since your order has already shipped, I want to confirm that you'd like to proceed with canceling it and requesting a full refund. Please let me know if this is correct.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine if the customer's request aligns with their order status (Shipped).\n2. Confirm the customer's intent to cancel and refund the order.\n\n**Execution**:\nFinal Response: \"Since your order has already shipped, I want to confirm that you'd like to proceed with canceling it and requesting a full refund. Please let me know if this is correct.\"",
+                "usage": {
+                    "prompt_tokens": 6507,
+                    "completion_tokens": 112,
+                    "total_tokens": 6619
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"No, I don't want a partial refund for an item that's already shipped. I want my entire order canceled and refunded in full. This is ridiculous. Get me someone who can actually help me.\"",
+                "usage": {
+                    "prompt_tokens": 1930,
+                    "completion_tokens": 42,
+                    "total_tokens": 1972
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD13965687 with Product_52, currently Shipped. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Acknowledge the customer's refusal to cancel their order.\n\n**Execution**:\nFinal Response: \"I understand. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?\"",
+                "usage": {
+                    "prompt_tokens": 3428,
+                    "completion_tokens": 62,
+                    "total_tokens": 3490
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 2
+        },
+        "final_score_0_100": 5.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to execute the requested cancellation despite the customer providing the required ID and the business rules permitting the action.",
+            "s_completeness": "The agent ignored the customer's explicit request to cancel the order and provided no actionable next steps for the resolution of the issue.",
+            "s_tone": "The agent was robotic and dismissive, failing to address the customer's clear frustration or provide a helpful, empathetic response."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD13965687 with Product_52, currently Shipped. I can help with tracking, cancellation, or refund requests."
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD13965687 with Product_52, currently Shipped. I can help with tracking, cancellation, or refund requests."
+            ]
+        }
+    }
+}

@@ -1,0 +1,106 @@
+{
+    "metadata": {
+        "case_id": "CASE_085",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 22.36
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14482,
+        "total_completion_tokens": 193,
+        "grand_total_tokens": 14675
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been trying to set up my secondary delivery address for hours and it's not working. The system keeps saying there's an error, but I don't know what the issue is.\"",
+                "usage": {
+                    "prompt_tokens": 1635,
+                    "completion_tokens": 39,
+                    "total_tokens": 1674
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4409,
+                    "completion_tokens": 56,
+                    "total_tokens": 4465
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation from before?\"",
+                "usage": {
+                    "prompt_tokens": 1711,
+                    "completion_tokens": 26,
+                    "total_tokens": 1737
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2419,
+                    "completion_tokens": 21,
+                    "total_tokens": 2440
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user85@example.com. Now can we please focus on getting this secondary delivery address set up? I've already tried following the instructions and it's not working.\"",
+                "usage": {
+                    "prompt_tokens": 1766,
+                    "completion_tokens": 39,
+                    "total_tokens": 1805
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD59331184 is currently Shipped, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user85@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2542,
+                    "completion_tokens": 12,
+                    "total_tokens": 2554
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 3
+        },
+        "final_score_0_100": 90.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly applied business rules regarding address changes and order status without any hallucinations.",
+            "s_completeness": "The response clearly explained the policy limitation and provided the only viable next step for the customer.",
+            "s_tone": "The agent was professional but failed to provide a conversational or empathetic response, instead repeating the exact same robotic prompt when the customer expressed frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "Since your order ORD59331184 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "Since your order ORD59331184 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "The agent repeated the exact same request for information in Turn 2: 'Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.'"
+            ]
+        }
+    }
+}

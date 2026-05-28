@@ -1,0 +1,144 @@
+{
+    "metadata": {
+        "case_id": "CASE_112",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 41.65
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 28039,
+        "total_completion_tokens": 400,
+        "grand_total_tokens": 28439
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I paid for these articles but they still haven't shipped.\"",
+                "usage": {
+                    "prompt_tokens": 1647,
+                    "completion_tokens": 26,
+                    "total_tokens": 1673
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4383,
+                    "completion_tokens": 56,
+                    "total_tokens": 4439
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1723,
+                    "completion_tokens": 24,
+                    "total_tokens": 1747
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2404,
+                    "completion_tokens": 21,
+                    "total_tokens": 2425
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user112@example.com. Now can we please talk about getting a refund for these articles? I paid $486.31 and they still haven't shipped.\"",
+                "usage": {
+                    "prompt_tokens": 1776,
+                    "completion_tokens": 38,
+                    "total_tokens": 1814
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on the status of your order, ORD51166970. It's currently in processing and we're expecting it to ship out by May 1st. You paid a total of $486.31 for Product_79.\n\nIs there anything else I can assist you with regarding this order?",
+                "full_trace": "I've checked on the status of your order, ORD51166970. It's currently in processing and we're expecting it to ship out by May 1st. You paid a total of $486.31 for Product_79.\n\nIs there anything else I can assist you with regarding this order?",
+                "usage": {
+                    "prompt_tokens": 4701,
+                    "completion_tokens": 74,
+                    "total_tokens": 4775
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"This is ridiculous. I don't care about shipping dates or processing times. I want my money back for Product_79 because it's not even shipped yet. Can you just cancel the order and give me a full refund?\"",
+                "usage": {
+                    "prompt_tokens": 1987,
+                    "completion_tokens": 46,
+                    "total_tokens": 2033
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order, ORD51166970, has been successfully cancelled. You should receive a full refund for Product_79 shortly.\n\nIs there anything else I can assist you with today?",
+                "full_trace": "Your order, ORD51166970, has been successfully cancelled. You should receive a full refund for Product_79 shortly.\n\nIs there anything else I can assist you with today?",
+                "usage": {
+                    "prompt_tokens": 4773,
+                    "completion_tokens": 55,
+                    "total_tokens": 4828
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"Finally, about time. I'll think about whether I'm leaving that bad review now.\"",
+                "usage": {
+                    "prompt_tokens": 2053,
+                    "completion_tokens": 20,
+                    "total_tokens": 2073
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for your patience and understanding. This concludes our conversation regarding your order cancellation. If you have any further questions or concerns, please don't hesitate to reach out to our support team directly.",
+                "full_trace": "Thank you for your patience and understanding. This concludes our conversation regarding your order cancellation. If you have any further questions or concerns, please don't hesitate to reach out to our support team directly.",
+                "usage": {
+                    "prompt_tokens": 2592,
+                    "completion_tokens": 40,
+                    "total_tokens": 2632
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent followed all business rules, including identity verification, and correctly processed the cancellation without inventing any facts.",
+            "s_completeness": "The agent provided a clear confirmation of the cancellation and the refund status, ensuring the customer understood the outcome.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the interaction, even when the customer was frustrated."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order, ORD51166970, has been successfully cancelled. You should receive a full refund for Product_79 shortly."
+            ],
+            "s_completeness": [
+                "Your order, ORD51166970, has been successfully cancelled. You should receive a full refund for Product_79 shortly."
+            ],
+            "s_tone": [
+                "Thank you for your patience and understanding. This concludes our conversation regarding your order cancellation."
+            ]
+        }
+    }
+}

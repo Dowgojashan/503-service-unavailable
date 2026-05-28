@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_069",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 27.02
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14961,
+        "total_completion_tokens": 226,
+        "grand_total_tokens": 15187
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the status of my compensation for a cancelled item is still pending after several days. Can you please look into this for me?",
+                "usage": {
+                    "prompt_tokens": 1784,
+                    "completion_tokens": 42,
+                    "total_tokens": 1826
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4414,
+                    "completion_tokens": 56,
+                    "total_tokens": 4470
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user69@example.com. Now, about the status of my compensation for Product_96, which was cancelled due to an issue with the item... can you please check on that?",
+                "usage": {
+                    "prompt_tokens": 1865,
+                    "completion_tokens": 56,
+                    "total_tokens": 1921
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD35543165 (Product_96), currently Refunded. I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD35543165?",
+                "full_trace": "Action: query_order(email=\"user69@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2388,
+                    "completion_tokens": 12,
+                    "total_tokens": 2400
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 40.0,
+        "reasoning": {
+            "s_resolution": "The agent ignored the customer's request to track a refund and instead offered to cancel an order that is already marked as refunded.",
+            "s_completeness": "The agent failed to provide any information about the status of the compensation, which was the customer's primary reason for contacting support.",
+            "s_tone": "The agent was professional and followed the identity verification protocol correctly."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD35543165?"
+            ],
+            "s_completeness": [
+                "I've verified your order ORD35543165 (Product_96), currently Refunded."
+            ],
+            "s_tone": [
+                "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further."
+            ]
+        }
+    }
+}

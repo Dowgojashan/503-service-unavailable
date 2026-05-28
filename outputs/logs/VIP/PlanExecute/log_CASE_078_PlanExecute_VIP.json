@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_078",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 15.88
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9501,
+        "total_completion_tokens": 184,
+        "grand_total_tokens": 9685
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the payment method I used is no longer valid and I need to check if there are other options available for me to complete the purchase.",
+                "usage": {
+                    "prompt_tokens": 1787,
+                    "completion_tokens": 44,
+                    "total_tokens": 1831
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (ORDxxx format)? This will help me look into the details of your purchase.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) since they mentioned an issue with their order.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (ORDxxx format)? This will help me look into the details of your purchase.\"",
+                "usage": {
+                    "prompt_tokens": 2841,
+                    "completion_tokens": 63,
+                    "total_tokens": 2904
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user78@example.com. Now, about the payment method issue I mentioned earlier... can we discuss alternative options for completing the purchase?",
+                "usage": {
+                    "prompt_tokens": 1892,
+                    "completion_tokens": 46,
+                    "total_tokens": 1938
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout. For your order ORD63666768 (Product_57), payment has already been processed and your order is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Verify the order exists using the provided email.\n\n**Execution**:\nAction: query_order(email=\"user78@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2981,
+                    "completion_tokens": 31,
+                    "total_tokens": 3012
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order and provided an accurate status update that addressed the customer's payment concern.",
+            "s_completeness": "The response provided both general information on payment methods and specific order status, leaving no ambiguity.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD63666768 (Product_57), payment has already been processed and your order is currently Shipped."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout. For your order ORD63666768 (Product_57), payment has already been processed and your order is currently Shipped."
+            ],
+            "s_tone": [
+                "To better assist you, could you please provide your Order ID (ORDxxx format)? This will help me look into the details of your purchase."
+            ]
+        }
+    }
+}

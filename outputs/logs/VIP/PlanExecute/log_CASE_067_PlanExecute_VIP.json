@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_067",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 29.88
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18186,
+        "total_completion_tokens": 420,
+        "grand_total_tokens": 18606
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I was expecting a rebate on Product_66 but it doesn't seem to have been applied. Can you help me figure out what's going on?",
+                "usage": {
+                    "prompt_tokens": 1787,
+                    "completion_tokens": 47,
+                    "total_tokens": 1834
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with our system?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order.\n\n**Execution**\nFinal Response: \"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with our system?\"",
+                "usage": {
+                    "prompt_tokens": 2844,
+                    "completion_tokens": 66,
+                    "total_tokens": 2910
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user67@example.com. Now, about this rebate I'm missing... can we discuss how I can get it applied?",
+                "usage": {
+                    "prompt_tokens": 1903,
+                    "completion_tokens": 44,
+                    "total_tokens": 1947
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I see that you're missing a rebate on Product_66 in your order ORD47528925. Can I confirm that this is indeed the issue you'd like to address? If so, we can discuss possible next steps.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the customer's intent regarding the rebate on Product_66.\n\n**Execution**:\nFinal Response: \"I see that you're missing a rebate on Product_66 in your order ORD47528925. Can I confirm that this is indeed the issue you'd like to address? If so, we can discuss possible next steps.\"",
+                "usage": {
+                    "prompt_tokens": 6229,
+                    "completion_tokens": 106,
+                    "total_tokens": 6335
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "Yes, that's correct - I'm missing a rebate on Product_66 in my order ORD47528925. Now, can we discuss how I can get this rebate applied? What are the next steps for me to receive it?",
+                "usage": {
+                    "prompt_tokens": 2013,
+                    "completion_tokens": 48,
+                    "total_tokens": 2061
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD47528925 with Product_66, currently Processing. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the reason for the missing rebate on Product_66.\n2. Explain the policy regarding rebates and any applicable conditions.\n\n**Execution**:\nFinal Response: \"According to our policies, a rebate is only applied if the product meets certain quality standards. Since your order status is 'Processing', it's possible that the rebate was not applied due to an issue with Product_66. If you'd like to proceed with canceling the order and re-ordering the item, I can assist you with that.\"",
+                "usage": {
+                    "prompt_tokens": 3410,
+                    "completion_tokens": 109,
+                    "total_tokens": 3519
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 40.0,
+        "reasoning": {
+            "s_resolution": "The agent ignored the customer's specific request regarding the missing rebate and failed to provide information on the existing pending refund.",
+            "s_completeness": "The response was unhelpful and failed to address the customer's question, leaving them with no information on their refund status.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD47528925 with Product_66, currently Processing. I can help with tracking, cancellation, or refund requests."
+            ]
+        }
+    }
+}

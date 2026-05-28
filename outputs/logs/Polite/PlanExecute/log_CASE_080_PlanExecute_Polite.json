@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_080",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 27.55
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 13768,
+        "total_completion_tokens": 293,
+        "grand_total_tokens": 14061
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been cancelled by mistake. Can you please check on the status of my order?",
+                "usage": {
+                    "prompt_tokens": 1511,
+                    "completion_tokens": 40,
+                    "total_tokens": 1551
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To check on your order status, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To check on your order status, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2837,
+                    "completion_tokens": 60,
+                    "total_tokens": 2897
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I don't have my Order ID handy right now, but I can give you my registered email address if that helps. It's user80@example.com. However, I'm actually trying to figure out which payment methods are accepted for this order. Can you please tell me what options I have?",
+                "usage": {
+                    "prompt_tokens": 1612,
+                    "completion_tokens": 60,
+                    "total_tokens": 1672
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Just to confirm, I have your registered email address as user80@example.com. Is this correct?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer to confirm their email address for verification purposes.\n\n**Execution**:\nFinal Response: \"Just to confirm, I have your registered email address as user80@example.com. Is this correct?\"",
+                "usage": {
+                    "prompt_tokens": 2991,
+                    "completion_tokens": 47,
+                    "total_tokens": 3038
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "Yes, that's correct. My email is user80@example.com. Now, about my order... I'd really appreciate it if you could tell me which payment methods are accepted for this order. Can you please list them out for me?",
+                "usage": {
+                    "prompt_tokens": 1692,
+                    "completion_tokens": 49,
+                    "total_tokens": 1741
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout. For your order ORD99928840 (Product_72), payment has already been processed and your order is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the customer's account and their current order.\n\n**Execution**:\nAction: query_order(email=\"user80@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3125,
+                    "completion_tokens": 37,
+                    "total_tokens": 3162
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status and avoided inventing a reason for the refund, adhering to all business rules.",
+            "s_completeness": "The agent fully answered the customer's question regarding payment methods and provided the relevant order status.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD99928840 (Product_72), payment has already been processed and your order is currently Refunded."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

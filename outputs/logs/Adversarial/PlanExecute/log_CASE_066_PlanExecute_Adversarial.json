@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_066",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 41.14
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 22994,
+        "total_completion_tokens": 466,
+        "grand_total_tokens": 23460
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it.\"",
+                "usage": {
+                    "prompt_tokens": 1636,
+                    "completion_tokens": 26,
+                    "total_tokens": 1662
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2823,
+                    "completion_tokens": 58,
+                    "total_tokens": 2881
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1720,
+                    "completion_tokens": 26,
+                    "total_tokens": 1746
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Confirm that the customer's request is order-specific (check order, cancel, refund, track shipping).\n2. Ask for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 3006,
+                    "completion_tokens": 80,
+                    "total_tokens": 3086
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user66@example.com. Now can we please talk about getting me a refund? I want to know where I'll be receiving it.\"",
+                "usage": {
+                    "prompt_tokens": 1784,
+                    "completion_tokens": 34,
+                    "total_tokens": 1818
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I see that your order ORD96215509 has been successfully refunded in the amount of $476.18. Since it's already been processed, there's no need to take further action on this order. If you have any questions or concerns about your refund or would like assistance with anything else, please don't hesitate to contact our support team.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Inform the customer that their order is already refunded and closed.\n2. Suggest contacting support for any remaining concerns.\n\n**Execution**:\nFinal Response: \"I see that your order ORD96215509 has been successfully refunded in the amount of $476.18. Since it's already been processed, there's no need to take further action on this order. If you have any questions or concerns about your refund or would like assistance with anything else, please don't hesitate to contact our support team.\"",
+                "usage": {
+                    "prompt_tokens": 6566,
+                    "completion_tokens": 137,
+                    "total_tokens": 6703
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"Finally, about time. I'll just go ahead and assume my refund is on its way. Can you at least tell me where I should be expecting it? A bank account or something?\"",
+                "usage": {
+                    "prompt_tokens": 1998,
+                    "completion_tokens": 40,
+                    "total_tokens": 2038
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD96215509 with Product_83, currently Refunded. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to determine where the refund was processed.\n\n**Execution**:\nFinal Response: \"Unfortunately, our system doesn't provide information on specific bank accounts or payment methods used for refunds. However, you can expect your refund to be processed through the same method as your original purchase.\"",
+                "usage": {
+                    "prompt_tokens": 3461,
+                    "completion_tokens": 65,
+                    "total_tokens": 3526
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent hallucinated the refund amount, stating the total order value instead of the actual refund amount listed in the fact sheet.",
+            "s_completeness": "The agent completely ignored the customer's direct question about where the refund would be deposited, providing a generic list of services instead.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I see that your order ORD96215509 has been successfully refunded in the amount of $476.18."
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD96215509 with Product_83, currently Refunded."
+            ]
+        }
+    }
+}

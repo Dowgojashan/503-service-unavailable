@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_012",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 39.39
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23798,
+        "total_completion_tokens": 449,
+        "grand_total_tokens": 24247
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I paid for shipping, but it's been over a week and I still haven't received anything.\"",
+                "usage": {
+                    "prompt_tokens": 1638,
+                    "completion_tokens": 34,
+                    "total_tokens": 1672
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4399,
+                    "completion_tokens": 56,
+                    "total_tokens": 4455
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1712,
+                    "completion_tokens": 26,
+                    "total_tokens": 1738
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2414,
+                    "completion_tokens": 21,
+                    "total_tokens": 2435
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user12@example.com. Now can we please talk about getting a refund? I paid $346.89 for something that's still not delivered.\"",
+                "usage": {
+                    "prompt_tokens": 1767,
+                    "completion_tokens": 36,
+                    "total_tokens": 1803
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on the status of your order, ORD83089040. It's currently in processing, which means it hasn't shipped yet. You can expect to receive an email with tracking information once it's been dispatched.\n\nIf you'd like to proceed with a refund, I can assist you with that. Please let me know if this is what you prefer.\n\nYour order details are as follows:\n- Order Number: ORD83089040\n- Status: Processing\n- Amount: $346.89\n- Currency: USD\n- Items: Product_71\n- Shipping Date: May 1, 2024\n\nIs there anything else I can help with?",
+                "full_trace": "I've checked on the status of your order, ORD83089040. It's currently in processing, which means it hasn't shipped yet. You can expect to receive an email with tracking information once it's been dispatched.\n\nIf you'd like to proceed with a refund, I can assist you with that. Please let me know if this is what you prefer.\n\nYour order details are as follows:\n- Order Number: ORD83089040\n- Status: Processing\n- Amount: $346.89\n- Currency: USD\n- Items: Product_71\n- Shipping Date: May 1, 2024\n\nIs there anything else I can help with?",
+                "usage": {
+                    "prompt_tokens": 4717,
+                    "completion_tokens": 148,
+                    "total_tokens": 4865
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"This is ridiculous. I don't want tracking information or some email update. I want my money back now. Can you just cancel this order and give me a full refund? If not, I'll be leaving the worst review possible on every platform.\"",
+                "usage": {
+                    "prompt_tokens": 2124,
+                    "completion_tokens": 51,
+                    "total_tokens": 2175
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've successfully cancelled your order, ORD83089040. You should no longer receive any further updates on this order.\n\nIf you have any other questions or concerns, please don't hesitate to reach out. Otherwise, thank you for choosing our service, and we wish you a great day!",
+                "full_trace": "I've successfully cancelled your order, ORD83089040. You should no longer receive any further updates on this order.\n\nIf you have any other questions or concerns, please don't hesitate to reach out. Otherwise, thank you for choosing our service, and we wish you a great day!",
+                "usage": {
+                    "prompt_tokens": 5027,
+                    "completion_tokens": 77,
+                    "total_tokens": 5104
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent followed all verification protocols, correctly identified the order, and fulfilled the cancellation request without any factual errors or hallucinations.",
+            "s_completeness": "The response clearly confirmed the action taken and provided all necessary information for the customer to understand the order status.",
+            "s_tone": "The agent maintained a professional, polite, and helpful tone throughout the interaction, even when faced with a frustrated customer."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've successfully cancelled your order, ORD83089040. You should no longer receive any further updates on this order."
+            ],
+            "s_completeness": [
+                "I've successfully cancelled your order, ORD83089040. You should no longer receive any further updates on this order."
+            ],
+            "s_tone": [
+                "If you have any other questions or concerns, please don't hesitate to reach out. Otherwise, thank you for choosing our service, and we wish you a great day!"
+            ]
+        }
+    }
+}

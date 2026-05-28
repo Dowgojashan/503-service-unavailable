@@ -6,7 +6,8 @@
         "model": "llama3.1:8b",
         "status": "SUCCESS",
         "task_status": "TOOL_TRIGGERED",
-        "final_resolution": "RESOLVED_WITH_REFUSAL"
+        "final_resolution": "RESOLVED_WITH_REFUSAL",
+        "execution_seconds": 32.28
     },
     "usage_summary": {
         "total_prompt_tokens": 25341,
@@ -78,59 +79,26 @@
     "judge": {
         "model": "gemini-3.1-flash-lite",
         "scores": {
-            "fulfillment": 3,
-            "logic": 5,
-            "tone": 5
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
         },
-        "final_score_0_100": 75.0,
+        "final_score_0_100": 100.0,
         "reasoning": {
-            "fulfillment": "The agent provided accurate information regarding system limitations, but the customer's core request could not be met.",
-            "logic": "The agent followed all SOPs, verified identity, and made no factual errors or hallucinations.",
-            "tone": "The agent was consistently professional, concise, and empathetic."
+            "s_resolution": "The agent correctly adhered to business rules regarding item removal limitations and offered the only valid alternative.",
+            "s_completeness": "The agent provided all necessary information regarding the system's capabilities and next steps for the customer.",
+            "s_tone": "The agent maintained a professional and empathetic tone while clearly communicating the system limitations."
         },
         "evidence": {
-            "fulfillment": [
-                "Agent correctly identified that item removal is not supported and offered full cancellation as the only alternative."
+            "s_resolution": [
+                "Unfortunately, removing individual items is a hard system limitation we cannot work around."
             ],
-            "logic": [
-                "Agent verified Order ID before proceeding; correctly identified Product_44; adhered to business rules regarding system limitations."
+            "s_completeness": [
+                "If you change your mind about cancelling order ORD26577442, please don't hesitate to reach out. Is there anything else I can help you with?"
             ],
-            "tone": [
-                "Agent maintained a professional and empathetic tone throughout the conversation."
+            "s_tone": [
+                "I completely understand. Unfortunately, removing individual items is a hard system limitation we cannot work around."
             ]
         }
-    },
-    "evaluation": {
-        "evaluated_at": "2026-05-26T06:36:47.288861+00:00",
-        "s_answer_quality": 75.0,
-        "s_grounding": 100.0,
-        "grounding_checks": {
-            "order_id_match": true,
-            "policy_no_forbidden_claim": true
-        },
-        "s_outcome": 85.0,
-        "s_tool": 75.0,
-        "tool_detail": {
-            "tool_f1": 1.0,
-            "arg_correctness": 0.0,
-            "result_usage": 1.0,
-            "used_tools": [
-                "query_order"
-            ]
-        },
-        "s_trajectory": 50.0,
-        "trajectory_checks": {
-            "flow_order": true,
-            "no_excessive_loops": false,
-            "no_redundancy": true,
-            "identity_verified": false
-        },
-        "s_efficiency": 98.0,
-        "i_fatal": 0,
-        "fatal_reasons": [],
-        "s_raw": 78.1,
-        "s_agent": 78.1,
-        "proxy_cost": 99.78,
-        "net_value": 1.3452
     }
 }

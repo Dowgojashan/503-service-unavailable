@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_117",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 38.56
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 19548,
+        "total_completion_tokens": 435,
+        "grand_total_tokens": 19983
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order that I'd like resolved promptly. I paid $399 for Product_31 but it's been over a week and I still haven't received it.",
+                "usage": {
+                    "prompt_tokens": 1793,
+                    "completion_tokens": 46,
+                    "total_tokens": 1839
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4422,
+                    "completion_tokens": 56,
+                    "total_tokens": 4478
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user117@example.com. Now, about my order: I'd appreciate it if we could discuss the refund for Product_31 since it's been over a week and I haven't received it yet.",
+                "usage": {
+                    "prompt_tokens": 1887,
+                    "completion_tokens": 60,
+                    "total_tokens": 1947
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on the status of your order ORD46902196. It was shipped on May 1st with a total amount of $399.28. Since it's been over a week since shipping, I'll process a refund for you now.\n\nYour refund will be processed in accordance with our company policy. You should receive an email notification once the refund has been completed. If you have any further questions or concerns, please don't hesitate to reach out.\n\nThank you for your patience and understanding. This concludes my assistance on this matter.",
+                "full_trace": "I've checked on the status of your order ORD46902196. It was shipped on May 1st with a total amount of $399.28. Since it's been over a week since shipping, I'll process a refund for you now.\n\nYour refund will be processed in accordance with our company policy. You should receive an email notification once the refund has been completed. If you have any further questions or concerns, please don't hesitate to reach out.\n\nThank you for your patience and understanding. This concludes my assistance on this matter.",
+                "usage": {
+                    "prompt_tokens": 4442,
+                    "completion_tokens": 122,
+                    "total_tokens": 4564
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "That's what I expected. Thank you for processing the refund. However, I'd appreciate it if you could confirm whether this refund will be processed as a full amount of $399.28 or if there are any deductions due to shipping costs or other fees.",
+                "usage": {
+                    "prompt_tokens": 2154,
+                    "completion_tokens": 53,
+                    "total_tokens": 2207
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your refund request for order ORD46902196 has been submitted successfully. The amount of $185.52 will be refunded to you once it's processed. You'll receive an email notification when this is completed.\n\nThis concludes my assistance on this matter. Thank you for your patience and understanding. If you have any further questions or concerns, please don't hesitate to reach out. Good day!",
+                "full_trace": "Your refund request for order ORD46902196 has been submitted successfully. The amount of $185.52 will be refunded to you once it's processed. You'll receive an email notification when this is completed.\n\nThis concludes my assistance on this matter. Thank you for your patience and understanding. If you have any further questions or concerns, please don't hesitate to reach out. Good day!",
+                "usage": {
+                    "prompt_tokens": 4850,
+                    "completion_tokens": 98,
+                    "total_tokens": 4948
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order and the specific refund amount from the fact sheet without any hallucinations.",
+            "s_completeness": "The agent provided the exact refund amount and confirmed the submission status, leaving no ambiguity for the customer.",
+            "s_tone": "The agent maintained a professional, polite, and helpful tone throughout the entire conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "The amount of $185.52 will be refunded to you once it's processed."
+            ],
+            "s_completeness": [
+                "Your refund request for order ORD46902196 has been submitted successfully. The amount of $185.52 will be refunded to you once it's processed."
+            ],
+            "s_tone": [
+                "This concludes my assistance on this matter. Thank you for your patience and understanding. If you have any further questions or concerns, please don't hesitate to reach out. Good day!"
+            ]
+        }
+    }
+}

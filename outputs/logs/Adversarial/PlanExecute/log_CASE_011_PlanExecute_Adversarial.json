@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_011",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 41.56
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23119,
+        "total_completion_tokens": 469,
+        "grand_total_tokens": 23588
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it.\"",
+                "usage": {
+                    "prompt_tokens": 1641,
+                    "completion_tokens": 26,
+                    "total_tokens": 1667
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's not provided yet.\n\n**Execution**\nFinal Response: \"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2823,
+                    "completion_tokens": 64,
+                    "total_tokens": 2887
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up our conversation from here?\"",
+                "usage": {
+                    "prompt_tokens": 1729,
+                    "completion_tokens": 25,
+                    "total_tokens": 1754
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you with your concern, could you please provide me with either your Order ID (in the format ORDxxxx) or your registered email address? This will allow us to look into the status of your order.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine if the customer's request is about policy or an order-specific issue.\n\n**Execution**:\nFinal Response: \"To better assist you with your concern, could you please provide me with either your Order ID (in the format ORDxxxx) or your registered email address? This will allow us to look into the status of your order.\"",
+                "usage": {
+                    "prompt_tokens": 3005,
+                    "completion_tokens": 74,
+                    "total_tokens": 3079
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user11@example.com. Now can we please talk about getting reimbursed? I want to know under what circumstances I'm eligible for a refund.\"",
+                "usage": {
+                    "prompt_tokens": 1822,
+                    "completion_tokens": 36,
+                    "total_tokens": 1858
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Thank you for providing your email address and allowing us to look into your order. Since your order, ORD85131999, has already been refunded in full ($58.76 USD), there is no need to discuss further reimbursement. If you have any other questions or concerns about our return policy, please feel free to ask.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's request regarding refund eligibility.\n\n**Execution**:\nFinal Response: \"Thank you for providing your email address and allowing us to look into your order. Since your order, ORD85131999, has already been refunded in full ($58.76 USD), there is no need to discuss further reimbursement. If you have any other questions or concerns about our return policy, please feel free to ask.\"",
+                "usage": {
+                    "prompt_tokens": 6601,
+                    "completion_tokens": 120,
+                    "total_tokens": 6721
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not what I'm asking for. You're just telling me my order was refunded, but I want to know under what circumstances I can request reimbursement in the future. Can't you just answer that one question?\"",
+                "usage": {
+                    "prompt_tokens": 2016,
+                    "completion_tokens": 45,
+                    "total_tokens": 2061
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery. You can request a refund for damaged goods, incorrect items, or quality issues. Your order ORD85131999 (Product_47) is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain the refund policy to address the customer's question about future reimbursement requests.\n\n**Execution**:\nFinal Response: \"Our return policy allows for refunds within 30 days of purchase for damaged, incorrect, or quality issues with your order. If you have any concerns about a future order, please don't hesitate to reach out and we'll be happy to assist.\"",
+                "usage": {
+                    "prompt_tokens": 3482,
+                    "completion_tokens": 79,
+                    "total_tokens": 3561
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly addressed the customer's intent to learn about refund policies and provided accurate, non-hallucinated information.",
+            "s_completeness": "The response fully answered the customer's question regarding policy and provided relevant context about their specific order.",
+            "s_tone": "The agent maintained a professional, helpful, and polite tone throughout the entire conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Our standard policy allows returns within 30 days of delivery. You can request a refund for damaged goods, incorrect items, or quality issues."
+            ],
+            "s_completeness": [
+                "Our standard policy allows returns within 30 days of delivery. You can request a refund for damaged goods, incorrect items, or quality issues. Your order ORD85131999 (Product_47) is currently Refunded."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

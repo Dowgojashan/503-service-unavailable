@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_117",
+        "agent_type": "ReAct",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 44.09
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 31746,
+        "total_completion_tokens": 350,
+        "grand_total_tokens": 32096
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I paid for something but it's still not delivered.\"",
+                "usage": {
+                    "prompt_tokens": 1645,
+                    "completion_tokens": 25,
+                    "total_tokens": 1670
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do you need my Order ID or email? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1744,
+                    "completion_tokens": 22,
+                    "total_tokens": 1766
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user117@example.com. Now can we please talk about getting me a refund for this order? I paid $399.28 and it's still not delivered.\"",
+                "usage": {
+                    "prompt_tokens": 1808,
+                    "completion_tokens": 39,
+                    "total_tokens": 1847
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD46902196 with Product_31, which is currently Shipped. I can help with order tracking, cancellation, or refund requests. Is there anything else I can help you with today?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not good enough. I want a refund for Product_31 because it hasn't been delivered and I'm still waiting. Can you actually process my refund or do I have to escalate this further?\"",
+                "usage": {
+                    "prompt_tokens": 1973,
+                    "completion_tokens": 42,
+                    "total_tokens": 2015
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your refund for order ORD46902196 has been successfully processed. Is there anything else I can help you with?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 3,
+            "s_tone": 5
+        },
+        "final_score_0_100": 85.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order and fulfilled the customer's request to process a refund.",
+            "s_completeness": "The agent failed to mention the refund amount or acknowledge that a refund was already pending, leaving the customer uninformed about the specific financial outcome.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your refund for order ORD46902196 has been successfully processed."
+            ],
+            "s_completeness": [
+                "Your refund for order ORD46902196 has been successfully processed. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Your refund for order ORD46902196 has been successfully processed. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

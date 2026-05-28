@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_095",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 42.55
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23243,
+        "total_completion_tokens": 516,
+        "grand_total_tokens": 23759
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know when it's going to ship, but the tracking info is still saying 'processing' after days.\"",
+                "usage": {
+                    "prompt_tokens": 1632,
+                    "completion_tokens": 39,
+                    "total_tokens": 1671
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address so I can look into this further?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's not provided yet.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address so I can look into this further?\"",
+                "usage": {
+                    "prompt_tokens": 2836,
+                    "completion_tokens": 67,
+                    "total_tokens": 2903
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1732,
+                    "completion_tokens": 32,
+                    "total_tokens": 1764
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address so I can look into this further?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Confirm the customer's request is order-specific (check order, cancel, refund, track shipping).\n2. Ask for their Order ID (ORDxxx format) or registered email address.\n\n**Execution**:\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address so I can look into this further?\"",
+                "usage": {
+                    "prompt_tokens": 3028,
+                    "completion_tokens": 83,
+                    "total_tokens": 3111
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user95@example.com. Now can we please talk about when I'm going to get my order? I just want to know if it's shipping to {{Delivery City}} and when I can expect it.\"",
+                "usage": {
+                    "prompt_tokens": 1805,
+                    "completion_tokens": 48,
+                    "total_tokens": 1853
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I see that your order ORD35122457 has already been delivered on May 1st, 2024. Since it's no longer in transit, I'm unable to provide a more specific shipping date or tracking information. If you have any concerns about the delivery or would like assistance with anything else, please don't hesitate to contact our support team for further help.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's request regarding delivery and shipping date.\n\n**Execution**:\nFinal Response: \"I see that your order ORD35122457 has already been delivered on May 1st, 2024. Since it's no longer in transit, I'm unable to provide a more specific shipping date or tracking information. If you have any concerns about the delivery or would like assistance with anything else, please don't hesitate to contact our support team for further help.\"",
+                "usage": {
+                    "prompt_tokens": 6658,
+                    "completion_tokens": 130,
+                    "total_tokens": 6788
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"This is ridiculous. I was told my order would ship to {{Delivery City}}, but now you're saying it's already been delivered? That doesn't make sense. Can you at least confirm whether the delivery address was correct?\"",
+                "usage": {
+                    "prompt_tokens": 2040,
+                    "completion_tokens": 46,
+                    "total_tokens": 2086
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD35122457 with Product_35, currently Delivered. Unfortunately, our system doesn't support changing the shipping address once placed. Since your order is currently Delivered, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to confirm the delivery address.\n\n**Execution**:\nFinal Response: \"I've checked the order details for ORD35122457, and it appears that the delivery address was indeed correct. Since the order has already been delivered, I'm unable to make any changes to the shipping information at this time.\"",
+                "usage": {
+                    "prompt_tokens": 3512,
+                    "completion_tokens": 71,
+                    "total_tokens": 3583
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status and item, and followed identity verification protocols before providing information.",
+            "s_completeness": "The agent clearly explained the order status and provided the correct next step for the customer to resolve their delivery concern.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD35122457 with Product_35, currently Delivered."
+            ],
+            "s_completeness": [
+                "Since your order is currently Delivered, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Unfortunately, our system doesn't support changing the shipping address once placed."
+            ]
+        }
+    }
+}

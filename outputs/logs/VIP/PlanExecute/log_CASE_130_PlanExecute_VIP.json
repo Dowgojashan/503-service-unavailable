@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_130",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 29.64
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 17999,
+        "total_completion_tokens": 415,
+        "grand_total_tokens": 18414
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I'm having trouble with my online payments for an order I placed recently. The system keeps saying it's pending and won't let me complete the checkout.\"",
+                "usage": {
+                    "prompt_tokens": 1779,
+                    "completion_tokens": 35,
+                    "total_tokens": 1814
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (in the format ORDxxxxx) or your registered email address so I can assist you with your online payment issue?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (in the format ORDxxxxx) or your registered email address so I can assist you with your online payment issue?\"",
+                "usage": {
+                    "prompt_tokens": 2832,
+                    "completion_tokens": 64,
+                    "total_tokens": 2896
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"I would have thought my VIP account details were already on file, but fine — my email is user130@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1873,
+                    "completion_tokens": 25,
+                    "total_tokens": 1898
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I've checked your account details and order status. Since your order has already shipped, you can contact our support team if you have any issues with delivery or product quality. If it's damaged or not as described, please let us know within 30 days for a possible return or refund.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the customer's intent based on their original request.\n\n**Execution**:\nFinal Response: \"I've checked your account details and order status. Since your order has already shipped, you can contact our support team if you have any issues with delivery or product quality. If it's damaged or not as described, please let us know within 30 days for a possible return or refund.\"",
+                "usage": {
+                    "prompt_tokens": 6148,
+                    "completion_tokens": 117,
+                    "total_tokens": 6265
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I understand that my order has shipped, but I'm still having trouble with the online payment itself. As a VIP member, I expect this issue to be sorted quickly and efficiently. Can we please focus on resolving the payment problem rather than discussing delivery or product quality?\"",
+                "usage": {
+                    "prompt_tokens": 1992,
+                    "completion_tokens": 54,
+                    "total_tokens": 2046
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD05887967 with Product_18, currently Shipped. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain that the payment issue cannot be resolved through cancellation or refund since the order has shipped.\n2. Offer an alternative solution to resolve the payment problem.\n\n**Execution**:\nFinal Response: \"I understand your concern about the online payment issue, but as a VIP member, you're eligible for our 30-day return policy for damaged/incorrect/quality items. However, since your order has already shipped, we can't cancel or refund it directly. If you'd like to resolve the payment problem, I recommend contacting our support team so they can assist you further.\"",
+                "usage": {
+                    "prompt_tokens": 3375,
+                    "completion_tokens": 120,
+                    "total_tokens": 3495
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 40.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's stated payment issue and failed to provide any assistance related to the core request.",
+            "s_completeness": "The response provided no information or next steps regarding the payment issue, forcing the customer to re-contact support.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD05887967 with Product_18, currently Shipped. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD05887967 with Product_18, currently Shipped."
+            ]
+        }
+    }
+}

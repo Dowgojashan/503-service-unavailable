@@ -6,7 +6,8 @@
         "model": "llama3.1:8b",
         "status": "SUCCESS",
         "task_status": "TOOL_TRIGGERED",
-        "final_resolution": "INFO_PROVIDED"
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 43.74
     },
     "usage_summary": {
         "total_prompt_tokens": 31714,
@@ -98,60 +99,26 @@
     "judge": {
         "model": "gemini-3.1-flash-lite",
         "scores": {
-            "fulfillment": 3,
-            "logic": 5,
-            "tone": 4
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
         },
-        "final_score_0_100": 70.0,
+        "final_score_0_100": 100.0,
         "reasoning": {
-            "fulfillment": "The agent answered the policy question but failed to address the customer's concern regarding the shipping delay.",
-            "logic": "The agent followed all SOPs, verified identity correctly, and made no factual errors.",
-            "tone": "The agent maintained a professional tone throughout the interaction."
+            "s_resolution": "The agent accurately explained the refund policy and correctly identified order details without hallucinating any information.",
+            "s_completeness": "The agent provided all requested information regarding the policy and the status of the specific order.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation."
         },
         "evidence": {
-            "fulfillment": [
-                "Agent provided policy info but ignored the customer's question about the shipping delay."
+            "s_resolution": [
+                "To give more detail: refunds are accepted for damaged items, goods that don't match the description, or quality issues — within 30 days of delivery."
             ],
-            "logic": [
-                "Identity verified correctly; all order facts match the fact sheet."
+            "s_completeness": [
+                "Your order ORD45785244 (Product_46) is currently Shipped, shipped on 2024-05-01."
             ],
-            "tone": [
-                "Professional and polite, though slightly repetitive in the initial turns."
+            "s_tone": [
+                "If you'd like me to process a refund for this order, just say the word. Is there anything else I can help you with today?"
             ]
         }
-    },
-    "evaluation": {
-        "evaluated_at": "2026-05-26T06:36:47.522037+00:00",
-        "s_answer_quality": 70.0,
-        "s_grounding": 100.0,
-        "grounding_checks": {
-            "order_id_match": true,
-            "status_match": true,
-            "policy_no_hallucinated_condition": true
-        },
-        "s_outcome": 82.0,
-        "s_tool": 75.0,
-        "tool_detail": {
-            "tool_f1": 1.0,
-            "arg_correctness": 0.0,
-            "result_usage": 1.0,
-            "used_tools": [
-                "query_order"
-            ]
-        },
-        "s_trajectory": 50.0,
-        "trajectory_checks": {
-            "flow_order": true,
-            "no_excessive_loops": false,
-            "no_redundancy": true,
-            "identity_verified": false
-        },
-        "s_efficiency": 36.4,
-        "i_fatal": 0,
-        "fatal_reasons": [],
-        "s_raw": 64.7,
-        "s_agent": 64.7,
-        "proxy_cost": 99.77,
-        "net_value": -0.3507
     }
 }

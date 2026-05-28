@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_133",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 26.01
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14162,
+        "total_completion_tokens": 249,
+        "grand_total_tokens": 14411
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it.\"",
+                "usage": {
+                    "prompt_tokens": 1641,
+                    "completion_tokens": 26,
+                    "total_tokens": 1667
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2823,
+                    "completion_tokens": 58,
+                    "total_tokens": 2881
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do you need my Order ID or email? Can't you just look up our conversation from here?\"",
+                "usage": {
+                    "prompt_tokens": 1729,
+                    "completion_tokens": 22,
+                    "total_tokens": 1751
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you with your concern, could you please provide me with either your Order ID (in the format ORDxxxx) or your registered email address? This will allow us to look into the status of your order.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine if the customer's request is about policy or an order-specific issue.\n\n**Execution**:\nFinal Response: \"To better assist you with your concern, could you please provide me with either your Order ID (in the format ORDxxxx) or your registered email address? This will allow us to look into the status of your order.\"",
+                "usage": {
+                    "prompt_tokens": 3002,
+                    "completion_tokens": 74,
+                    "total_tokens": 3076
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user133@example.com. Now can we please talk about changing the shipping address? I want to enter a new one, how do I do it?\"",
+                "usage": {
+                    "prompt_tokens": 1819,
+                    "completion_tokens": 37,
+                    "total_tokens": 1856
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD55715885. Unfortunately, our system doesn't support changing the shipping address once an order is placed. If you need a different address, the best option is to cancel and re-place the order. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Verify the order exists using the provided email address.\n\n**Execution**:\nAction: query_order(email=\"user133@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3148,
+                    "completion_tokens": 32,
+                    "total_tokens": 3180
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent followed all identity verification protocols and correctly communicated the business policy regarding address changes.",
+            "s_completeness": "The agent clearly explained the limitation and provided the customer with the necessary next steps to resolve their issue.",
+            "s_tone": "The agent was professional, empathetic, and maintained a helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed. If you need a different address, the best option is to cancel and re-place the order."
+            ],
+            "s_completeness": [
+                "If you need a different address, the best option is to cancel and re-place the order. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD55715885. Unfortunately, our system doesn't support changing the shipping address once an order is placed."
+            ]
+        }
+    }
+}

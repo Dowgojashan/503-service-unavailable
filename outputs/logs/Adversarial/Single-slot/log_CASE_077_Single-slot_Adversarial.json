@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_077",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 32.5
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 21263,
+        "total_completion_tokens": 309,
+        "grand_total_tokens": 21572
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I paid for it weeks ago, but I still haven't received anything.\"",
+                "usage": {
+                    "prompt_tokens": 1638,
+                    "completion_tokens": 29,
+                    "total_tokens": 1667
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4389,
+                    "completion_tokens": 56,
+                    "total_tokens": 4445
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do you need my Order ID or email? Can't you just look up our conversation from here?\"",
+                "usage": {
+                    "prompt_tokens": 1708,
+                    "completion_tokens": 22,
+                    "total_tokens": 1730
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2405,
+                    "completion_tokens": 21,
+                    "total_tokens": 2426
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user77@example.com. Now can we please talk about payment options? I want to know if there are any issues with my credit card.\"",
+                "usage": {
+                    "prompt_tokens": 1759,
+                    "completion_tokens": 35,
+                    "total_tokens": 1794
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for providing your email address. I've checked our payment policies for you.\n\nWe accept a variety of payment methods, including credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers. All transactions are processed immediately upon order placement and are encrypted for security.\n\nIf you have any further questions or concerns about payments, please let me know. Otherwise, I'll be happy to assist with anything else you need.",
+                "full_trace": "Thank you for providing your email address. I've checked our payment policies for you.\n\nWe accept a variety of payment methods, including credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers. All transactions are processed immediately upon order placement and are encrypted for security.\n\nIf you have any further questions or concerns about payments, please let me know. Otherwise, I'll be happy to assist with anything else you need.",
+                "usage": {
+                    "prompt_tokens": 4717,
+                    "completion_tokens": 99,
+                    "total_tokens": 4816
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's great information about payment methods, but I still want to know if there are any issues with my credit card. Can you confirm that my payment went through successfully?\"",
+                "usage": {
+                    "prompt_tokens": 2021,
+                    "completion_tokens": 35,
+                    "total_tokens": 2056
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD29625670 (Product_30), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user77@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2626,
+                    "completion_tokens": 12,
+                    "total_tokens": 2638
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer, addressed the payment policy inquiry, and confirmed the payment status for the specific order without any hallucinations.",
+            "s_completeness": "The response fully answered the customer's questions regarding payment methods and the status of their specific transaction.",
+            "s_tone": "The agent maintained a professional, helpful, and empathetic tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD29625670 (Product_30), payment has already been processed."
+            ],
+            "s_completeness": [
+                "For your order ORD29625670 (Product_30), payment has already been processed."
+            ],
+            "s_tone": [
+                "Thank you for providing your email address. I've checked our payment policies for you."
+            ]
+        }
+    }
+}

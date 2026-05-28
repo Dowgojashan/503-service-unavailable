@@ -6,12 +6,13 @@
         "model": "llama3.1:8b",
         "status": "SUCCESS",
         "task_status": "TOOL_TRIGGERED",
-        "final_resolution": "EXECUTED_SUCCESSFULLY"
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 80.65
     },
     "usage_summary": {
-        "total_prompt_tokens": 15868,
+        "total_prompt_tokens": 15970,
         "total_completion_tokens": 3097,
-        "grand_total_tokens": 18965
+        "grand_total_tokens": 19067
     },
     "conversation": [
         {
@@ -19,9 +20,9 @@
             "customer": {
                 "content": "Hi, I'm a VIP member and I have an issue with my order - the payment method I selected isn't showing up as an option when I try to check out. Can you help me resolve this?",
                 "usage": {
-                    "prompt_tokens": 1735,
+                    "prompt_tokens": 1786,
                     "completion_tokens": 43,
-                    "total_tokens": 1778
+                    "total_tokens": 1829
                 }
             },
             "service_agent": {
@@ -39,9 +40,9 @@
             "customer": {
                 "content": "I would have thought my VIP account details were already on file, but fine - my email is user75@example.com. Now, about the payment options for my order... I'd appreciate it if we could focus on getting those listed so I can proceed with checkout.",
                 "usage": {
-                    "prompt_tokens": 1845,
+                    "prompt_tokens": 1896,
                     "completion_tokens": 54,
-                    "total_tokens": 1899
+                    "total_tokens": 1950
                 }
             },
             "service_agent": {
@@ -58,25 +59,25 @@
     "judge": {
         "model": "gemini-3.1-flash-lite",
         "scores": {
-            "fulfillment": 5,
-            "logic": 4,
-            "tone": 5
+            "s_resolution": 3,
+            "s_completeness": 5,
+            "s_tone": 5
         },
-        "final_score_0_100": 92.5,
+        "final_score_0_100": 75.0,
         "reasoning": {
-            "fulfillment": "The agent fully addressed the customer's request for payment information.",
-            "logic": "The agent followed the identity verification SOP correctly, though the description of the order status as 'processed' for a 'refunded' order is slightly imprecise.",
-            "tone": "The agent maintained a professional and helpful tone throughout the conversation."
+            "s_resolution": "The agent provided incorrect information regarding the order status, claiming it was processed when the fact sheet lists it as refunded.",
+            "s_completeness": "The agent fully answered the customer's request for information regarding payment methods.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation."
         },
         "evidence": {
-            "fulfillment": [
-                "Agent listed payment options and addressed the order inquiry."
+            "s_resolution": [
+                "For your current order ORD26468425 (Product_76), payment has been processed."
             ],
-            "logic": [
-                "Agent verified identity via email before proceeding; correctly identified order number and item."
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout."
             ],
-            "tone": [
-                "Agent was professional, polite, and concise."
+            "s_tone": [
+                "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?"
             ]
         }
     }

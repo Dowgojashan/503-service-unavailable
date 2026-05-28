@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_071",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 19.78
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 10517,
+        "total_completion_tokens": 181,
+        "grand_total_tokens": 10698
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the payment method I used is no longer valid and I need to update it before the item ships. Can you help me list my available payment options so we can get this sorted out?",
+                "usage": {
+                    "prompt_tokens": 1787,
+                    "completion_tokens": 54,
+                    "total_tokens": 1841
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4440,
+                    "completion_tokens": 60,
+                    "total_tokens": 4500
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user71@example.com. Now, about updating my payment method: can you please list the available options for me? I'd like to choose an alternative before the item ships.",
+                "usage": {
+                    "prompt_tokens": 1887,
+                    "completion_tokens": 55,
+                    "total_tokens": 1942
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD90189072 (Product_87), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user71@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2403,
+                    "completion_tokens": 12,
+                    "total_tokens": 2415
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer's identity and accurately addressed the payment inquiry based on the order status.",
+            "s_completeness": "The agent provided the requested list of payment methods and clearly explained the limitation regarding the current order.",
+            "s_tone": "The agent maintained a professional, concise, and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD90189072 (Product_87), payment has already been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout."
+            ],
+            "s_tone": [
+                "For your order ORD90189072 (Product_87), payment has already been processed. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

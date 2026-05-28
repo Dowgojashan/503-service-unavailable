@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_026",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 19.47
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 10469,
+        "total_completion_tokens": 172,
+        "grand_total_tokens": 10641
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I need to know what payment methods are available for checkout since the one I chose isn't working. Can you help me list the options?",
+                "usage": {
+                    "prompt_tokens": 1783,
+                    "completion_tokens": 45,
+                    "total_tokens": 1828
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4422,
+                    "completion_tokens": 60,
+                    "total_tokens": 4482
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user26@example.com. Now, about the payment methods for my order... I'd appreciate it if we could focus on getting those listed out so I can proceed with checkout.",
+                "usage": {
+                    "prompt_tokens": 1870,
+                    "completion_tokens": 55,
+                    "total_tokens": 1925
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD95851138 (Product_32), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user26@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2394,
+                    "completion_tokens": 12,
+                    "total_tokens": 2406
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent followed identity verification protocols and accurately addressed the customer's request without any factual errors or hallucinations.",
+            "s_completeness": "The response fully answered the customer's question and provided relevant context regarding their specific order status.",
+            "s_tone": "The agent maintained a professional, polite, and efficient tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD95851138 (Product_32), payment has already been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD95851138 (Product_32), payment has already been processed."
+            ],
+            "s_tone": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD95851138 (Product_32), payment has already been processed. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

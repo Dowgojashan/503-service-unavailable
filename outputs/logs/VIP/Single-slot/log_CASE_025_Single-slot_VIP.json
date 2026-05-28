@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_025",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 19.21
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 10434,
+        "total_completion_tokens": 161,
+        "grand_total_tokens": 10595
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I need to know what payment methods are accepted for this purchase because it's not clear on the website.",
+                "usage": {
+                    "prompt_tokens": 1784,
+                    "completion_tokens": 38,
+                    "total_tokens": 1822
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4406,
+                    "completion_tokens": 56,
+                    "total_tokens": 4462
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user25@example.com. Can we please focus on the payment methods for my order? I'd like to know which options are available since it's not clear on the website.",
+                "usage": {
+                    "prompt_tokens": 1861,
+                    "completion_tokens": 55,
+                    "total_tokens": 1916
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD80319147 (Product_89), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user25@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2383,
+                    "completion_tokens": 12,
+                    "total_tokens": 2395
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order details and answered the customer's question accurately without any hallucinations.",
+            "s_completeness": "The response provided all necessary information regarding payment methods and the status of the specific order.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD80319147 (Product_89), payment has already been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD80319147 (Product_89), payment has already been processed."
+            ],
+            "s_tone": [
+                "For your order ORD80319147 (Product_89), payment has already been processed. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_107",
+        "agent_type": "Reflection",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "RESOLVED_WITH_REFUSAL",
+        "execution_seconds": 95.52
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 48982,
+        "total_completion_tokens": 1496,
+        "grand_total_tokens": 50478
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the product I received is not what I ordered (Product_91). It's supposed to be a specific article, but it looks like they sent me something else instead.",
+                "usage": {
+                    "prompt_tokens": 1782,
+                    "completion_tokens": 51,
+                    "total_tokens": 1833
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "--- Reflection Process ---\n**Initial Draft**: Since you're a VIP member, I'd like to help you with your issue right away. Can you please confirm if you'd like me to check on the status of your order using [Tool Call: query_order()]?\n\n**Reflection**: The customer has not provided an Order ID or Email yet. According to the system context, we should ask for their Order ID (ORDxxx format) or registered email FIRST.\n\n**Final Response**: Of course! Could you please share your Order ID (ORDxxx format) or registered email so I can pull up your order and assist you further?",
+                "usage": {
+                    "prompt_tokens": 14094,
+                    "completion_tokens": 370,
+                    "total_tokens": 14464
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user107@example.com. Now, about the issue with my order... I specifically ordered Product_91, and it seems there's been an error in shipping. Can you help me resolve this so I can get the correct product?",
+                "usage": {
+                    "prompt_tokens": 1897,
+                    "completion_tokens": 66,
+                    "total_tokens": 1963
+                }
+            },
+            "service_agent": {
+                "final_answer": "** I understand your concern regarding the incorrect product shipped. Once your order ORD63410183 ships, you can contact our support team for assistance with returning or exchanging the item. If you'd like, I can also provide more information on our return and exchange policies.",
+                "full_trace": "--- Reflection Process ---\n**Initial Draft**: I've checked on your order ORD63410183, and it's currently in processing with an expected shipping date of May 1st. Unfortunately, since the order is still being processed, we cannot proceed with any actions related to the incorrect product shipped.\n\n**Reflection**: The customer has asked about the issue with their order, specifically mentioning that they ordered Product_91 but received something else. Since the order is in processing, we should provide information on what can be done once it ships.\n\n**Final Response:** I understand your concern regarding the incorrect product shipped. Once your order ORD63410183 ships, you can contact our support team for assistance with returning or exchanging the item. If you'd like, I can also provide more information on our return and exchange policies.",
+                "usage": {
+                    "prompt_tokens": 31209,
+                    "completion_tokens": 1009,
+                    "total_tokens": 32218
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 40.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's issue and provided inaccurate information regarding the order's shipping status.",
+            "s_completeness": "The response was incomplete as it deferred the issue to a future shipping event rather than addressing the current processing status and the reported error.",
+            "s_tone": "The agent maintained a professional and empathetic tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once your order ORD63410183 ships, you can contact our support team for assistance with returning or exchanging the item."
+            ],
+            "s_completeness": [
+                "If you'd like, I can also provide more information on our return and exchange policies."
+            ],
+            "s_tone": [
+                "I understand your concern regarding the incorrect product shipped."
+            ]
+        }
+    }
+}

@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_145",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 41.85
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 22904,
+        "total_completion_tokens": 491,
+        "grand_total_tokens": 23395
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I need assistance because it's taking way too long.\"",
+                "usage": {
+                    "prompt_tokens": 1637,
+                    "completion_tokens": 25,
+                    "total_tokens": 1662
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 2822,
+                    "completion_tokens": 62,
+                    "total_tokens": 2884
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1722,
+                    "completion_tokens": 25,
+                    "total_tokens": 1747
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To assist you with your order issue, could you please provide your Order ID (in the format ORDxxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Confirm the customer's request is order-specific (check order, cancel, refund, track shipping).\n2. Ask for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To assist you with your order issue, could you please provide your Order ID (in the format ORDxxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 3004,
+                    "completion_tokens": 82,
+                    "total_tokens": 3086
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user145@example.com. Now can you tell me when I can expect my parcel? This is ridiculous, I've been waiting for ages.\"",
+                "usage": {
+                    "prompt_tokens": 1791,
+                    "completion_tokens": 35,
+                    "total_tokens": 1826
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand you're concerned about your parcel's delivery. According to our policy, we process orders within 3-5 business days after payment confirmation. Since your order is currently Processing, it should be shipped out soon. You can track the status of your shipment by contacting our support team for assistance.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the customer's intent based on their request.\n2. Address their concern about shipping and delivery.\n\n**Execution**:\nFinal Response: \"I understand you're concerned about your parcel's delivery. According to our policy, we process orders within 3-5 business days after payment confirmation. Since your order is currently Processing, it should be shipped out soon. You can track the status of your shipment by contacting our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 6519,
+                    "completion_tokens": 127,
+                    "total_tokens": 6646
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not good enough. I don't care about your policy or how long it takes for orders to process. I want to know when my parcel will arrive, and I'm still waiting for an answer to that question. Can you at least give me a specific date or timeframe for delivery?\"",
+                "usage": {
+                    "prompt_tokens": 1985,
+                    "completion_tokens": 60,
+                    "total_tokens": 2045
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD31438865 with Product_75, currently Processing. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the shipping date from the order data.\n\n**Execution**:\nFinal Response: \"According to your order details, your parcel was scheduled for shipping on May 1st. Unfortunately, I don't have a specific delivery date available at this time. However, you can track the status of your shipment by contacting our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 3424,
+                    "completion_tokens": 75,
+                    "total_tokens": 3499
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 1,
+            "s_tone": 5
+        },
+        "final_score_0_100": 32.5,
+        "reasoning": {
+            "s_resolution": "The agent failed to answer the customer's repeated question regarding the delivery timeframe, effectively ignoring the core intent of the conversation.",
+            "s_completeness": "The response was entirely unhelpful regarding the customer's specific request for a delivery date, providing no actionable information.",
+            "s_tone": "The agent maintained a professional and empathetic tone throughout the interaction, even when the customer became frustrated."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD31438865 with Product_75, currently Processing. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I understand you're concerned about your parcel's delivery."
+            ]
+        }
+    }
+}

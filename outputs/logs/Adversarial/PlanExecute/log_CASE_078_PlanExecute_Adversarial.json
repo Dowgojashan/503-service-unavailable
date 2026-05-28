@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_078",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 25.99
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14165,
+        "total_completion_tokens": 255,
+        "grand_total_tokens": 14420
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it.\"",
+                "usage": {
+                    "prompt_tokens": 1639,
+                    "completion_tokens": 26,
+                    "total_tokens": 1665
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2823,
+                    "completion_tokens": 58,
+                    "total_tokens": 2881
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1726,
+                    "completion_tokens": 32,
+                    "total_tokens": 1758
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand your concern, but to better assist you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine if the customer's request is about policy or an order-specific issue.\n\n**Execution**:\nFinal Response: \"I understand your concern, but to better assist you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 3012,
+                    "completion_tokens": 66,
+                    "total_tokens": 3078
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user78@example.com. Now can we please talk about my payment options? I want to know if there's a way to pay for this order without using my credit card.\"",
+                "usage": {
+                    "prompt_tokens": 1810,
+                    "completion_tokens": 42,
+                    "total_tokens": 1852
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout. For your order ORD63666768 (Product_57), payment has already been processed and your order is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Verify the order exists using the provided email.\n\n**Execution**:\nAction: query_order(email=\"user78@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3155,
+                    "completion_tokens": 31,
+                    "total_tokens": 3186
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer's identity, addressed the payment inquiry, and provided accurate order-specific details without any hallucinations.",
+            "s_completeness": "The response fully answered the customer's question about payment methods and provided necessary context regarding their specific order status.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction, handling the customer's pushback on verification procedures appropriately."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD63666768 (Product_57), payment has already been processed and your order is currently Shipped."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout."
+            ],
+            "s_tone": [
+                "I understand your concern, but to better assist you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?"
+            ]
+        }
+    }
+}

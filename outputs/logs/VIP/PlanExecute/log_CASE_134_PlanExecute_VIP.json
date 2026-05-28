@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_134",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 16.5
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9499,
+        "total_completion_tokens": 201,
+        "grand_total_tokens": 9700
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I need to submit a shipping address but the system isn't letting me proceed. Can you help me resolve this?",
+                "usage": {
+                    "prompt_tokens": 1786,
+                    "completion_tokens": 40,
+                    "total_tokens": 1826
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since this is an order-specific request.\n\n**Execution**:\nFinal Response: \"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2837,
+                    "completion_tokens": 67,
+                    "total_tokens": 2904
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user134@example.com. Now, about submitting a shipping address... I've got all the information ready, but the system isn't letting me proceed. Can we please focus on getting this sorted out?",
+                "usage": {
+                    "prompt_tokens": 1885,
+                    "completion_tokens": 60,
+                    "total_tokens": 1945
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD29520192. Unfortunately, our system doesn't support changing the shipping address once an order is placed. Since your order is currently Shipped, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to verify it exists and retrieve any relevant information.\n\n**Execution**:\nAction: query_order(email=\"user134@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2991,
+                    "completion_tokens": 34,
+                    "total_tokens": 3025
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly followed identity verification protocols and accurately communicated the business policy regarding address changes.",
+            "s_completeness": "The response clearly explained why the request could not be fulfilled and provided the appropriate next step for the customer.",
+            "s_tone": "The agent remained professional, empathetic, and concise throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed."
+            ],
+            "s_completeness": [
+                "Since your order is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

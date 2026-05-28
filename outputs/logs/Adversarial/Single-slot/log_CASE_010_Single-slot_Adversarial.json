@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_010",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 38.65
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23862,
+        "total_completion_tokens": 338,
+        "grand_total_tokens": 24200
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want it cancelled, but every time I try to contact you guys, I get stuck on some automated menu.\"",
+                "usage": {
+                    "prompt_tokens": 1633,
+                    "completion_tokens": 38,
+                    "total_tokens": 1671
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4409,
+                    "completion_tokens": 60,
+                    "total_tokens": 4469
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1712,
+                    "completion_tokens": 24,
+                    "total_tokens": 1736
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 2420,
+                    "completion_tokens": 23,
+                    "total_tokens": 2443
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my Order ID is ORD77321077. Now can we please talk about cancelling this order? I don't want to waste any more of my time.\"",
+                "usage": {
+                    "prompt_tokens": 1767,
+                    "completion_tokens": 35,
+                    "total_tokens": 1802
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD77321077 (Product_39), currently Shipped. I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD77321077?",
+                "full_trace": "Action: query_order(order_id=\"ORD77321077\")",
+                "usage": {
+                    "prompt_tokens": 2542,
+                    "completion_tokens": 13,
+                    "total_tokens": 2555
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"No, I don't want cancellation. I want a full refund for this entire order. And I'm going to leave a 1-star review on every platform if it's not done immediately.\"",
+                "usage": {
+                    "prompt_tokens": 1935,
+                    "completion_tokens": 40,
+                    "total_tokens": 1975
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2712,
+                    "completion_tokens": 37,
+                    "total_tokens": 2749
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent ignored the customer's request for a full refund and incorrectly addressed a request for item removal that was never made.",
+            "s_completeness": "The agent failed to address the refund request entirely, leaving the customer without information on how to proceed.",
+            "s_tone": "The agent maintained a professional and calm demeanor throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, removing individual items isn't supported."
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I understand. Unfortunately, removing individual items isn't supported."
+            ]
+        }
+    }
+}

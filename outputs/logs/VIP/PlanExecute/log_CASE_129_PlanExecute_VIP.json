@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_129",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 29.99
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18256,
+        "total_completion_tokens": 430,
+        "grand_total_tokens": 18686
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm having trouble with my payment for the order I placed recently. The amount was $350.53 and it's been pending for over a week now.",
+                "usage": {
+                    "prompt_tokens": 1786,
+                    "completion_tokens": 35,
+                    "total_tokens": 1821
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can assist you with your payment issue?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can assist you with your payment issue?\"",
+                "usage": {
+                    "prompt_tokens": 2832,
+                    "completion_tokens": 57,
+                    "total_tokens": 2889
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user129@example.com. Can we please focus on resolving the payment issue? I'm still waiting for confirmation of the transaction.",
+                "usage": {
+                    "prompt_tokens": 1881,
+                    "completion_tokens": 45,
+                    "total_tokens": 1926
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand you're concerned about the payment confirmation for your order ORD29418484. Since it has already been delivered, I'm afraid there's nothing we can do to change the status of the transaction. If you have any further questions or concerns, please don't hesitate to contact our support team directly.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's request regarding the payment issue.\n\n**Execution**:\nFinal Response: \"I understand you're concerned about the payment confirmation for your order ORD29418484. Since it has already been delivered, I'm afraid there's nothing we can do to change the status of the transaction. If you have any further questions or concerns, please don't hesitate to contact our support team directly.\"",
+                "usage": {
+                    "prompt_tokens": 6254,
+                    "completion_tokens": 119,
+                    "total_tokens": 6373
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a long-standing VIP member, I'd appreciate it if you could make an exception here and help me resolve this payment issue. The fact that the order has been delivered doesn't change the fact that my payment status is still pending. Can we please look into why the transaction isn't going through?",
+                "usage": {
+                    "prompt_tokens": 2029,
+                    "completion_tokens": 61,
+                    "total_tokens": 2090
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD29418484 with Product_91, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain that the order has already been delivered and there's nothing to resolve regarding payment status.\n\n**Execution**:\nFinal Response: \"I understand your concern, but since the order ORD29418484 has already been delivered, it means the transaction was successfully processed. The pending status you're seeing is likely a temporary system issue or a delay in processing. Unfortunately, we can't make any changes to the payment status at this point. If you have any further questions or concerns, please don't hesitate to contact our support team directly.\"",
+                "usage": {
+                    "prompt_tokens": 3474,
+                    "completion_tokens": 113,
+                    "total_tokens": 3587
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's core request regarding a payment issue and pivoted to irrelevant services.",
+            "s_completeness": "The response failed to provide any actionable information or next steps for the customer's specific payment concern.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD29418484 with Product_91, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD29418484 with Product_91, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

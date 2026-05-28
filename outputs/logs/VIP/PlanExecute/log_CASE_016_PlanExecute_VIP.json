@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_016",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 25.0
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14624,
+        "total_completion_tokens": 304,
+        "grand_total_tokens": 14928
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the product I received is not what I ordered. The total amount was $135.59.",
+                "usage": {
+                    "prompt_tokens": 1786,
+                    "completion_tokens": 36,
+                    "total_tokens": 1822
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (ORDxxx format) so I can assist you with your issue?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) since it's an order-specific request.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (ORDxxx format) so I can assist you with your issue?\"",
+                "usage": {
+                    "prompt_tokens": 2833,
+                    "completion_tokens": 54,
+                    "total_tokens": 2887
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user16@example.com. Now, regarding my issue with the wrong product, I'd like to know under which circumstances I can request a refund. Can you clarify the refund policy for me?",
+                "usage": {
+                    "prompt_tokens": 1866,
+                    "completion_tokens": 58,
+                    "total_tokens": 1924
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. If you believe your package was lost in transit, please contact our support team to open an investigation. Your order ORD47690438 (Product_58) is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Retrieve order information using the provided email.\n\n**Execution**:\nAction: query_order(email=\"user16@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2978,
+                    "completion_tokens": 30,
+                    "total_tokens": 3008
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a long-standing VIP member, is there an exception for incorrect items? I'd appreciate it if you could clarify whether receiving the wrong product qualifies as an \"incorrect item\" under your policy.",
+                "usage": {
+                    "prompt_tokens": 2045,
+                    "completion_tokens": 40,
+                    "total_tokens": 2085
+                }
+            },
+            "service_agent": {
+                "final_answer": "Beyond damaged goods, incorrect items, and quality issues, refunds may also apply when a product significantly differs from its listing description. For example, receiving a red item when the listing showed blue, or a product missing a key advertised feature. Items that simply don't meet personal expectations are generally not eligible. Your order ORD47690438 (Product_58) is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to determine if receiving the wrong product qualifies as an \"incorrect item\" under our policy.\n\n**Execution**:\nFinal Response: \"According to our refund policy, you can request a refund for incorrect items within 30 days of delivery. Since you received the wrong product, this would qualify as an 'incorrect item'. I'll guide you through the process to initiate a refund.\"",
+                "usage": {
+                    "prompt_tokens": 3116,
+                    "completion_tokens": 86,
+                    "total_tokens": 3202
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent accurately clarified the refund policy and correctly identified the order status without any factual errors or hallucinations.",
+            "s_completeness": "The agent provided all necessary information regarding the policy and the current state of the order.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Beyond damaged goods, incorrect items, and quality issues, refunds may also apply when a product significantly differs from its listing description."
+            ],
+            "s_completeness": [
+                "Your order ORD47690438 (Product_58) is currently Processing. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Your order ORD47690438 (Product_58) is currently Processing. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

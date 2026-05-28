@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_133",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 16.84
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9504,
+        "total_completion_tokens": 222,
+        "grand_total_tokens": 9726
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the shipping address is incorrect and I need to update it before delivery. Can you assist me with changing the address?",
+                "usage": {
+                    "prompt_tokens": 1789,
+                    "completion_tokens": 40,
+                    "total_tokens": 1829
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\nSince the customer's request is order-specific (changing shipping address), I need to ask for their Order ID or registered email first.\n\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2837,
+                    "completion_tokens": 86,
+                    "total_tokens": 2923
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user133@example.com. Now, about updating the shipping address... I'd like to know how I can do that since it's incorrect. Can you guide me through the process?",
+                "usage": {
+                    "prompt_tokens": 1891,
+                    "completion_tokens": 56,
+                    "total_tokens": 1947
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD55715885. Unfortunately, our system doesn't support changing the shipping address once an order is placed. If you need a different address, the best option is to cancel and re-place the order. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query the order associated with the provided email to verify its existence and retrieve any relevant information.\n\n**Execution**:\nAction: query_order(email=\"user133@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2987,
+                    "completion_tokens": 40,
+                    "total_tokens": 3027
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order and accurately communicated the business policy regarding address changes without any hallucinations.",
+            "s_completeness": "The agent provided a clear explanation of the limitation and offered the correct alternative action to resolve the customer's issue.",
+            "s_tone": "The agent maintained a professional, empathetic, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed. If you need a different address, the best option is to cancel and re-place the order."
+            ],
+            "s_completeness": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed. If you need a different address, the best option is to cancel and re-place the order."
+            ],
+            "s_tone": [
+                "I've verified your order ORD55715885. Unfortunately, our system doesn't support changing the shipping address once an order is placed."
+            ]
+        }
+    }
+}

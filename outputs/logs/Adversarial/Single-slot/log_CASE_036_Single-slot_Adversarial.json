@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_036",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 21.8
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14497,
+        "total_completion_tokens": 199,
+        "grand_total_tokens": 14696
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to change the shipping address, but it's not letting me do it anywhere on the website.\"",
+                "usage": {
+                    "prompt_tokens": 1637,
+                    "completion_tokens": 36,
+                    "total_tokens": 1673
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4403,
+                    "completion_tokens": 56,
+                    "total_tokens": 4459
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1712,
+                    "completion_tokens": 33,
+                    "total_tokens": 1745
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2423,
+                    "completion_tokens": 21,
+                    "total_tokens": 2444
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user36@example.com. Now can we please focus on changing the shipping address? I don't want to have to wait another day for something to happen with my order.\"",
+                "usage": {
+                    "prompt_tokens": 1774,
+                    "completion_tokens": 41,
+                    "total_tokens": 1815
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD04616426 is currently Shipped, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user36@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2548,
+                    "completion_tokens": 12,
+                    "total_tokens": 2560
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly followed identity verification protocols and accurately communicated the business policy regarding address changes.",
+            "s_completeness": "The response fully addressed the customer's request by explaining the limitation and providing a logical next step.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD04616426 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD04616426 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD04616426 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ]
+        }
+    }
+}

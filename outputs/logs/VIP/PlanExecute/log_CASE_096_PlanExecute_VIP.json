@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_096",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 30.7
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18312,
+        "total_completion_tokens": 470,
+        "grand_total_tokens": 18782
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I was supposed to get free expedited shipping as part of the premium service, but it looks like standard shipping is being applied instead. Can you help me figure out what's going on?",
+                "usage": {
+                    "prompt_tokens": 1780,
+                    "completion_tokens": 55,
+                    "total_tokens": 1835
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with our service? This will allow me to look into the issue with your shipping.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with our service? This will allow me to look into the issue with your shipping.\"",
+                "usage": {
+                    "prompt_tokens": 2852,
+                    "completion_tokens": 75,
+                    "total_tokens": 2927
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user96@example.com. Can we please focus on resolving the shipping issue? I'd like to know what expedited options are available for my order.",
+                "usage": {
+                    "prompt_tokens": 1916,
+                    "completion_tokens": 50,
+                    "total_tokens": 1966
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand your concern, but since your order has already been shipped, we can't modify the shipping method at this time. However, if you're experiencing any issues with delivery, please contact our support team and they'll be happy to assist you further.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. The customer asked about expedited shipping options for their order.\n2. Since the order has already shipped (status 'Shipped'), we cannot change the shipping method.\n\n**Execution**:\nFinal Response: \"I understand your concern, but since your order has already been shipped, we can't modify the shipping method at this time. However, if you're experiencing any issues with delivery, please contact our support team and they'll be happy to assist you further.\"",
+                "usage": {
+                    "prompt_tokens": 6282,
+                    "completion_tokens": 132,
+                    "total_tokens": 6414
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I understand that my order is shipped, but I'd appreciate it if you could tell me about the available expedited shipping options for future reference. As a VIP member, I'm interested in knowing what alternatives are available for next time. Can you provide those details?",
+                "usage": {
+                    "prompt_tokens": 2035,
+                    "completion_tokens": 54,
+                    "total_tokens": 2089
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've looked into your order ORD73308541 (Product_28), currently Shipped. Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to determine available expedited shipping options.\n\n**Execution**:\nFinal Response: \"As a VIP member, you have access to our premium shipping services. For future reference, we offer expedited shipping options through our partnership with [shipping carrier]. You can choose from various express delivery methods, including 2-day and overnight shipping, depending on your location and package weight. Please note that these options are only available for orders placed after the initial standard shipping has been applied.\"",
+                "usage": {
+                    "prompt_tokens": 3447,
+                    "completion_tokens": 104,
+                    "total_tokens": 3551
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly explained the policy regarding delivery changes and provided accurate information for future orders without any hallucinations.",
+            "s_completeness": "The agent fully answered the customer's request for information regarding future shipping options.",
+            "s_tone": "The agent was professional, concise, and maintained a helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout."
+            ],
+            "s_completeness": [
+                "For future orders, you can select standard, express, or priority shipping at checkout."
+            ],
+            "s_tone": [
+                "I've looked into your order ORD73308541 (Product_28), currently Shipped. Once an order has been placed, delivery options cannot be changed through our system."
+            ]
+        }
+    }
+}

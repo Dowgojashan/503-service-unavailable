@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_081",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 15.81
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 8882,
+        "total_completion_tokens": 156,
+        "grand_total_tokens": 9038
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I'm having trouble submitting my new shipping address for an order I placed recently. It keeps saying there's an error with the submission.\"",
+                "usage": {
+                    "prompt_tokens": 1506,
+                    "completion_tokens": 31,
+                    "total_tokens": 1537
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help me better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order.\n\n**Execution**\nFinal Response: \"To help me better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 2828,
+                    "completion_tokens": 64,
+                    "total_tokens": 2892
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email is user81@example.com. I'd appreciate it if we could focus on fixing the error with my shipping address submission.\"",
+                "usage": {
+                    "prompt_tokens": 1596,
+                    "completion_tokens": 28,
+                    "total_tokens": 1624
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD37054665. Unfortunately, our system doesn't support changing the shipping address once an order is placed. Since your order is currently Shipped, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the customer's order.\n\n**Execution**:\nAction: query_order(email=\"user81@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2952,
+                    "completion_tokens": 33,
+                    "total_tokens": 2985
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly followed identity verification protocols and accurately communicated the business policy regarding address changes.",
+            "s_completeness": "The agent provided a clear explanation of the limitation and actionable advice for the customer's situation.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed."
+            ],
+            "s_completeness": [
+                "Since your order is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "I've verified your order ORD37054665. Unfortunately, our system doesn't support changing the shipping address once an order is placed."
+            ]
+        }
+    }
+}

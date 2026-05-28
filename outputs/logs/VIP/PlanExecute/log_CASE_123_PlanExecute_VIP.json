@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_123",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 30.14
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18234,
+        "total_completion_tokens": 439,
+        "grand_total_tokens": 18673
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm having trouble making payments for my order and I need some assistance with it as soon as possible. As a VIP member, I expect this issue to be sorted quickly.",
+                "usage": {
+                    "prompt_tokens": 1784,
+                    "completion_tokens": 38,
+                    "total_tokens": 1822
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To assist you with your payment issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address so I can look into this further?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's not provided yet.\n\n**Execution**\nFinal Response: \"To assist you with your payment issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address so I can look into this further?\"",
+                "usage": {
+                    "prompt_tokens": 2835,
+                    "completion_tokens": 72,
+                    "total_tokens": 2907
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user123@example.com. Can we please focus on resolving the payment issue? I'm trying to make payments for my order, but there's an issue and I need help with it.",
+                "usage": {
+                    "prompt_tokens": 1897,
+                    "completion_tokens": 57,
+                    "total_tokens": 1954
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand you're experiencing a payment issue with your order ORD06274449. Can you please confirm if you'd like to cancel or proceed with making payments? If you need assistance with either, I'll be happy to help.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the customer's request intent based on their statement about payment issues.\n\n**Execution**:\nFinal Response: \"I understand you're experiencing a payment issue with your order ORD06274449. Can you please confirm if you'd like to cancel or proceed with making payments? If you need assistance with either, I'll be happy to help.\"",
+                "usage": {
+                    "prompt_tokens": 6258,
+                    "completion_tokens": 108,
+                    "total_tokens": 6366
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a VIP member, I'd appreciate it if we could focus on resolving the payment issue rather than canceling or proceeding with payments. Can you tell me why there's an issue with making payments in the first place? What's causing this problem so I can understand what needs to be done to resolve it?",
+                "usage": {
+                    "prompt_tokens": 2018,
+                    "completion_tokens": 63,
+                    "total_tokens": 2081
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD06274449 with Product_64, currently Processing. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to identify potential causes of payment issues.\n\n**Execution**:\nFinal Response: \"Based on your order ORD06274449, it appears that the issue with making payments may be related to a processing delay or an incomplete payment attempt. As a VIP member, I'd like to offer you assistance in resolving this matter. Can you please confirm if you've attempted to make any payments recently and if there's any additional information you can provide about the issue?\"",
+                "usage": {
+                    "prompt_tokens": 3442,
+                    "completion_tokens": 101,
+                    "total_tokens": 3543
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 3
+        },
+        "final_score_0_100": 10.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's request for help with a payment issue and instead offered unrelated services.",
+            "s_completeness": "The response failed to provide any information or next steps regarding the payment issue, leaving the customer's query entirely unanswered.",
+            "s_tone": "The agent was professional in tone but failed to engage with the customer's specific concerns, resulting in a robotic and dismissive interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD06274449 with Product_64, currently Processing."
+            ]
+        }
+    }
+}

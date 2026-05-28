@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_012",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 25.83
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14719,
+        "total_completion_tokens": 336,
+        "grand_total_tokens": 15055
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - it was supposed to arrive yesterday but there's no tracking info yet. Can you look into this for me?",
+                "usage": {
+                    "prompt_tokens": 1786,
+                    "completion_tokens": 39,
+                    "total_tokens": 1825
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To better assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2836,
+                    "completion_tokens": 61,
+                    "total_tokens": 2897
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user12@example.com. Now, about my order... I'd appreciate it if we could discuss the refund policy in case my item doesn't arrive at all. Can you tell me under what circumstances a full or partial refund would be issued?",
+                "usage": {
+                    "prompt_tokens": 1886,
+                    "completion_tokens": 68,
+                    "total_tokens": 1954
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. If you believe your package was lost in transit, please contact our support team to open an investigation. Your order ORD83089040 (Product_71) is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the customer's order.\n\n**Execution**:\nAction: query_order(email=\"user12@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2999,
+                    "completion_tokens": 33,
+                    "total_tokens": 3032
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a long-standing VIP member, is there any flexibility in this policy? I'm concerned about the delay and potential loss of my item. Can we discuss possible reimbursement options if it's deemed lost or not delivered at all?",
+                "usage": {
+                    "prompt_tokens": 2066,
+                    "completion_tokens": 46,
+                    "total_tokens": 2112
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery. You can request a refund for damaged goods, incorrect items, or quality issues. Your order ORD83089040 (Product_71) is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to understand the current status and any potential issues.\n\n**Execution**:\nFinal Response: \"I've checked on your order, user12@example.com. Unfortunately, I don't have real-time tracking information yet. However, our standard policy is that if an item doesn't arrive within 30 days of the original shipping date, we'll issue a full refund or replacement, whichever you prefer.\"",
+                "usage": {
+                    "prompt_tokens": 3146,
+                    "completion_tokens": 89,
+                    "total_tokens": 3235
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's specific concern about reimbursement for a lost package, instead repeating the standard return policy twice.",
+            "s_completeness": "The agent did not provide information on how to handle a lost package, leaving the customer's core question unanswered.",
+            "s_tone": "The agent maintained a professional tone, though the repetition of the exact same phrasing made the interaction feel robotic."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Our standard policy allows returns within 30 days of delivery. You can request a refund for damaged goods, incorrect items, or quality issues."
+            ],
+            "s_completeness": [
+                "Your order ORD83089040 (Product_71) is currently Processing. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Your order ORD83089040 (Product_71) is currently Processing. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

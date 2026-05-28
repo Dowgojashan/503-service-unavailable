@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_078",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 33.7
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 21441,
+        "total_completion_tokens": 337,
+        "grand_total_tokens": 21778
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it, but every time I try to check the status online, it says 'processing' and that's all.\"",
+                "usage": {
+                    "prompt_tokens": 1639,
+                    "completion_tokens": 47,
+                    "total_tokens": 1686
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4425,
+                    "completion_tokens": 56,
+                    "total_tokens": 4481
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1728,
+                    "completion_tokens": 26,
+                    "total_tokens": 1754
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2427,
+                    "completion_tokens": 21,
+                    "total_tokens": 2448
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user78@example.com. Now can we please talk about my payment options? I want to know if there's a way to pay with something other than the credit card they already have on file.\"",
+                "usage": {
+                    "prompt_tokens": 1783,
+                    "completion_tokens": 46,
+                    "total_tokens": 1829
+                }
+            },
+            "service_agent": {
+                "final_answer": "You can pay with a variety of methods, including credit cards (Visa, Mastercard, American Express), PayPal, and bank transfer. All transactions are processed immediately upon order placement and are encrypted for security. We also accept USD, EUR, GBP, and other major currencies.\n\nIs there anything else I can assist you with regarding your payment options?",
+                "full_trace": "You can pay with a variety of methods, including credit cards (Visa, Mastercard, American Express), PayPal, and bank transfer. All transactions are processed immediately upon order placement and are encrypted for security. We also accept USD, EUR, GBP, and other major currencies.\n\nIs there anything else I can assist you with regarding your payment options?",
+                "usage": {
+                    "prompt_tokens": 4783,
+                    "completion_tokens": 81,
+                    "total_tokens": 4864
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's great, but I still don't see my specific options for Product_57. Can you please tell me which payment methods are available for this particular item? And can I get a refund if I decide not to keep it?\"",
+                "usage": {
+                    "prompt_tokens": 2020,
+                    "completion_tokens": 48,
+                    "total_tokens": 2068
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD63666768 (Product_57), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user78@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2636,
+                    "completion_tokens": 12,
+                    "total_tokens": 2648
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 52.5,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order details but failed to address the customer's question regarding refund eligibility.",
+            "s_completeness": "The response is incomplete because it ignored the customer's request for information about refunds.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD63666768 (Product_57), payment has already been processed."
+            ],
+            "s_completeness": [
+                "For your order ORD63666768 (Product_57), payment has already been processed. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "For your order ORD63666768 (Product_57), payment has already been processed. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

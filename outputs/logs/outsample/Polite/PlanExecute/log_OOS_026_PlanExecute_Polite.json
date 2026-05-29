@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "OOS_026",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 34.23
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 20497,
+        "total_completion_tokens": 438,
+        "grand_total_tokens": 20935
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, my order was supposed to arrive two days ago but the tracking hasn't updated since Monday. Could you please check on the status for me?",
+                "usage": {
+                    "prompt_tokens": 1527,
+                    "completion_tokens": 31,
+                    "total_tokens": 1558
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can check on the status of your order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's not provided yet.\n\n**Execution**:\nFinal Response: \"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can check on the status of your order?\"",
+                "usage": {
+                    "prompt_tokens": 2828,
+                    "completion_tokens": 66,
+                    "total_tokens": 2894
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is oos026@example.com. Could you please check on the status of my order with that information?",
+                "usage": {
+                    "prompt_tokens": 1636,
+                    "completion_tokens": 25,
+                    "total_tokens": 1661
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Since your order was already shipped on May 1st, it should arrive soon. If you have any concerns or issues with your delivery, please contact our support team for assistance.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. The customer's order has been shipped and the estimated delivery date is May 1st.\n\n**Execution**:\nFinal Response: \"Since your order was already shipped on May 1st, it should arrive soon. If you have any concerns or issues with your delivery, please contact our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 9469,
+                    "completion_tokens": 190,
+                    "total_tokens": 9659
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I appreciate the update on shipping, but I'm still concerned about why the tracking hasn't updated since Monday. Can you please check if there's an issue with the delivery or if it's just delayed?",
+                "usage": {
+                    "prompt_tokens": 1714,
+                    "completion_tokens": 42,
+                    "total_tokens": 1756
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD15243296 (Product_97) is currently Shipped, shipped on 2024-05-01. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. The customer is concerned about the tracking not updating since Monday and wants to know if there's an issue with delivery.\n\n**Execution**:\nFinal Response: \"I understand your concern, but according to our system, the order was shipped on May 1st and should arrive soon. If you're still experiencing issues or have concerns about your delivery, please contact our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 3323,
+                    "completion_tokens": 84,
+                    "total_tokens": 3407
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order facts but failed to address the customer's specific concern regarding the lack of tracking updates.",
+            "s_completeness": "The agent provided no information on how to resolve the tracking delay or what the next steps are, leaving the customer's request unanswered.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD15243296 (Product_97) is currently Shipped, shipped on 2024-05-01."
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Your order ORD15243296 (Product_97) is currently Shipped, shipped on 2024-05-01."
+            ]
+        }
+    }
+}

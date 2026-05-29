@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "OOS_031",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 43.7
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23768,
+        "total_completion_tokens": 422,
+        "grand_total_tokens": 24190
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my return. I returned the phone over two weeks ago, but I still haven't seen the refund hit my account.\"",
+                "usage": {
+                    "prompt_tokens": 1665,
+                    "completion_tokens": 35,
+                    "total_tokens": 1700
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4401,
+                    "completion_tokens": 56,
+                    "total_tokens": 4457
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation and see that I've already returned the phone?\"",
+                "usage": {
+                    "prompt_tokens": 1767,
+                    "completion_tokens": 33,
+                    "total_tokens": 1800
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2422,
+                    "completion_tokens": 21,
+                    "total_tokens": 2443
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is oos031@example.com. Now can you please check on the status of my return and when I'll get my refund? This is ridiculous that it's taking so long.\"",
+                "usage": {
+                    "prompt_tokens": 1829,
+                    "completion_tokens": 42,
+                    "total_tokens": 1871
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order, ORD68453016, has been successfully delivered on May 1st with a total amount of $756.09. The item in your order was a Mobile_49. Since your order has already been shipped, I'm unable to cancel or modify it further. If you have any other questions or concerns, please don't hesitate to reach out.",
+                "full_trace": "Your order, ORD68453016, has been successfully delivered on May 1st with a total amount of $756.09. The item in your order was a Mobile_49. Since your order has already been shipped, I'm unable to cancel or modify it further. If you have any other questions or concerns, please don't hesitate to reach out.",
+                "usage": {
+                    "prompt_tokens": 4751,
+                    "completion_tokens": 87,
+                    "total_tokens": 4838
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"This is ridiculous. I didn't ask about delivery or cancellation, I asked about my refund. You're just trying to brush me off with some irrelevant information. Can you please check the status of my return and when I'll get my money back? I'm still waiting for a refund that's been over two weeks overdue.\"",
+                "usage": {
+                    "prompt_tokens": 2068,
+                    "completion_tokens": 66,
+                    "total_tokens": 2134
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your refund request for ORD68453016 has been submitted successfully. The status of your refund is currently Processing, and you can expect to receive a total amount of $756.09 back. You will be notified once the refund is completed. This concludes our assistance with your issue. Thank you for contacting us.",
+                "full_trace": "Your refund request for ORD68453016 has been submitted successfully. The status of your refund is currently Processing, and you can expect to receive a total amount of $756.09 back. You will be notified once the refund is completed. This concludes our assistance with your issue. Thank you for contacting us.",
+                "usage": {
+                    "prompt_tokens": 4865,
+                    "completion_tokens": 82,
+                    "total_tokens": 4947
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 3,
+            "s_tone": 2
+        },
+        "final_score_0_100": 45.0,
+        "reasoning": {
+            "s_resolution": "The agent eventually provided the correct refund status, but initially provided irrelevant information about cancellation policies that the customer never requested.",
+            "s_completeness": "The agent provided the status but failed to address the customer's concern regarding the delay or provide any helpful context on the processing timeline.",
+            "s_tone": "The agent was robotic, repetitive, and dismissive, ending the conversation abruptly without acknowledging the customer's frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "The status of your refund is currently Processing, and you can expect to receive a total amount of $756.09 back."
+            ],
+            "s_completeness": [
+                "The status of your refund is currently Processing, and you can expect to receive a total amount of $756.09 back."
+            ],
+            "s_tone": [
+                "This concludes our assistance with your issue. Thank you for contacting us."
+            ]
+        }
+    }
+}

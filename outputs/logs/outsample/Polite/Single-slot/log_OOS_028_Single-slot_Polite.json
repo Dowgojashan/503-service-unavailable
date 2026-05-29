@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "OOS_028",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 38.96
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18847,
+        "total_completion_tokens": 462,
+        "grand_total_tokens": 19309
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and now I'm trying to get a refund because the item was damaged when I got it.",
+                "usage": {
+                    "prompt_tokens": 1554,
+                    "completion_tokens": 36,
+                    "total_tokens": 1590
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4402,
+                    "completion_tokens": 56,
+                    "total_tokens": 4458
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I don't have my Order ID handy right now, but I can give you my registered email if that helps. It's oos028@example.com. Can we please focus on the refund for the damaged item? I've been waiting over three weeks and I'm getting frustrated with the delays.",
+                "usage": {
+                    "prompt_tokens": 1674,
+                    "completion_tokens": 60,
+                    "total_tokens": 1734
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on your order, and it appears that it was delivered on May 1st with a total amount of $96.93 for the item \"Lifestyle_34\". However, I understand that you're experiencing issues with the item being damaged.\n\nSince the order has already been marked as delivered, I'll need to assist you further in processing your refund. Please let me know if you'd like to proceed with canceling and refunding the order.",
+                "full_trace": "I've checked on your order, and it appears that it was delivered on May 1st with a total amount of $96.93 for the item \"Lifestyle_34\". However, I understand that you're experiencing issues with the item being damaged.\n\nSince the order has already been marked as delivered, I'll need to assist you further in processing your refund. Please let me know if you'd like to proceed with canceling and refunding the order.",
+                "usage": {
+                    "prompt_tokens": 4428,
+                    "completion_tokens": 107,
+                    "total_tokens": 4535
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I'd like to proceed with canceling and refunding the order, but I want to make one thing clear: I'm not interested in waiting for another few days or weeks for this process to be completed. I've already returned the damaged item, and it's been over three weeks since then. Can you please expedite the refund so I can get my money back as soon as possible?",
+                "usage": {
+                    "prompt_tokens": 1909,
+                    "completion_tokens": 80,
+                    "total_tokens": 1989
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order, ORD28618006, has been successfully cancelled for the reason you specified. We will now proceed with processing your refund in accordance with our company's policies.\n\nPlease note that it may take a few more days to process and reflect the refund on your account. You will receive an email notification once the refund is complete.\n\nThank you for your patience and understanding throughout this process. If you have any further questions or concerns, please don't hesitate to reach out to us.\n\nThis concludes our conversation regarding your order.",
+                "full_trace": "Your order, ORD28618006, has been successfully cancelled for the reason you specified. We will now proceed with processing your refund in accordance with our company's policies.\n\nPlease note that it may take a few more days to process and reflect the refund on your account. You will receive an email notification once the refund is complete.\n\nThank you for your patience and understanding throughout this process. If you have any further questions or concerns, please don't hesitate to reach out to us.\n\nThis concludes our conversation regarding your order.",
+                "usage": {
+                    "prompt_tokens": 4880,
+                    "completion_tokens": 123,
+                    "total_tokens": 5003
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 40.0,
+        "reasoning": {
+            "s_resolution": "The agent hallucinated a cancellation action for an order that was already delivered and had a refund already in progress.",
+            "s_completeness": "The agent failed to inform the customer of the actual 'Processing' status of their refund, providing generic and misleading information instead.",
+            "s_tone": "The agent maintained a professional and empathetic tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order, ORD28618006, has been successfully cancelled for the reason you specified."
+            ],
+            "s_completeness": [
+                "Please note that it may take a few more days to process and reflect the refund on your account."
+            ],
+            "s_tone": [
+                "Thank you for your patience and understanding throughout this process."
+            ]
+        }
+    }
+}

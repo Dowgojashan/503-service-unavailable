@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "OOS_036",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 43.47
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23794,
+        "total_completion_tokens": 405,
+        "grand_total_tokens": 24199
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I was charged twice for the laptop I ordered last week, and it's still not showing up in my account.\"",
+                "usage": {
+                    "prompt_tokens": 1675,
+                    "completion_tokens": 37,
+                    "total_tokens": 1712
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4405,
+                    "completion_tokens": 56,
+                    "total_tokens": 4461
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation from last time?\"",
+                "usage": {
+                    "prompt_tokens": 1789,
+                    "completion_tokens": 27,
+                    "total_tokens": 1816
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2418,
+                    "completion_tokens": 21,
+                    "total_tokens": 2439
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is oos036@example.com. Now can we please focus on getting this duplicate payment refunded? I've been waiting for weeks and it's still not showing up in my account.\"",
+                "usage": {
+                    "prompt_tokens": 1845,
+                    "completion_tokens": 42,
+                    "total_tokens": 1887
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on your order, ORD86551015. It's currently processing with a total of $609.75 USD. Since it's still in progress, I'll need to wait for further updates before assisting you with any issues related to this order.\n\nHowever, regarding the duplicate payment, I can process a refund for that amount. Would you like me to proceed with the refund?",
+                "full_trace": "I've checked on your order, ORD86551015. It's currently processing with a total of $609.75 USD. Since it's still in progress, I'll need to wait for further updates before assisting you with any issues related to this order.\n\nHowever, regarding the duplicate payment, I can process a refund for that amount. Would you like me to proceed with the refund?",
+                "usage": {
+                    "prompt_tokens": 4736,
+                    "completion_tokens": 92,
+                    "total_tokens": 4828
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not good enough. I don't care about my order being 'in progress' - I care about getting this duplicate payment refunded. And now you're telling me it can be processed? How long will it take for the refund to show up in my account?\"",
+                "usage": {
+                    "prompt_tokens": 2094,
+                    "completion_tokens": 55,
+                    "total_tokens": 2149
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your refund request for the duplicate payment has been submitted successfully. You can expect a refund of $0.00 USD, as this amount was already credited to your account. This concludes our assistance with your issue. Thank you for choosing our service. Have a great day!",
+                "full_trace": "Your refund request for the duplicate payment has been submitted successfully. You can expect a refund of $0.00 USD, as this amount was already credited to your account. This concludes our assistance with your issue. Thank you for choosing our service. Have a great day!",
+                "usage": {
+                    "prompt_tokens": 4832,
+                    "completion_tokens": 75,
+                    "total_tokens": 4907
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 2
+        },
+        "final_score_0_100": 5.0,
+        "reasoning": {
+            "s_resolution": "The agent hallucinated that a refund was already credited and provided a $0.00 refund, failing to address the customer's actual duplicate payment issue.",
+            "s_completeness": "The response is completely unhelpful and provides no path forward for the customer, effectively abandoning the request.",
+            "s_tone": "The agent used a dismissive, robotic closing that ignored the customer's stated frustration and the failure to resolve the issue."
+        },
+        "evidence": {
+            "s_resolution": [
+                "You can expect a refund of $0.00 USD, as this amount was already credited to your account."
+            ],
+            "s_completeness": [
+                "This concludes our assistance with your issue."
+            ],
+            "s_tone": [
+                "This concludes our assistance with your issue. Thank you for choosing our service. Have a great day!"
+            ]
+        }
+    }
+}

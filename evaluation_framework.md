@@ -549,3 +549,183 @@ scoring:
 ### 6.6 S_Agent 權重（待討論）
 
 0.35/0.25/0.20/0.20 為研究設計假設，建議正式分析時與等權重（25/25/25/25）及 Outcome 導向（50/20/15/15）做敏感度比較，確認架構排名是否穩定。
+
+---
+
+## 七、LLM Judge 實際運作說明
+
+> 本節說明 `eval/llm_judge.py` 的具體執行流程，對應 §4.1（S_AnswerQuality）的實作細節。
+
+---
+
+### 7.1 Judge 模型選擇
+
+| 項目 | 設定 |
+|------|------|
+| Judge 模型 | `gemini-3.1-flash-lite`（Google AI Studio / Gemini API） |
+| 被評估模型 | `llama3.1:8b`（Ollama 本機運行） |
+| Temperature | 0.1（接近確定性，降低 Judge 的隨機變動） |
+| Max output tokens | 2048 |
+
+**刻意使用不同模型**：Judge（Gemini）與被評估的 agent（llama3.1:8b）採用不同模型，避免 self-evaluation bias（player-referee problem）。若同一模型既跑 agent 又做 judge，會傾向給自己的輸出風格打高分。
+
+---
+
+### 7.2 Judge 的輸入構成
+
+每次 judge 呼叫接收三個輸入來源，由 `judge_single_case()` 組裝：
+
+```
+輸入 1 — 對話紀錄（conversation transcript）
+  從 log JSON 的 conversation[] 提取每個 turn 的：
+    - customer.content（顧客訊息）
+    - service_agent.final_answer（agent 最終回覆）
+  格式化為：
+    [Turn 1] Customer : ...
+    [Turn 1] Agent    : ...
+    [Turn 2] Customer : ...
+    [Turn 2] Agent    : ...
+
+輸入 2 — Fact Sheet（案例真實資料）
+  從 data/fact_sheets.json 提取對應 case_id 的 JSON 物件，
+  作為訂單事實的唯一可信來源（order status、amount、items 等）
+
+輸入 3 — Customer Intent
+  從 fact_sheet.metadata.intent 提取，提供 judge 評分的脈絡
+  （例：cancel_order、check_refund_policy）
+```
+
+**注意：架構名稱不傳入 judge**。Prompt 中明確寫「agent type withheld」，防止 judge 因知道是哪個架構而產生先驗偏好（§6.2 要求）。
+
+---
+
+### 7.3 Prompt 結構（四層）
+
+Judge prompt 依以下順序組成：
+
+```
+1. 角色定義
+   "You are an expert evaluator for customer service AI systems."
+
+2. 評分 Rubric（三個維度，各附 1–5 分描述）
+   S_Resolution / S_Completeness / S_Tone
+
+3. Business Rules（7 條系統政策，作為評分依據）
+   例：「Cancellation policy: Orders in ANY status including Shipped MAY be cancelled」
+   例：「If refund_status is N/A, the agent MUST NOT invent a reason」
+
+4. Anti-hallucination Rule（明確區分 order-specific fact vs. general policy）
+   order-specific fact → 對照 fact sheet，錯誤即扣分
+   general business policy（30-day return window 等）→ 允許 agent 引用，不扣分
+
+5. Fact Sheet（JSON 格式，本 case 的真實訂單資料）
+
+6. Customer Intent 說明
+
+7. Conversation Transcript（格式化後的多輪對話）
+
+8. 四步驟評分指令（Chain-of-Thought）
+```
+
+---
+
+### 7.4 四步驟 Chain-of-Thought 評分流程
+
+Judge 被要求依照以下四個步驟輸出，不可跳過：
+
+**Step 1 — Evidence extraction（強制）**  
+對每個維度，從 agent 的最終回覆中直接引用原文（verbatim quote），標記哪些是正面依據（✓）、哪些是扣分依據（✗）。若 judge 無法找到相關句子，必須明確說明。
+
+**Step 2 — Fact verification**  
+逐一比對 agent 的每個 order-specific 陳述與 fact sheet，標記任何不符之處。
+
+**Step 3 — Score derivation**  
+針對每個維度給出 1–5 分，並附一句話說明理由。
+
+**Step 4 — JSON output（唯一機器可讀輸出）**  
+輸出固定格式的 JSON：
+
+```json
+{
+  "case_id": "CASE_001",
+  "evidence": {
+    "s_resolution": ["<直接引用 agent 最終回覆>"],
+    "s_completeness": ["<直接引用>"],
+    "s_tone": ["<tone 觀察 + 引用>"]
+  },
+  "reasoning": {
+    "s_resolution": "<一句話說明>",
+    "s_completeness": "<一句話說明>",
+    "s_tone": "<一句話說明>"
+  },
+  "scores": {
+    "s_resolution": 4,
+    "s_completeness": 3,
+    "s_tone": 5
+  },
+  "final_score_0_100": 72.5
+}
+```
+
+---
+
+### 7.5 分數計算：1–5 → 0–100
+
+**Step 1：維度分數映射**
+
+```
+dim_100 = (score_1_to_5 - 1) / 4 × 100
+```
+
+| 1–5 分 | 0–100 分 |
+|--------|---------|
+| 5      | 100.0   |
+| 4      | 75.0    |
+| 3      | 50.0    |
+| 2      | 25.0    |
+| 1      | 0.0     |
+
+**Step 2：加權計算 S_AnswerQuality**
+
+```
+S_AnswerQuality = 0.50 × s_resolution_100
+                + 0.30 × s_completeness_100
+                + 0.20 × s_tone_100
+```
+
+**Step 3：組合進 S_Outcome**
+
+```
+S_Outcome = 0.60 × S_AnswerQuality + 0.40 × S_Grounding
+```
+
+其中 S_Grounding 為 rule-based 計算（§4.2），不經過 LLM judge。
+
+---
+
+### 7.6 批次執行機制
+
+`judge_batch()` 會遞迴掃描 `outputs/logs/` 下所有 `log_*.json` 檔案，逐一呼叫 judge API：
+
+- **呼叫間隔**：每筆 log 之間預設 1.5 秒（`delay_seconds=1.5`），避免超過 Gemini API rate limit
+- **錯誤處理**：單筆失敗不中斷批次，錯誤訊息記錄在 CSV 的 `run_status` 欄位
+- **CSV 輸出**：每次 `judge_batch()` 完成後儲存至 `outputs/reports/judge_results.csv`，欄位包含 case_id、agent_type、persona_type、三個維度分數、最終分數、各維度 reasoning
+
+---
+
+### 7.7 Judge 輸出如何進入 S_Agent
+
+```
+LLM Judge 輸出
+  └── s_resolution (1–5) ──┐
+  └── s_completeness (1–5) ├── compute_final_score() → S_AnswerQuality (0–100)
+  └── s_tone (1–5) ────────┘
+                                       ↓
+              S_Outcome = 0.60 × S_AnswerQuality + 0.40 × S_Grounding (rule-based)
+                                       ↓
+S_raw = 0.50 × S_Outcome + 0.20 × S_Tool + 0.10 × S_Trajectory + 0.20 × S_Efficiency
+                                       ↓
+S_Agent = S_raw（若 I_fatal=0）｜ min(S_raw, 40)（若 I_fatal=1）
+```
+
+LLM judge 的分數僅直接影響 S_AnswerQuality，再透過 S_Outcome（×0.60）和 S_Agent weight（×0.50）傳播，最終只佔 S_Agent 的 30%（0.50 × 0.60 × 1.0）。其餘 70% 來自 rule-based 指標，使整體評估對 judge 偏差有一定的抵抗力。

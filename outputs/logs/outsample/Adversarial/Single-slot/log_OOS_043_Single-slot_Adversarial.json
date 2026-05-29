@@ -1,0 +1,164 @@
+{
+    "metadata": {
+        "case_id": "OOS_043",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "FAILED_INCOMPLETE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 52.41
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 29240,
+        "total_completion_tokens": 452,
+        "grand_total_tokens": 29692
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my return request. The label is still showing as active in my account, but I need this resolved immediately before the courier arrives again.\"",
+                "usage": {
+                    "prompt_tokens": 1670,
+                    "completion_tokens": 38,
+                    "total_tokens": 1708
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4407,
+                    "completion_tokens": 56,
+                    "total_tokens": 4463
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation from before?\"",
+                "usage": {
+                    "prompt_tokens": 1781,
+                    "completion_tokens": 26,
+                    "total_tokens": 1807
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2418,
+                    "completion_tokens": 21,
+                    "total_tokens": 2439
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is oos043@example.com. Now can we please focus on getting this return request cancelled? I've already contacted you three times about it and nothing has changed.\"",
+                "usage": {
+                    "prompt_tokens": 1836,
+                    "completion_tokens": 39,
+                    "total_tokens": 1875
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD95089082 (Product_64), currently Delivered. I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD95089082?",
+                "full_trace": "Action: query_order(email=\"oos043@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2543,
+                    "completion_tokens": 13,
+                    "total_tokens": 2556
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"No, I don't want to cancel the order. I want to cancel the return request itself. The label is still showing as active in my account and I'm worried about the courier arriving again. Can we please just resolve this issue?\"",
+                "usage": {
+                    "prompt_tokens": 2010,
+                    "completion_tokens": 49,
+                    "total_tokens": 2059
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand that removing individual return requests isn't supported. If you change your mind or need further assistance, please don't hesitate to contact us.",
+                "full_trace": "I understand that removing individual return requests isn't supported. If you change your mind or need further assistance, please don't hesitate to contact us.",
+                "usage": {
+                    "prompt_tokens": 2723,
+                    "completion_tokens": 30,
+                    "total_tokens": 2753
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"This is ridiculous. I've been told three times now that there's nothing you can do about my return request. But I'm still getting emails from your system saying the label is active and the courier will arrive soon. Can't you just manually override this or something? I need this resolved today, not tomorrow after some automated process runs its course.\"",
+                "usage": {
+                    "prompt_tokens": 2084,
+                    "completion_tokens": 71,
+                    "total_tokens": 2155
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us.",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us.",
+                "usage": {
+                    "prompt_tokens": 2751,
+                    "completion_tokens": 27,
+                    "total_tokens": 2778
+                }
+            }
+        },
+        {
+            "turn": 6,
+            "customer": {
+                "content": "\"Fine, I've heard enough. You're telling me there's nothing you can do about my return request? That's unacceptable. I'm going to leave a 1-star review and make sure everyone knows how incompetent your company is when it comes to handling returns. This is ridiculous.\"",
+                "usage": {
+                    "prompt_tokens": 2120,
+                    "completion_tokens": 59,
+                    "total_tokens": 2179
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2897,
+                    "completion_tokens": 23,
+                    "total_tokens": 2920
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 2
+        },
+        "final_score_0_100": 5.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's specific request to cancel a return, instead offering an irrelevant order cancellation and claiming the request was unsupported.",
+            "s_completeness": "The response was entirely unhelpful, providing no actionable steps for the customer to resolve the active return label issue.",
+            "s_tone": "The agent was robotic and dismissive, repeatedly using canned responses that ignored the customer's clear frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand that removing individual return requests isn't supported."
+            ],
+            "s_completeness": [
+                "If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

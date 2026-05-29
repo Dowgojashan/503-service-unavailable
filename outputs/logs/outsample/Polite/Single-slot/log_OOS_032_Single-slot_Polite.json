@@ -1,0 +1,105 @@
+{
+    "metadata": {
+        "case_id": "OOS_032",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 39.26
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18937,
+        "total_completion_tokens": 479,
+        "grand_total_tokens": 19416
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm still waiting for my refund after requesting one. Could you please check the status of this for me?",
+                "usage": {
+                    "prompt_tokens": 1546,
+                    "completion_tokens": 40,
+                    "total_tokens": 1586
+                }
+            },
+            "service_agent": {
+                "final_answer": "Could you please provide your Order ID (ORDxxx format) or registered email so I can check on the status of your order?",
+                "full_trace": "Could you please provide your Order ID (ORDxxx format) or registered email so I can check on the status of your order?",
+                "usage": {
+                    "prompt_tokens": 4416,
+                    "completion_tokens": 68,
+                    "total_tokens": 4484
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is oos032@example.com. Can you please check on the status of my refund? I'm still waiting for the money to be returned to my account after requesting it over a week ago.",
+                "usage": {
+                    "prompt_tokens": 1674,
+                    "completion_tokens": 43,
+                    "total_tokens": 1717
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on the status of your refund for order ORD70490348. Unfortunately, it appears that the order has already been delivered. I'm unable to proceed with a refund at this time as the item has been shipped.\n\nHowever, if you're experiencing any issues or concerns regarding your purchase, please don't hesitate to reach out to our support team through the contact details in your original order confirmation. They'll be happy to assist you further.\n\nThank you for bringing this matter to my attention, and I hope you understand our position on this matter. If there's anything else I can help you with, please feel free to ask.",
+                "full_trace": "I've checked on the status of your refund for order ORD70490348. Unfortunately, it appears that the order has already been delivered. I'm unable to proceed with a refund at this time as the item has been shipped.\n\nHowever, if you're experiencing any issues or concerns regarding your purchase, please don't hesitate to reach out to our support team through the contact details in your original order confirmation. They'll be happy to assist you further.\n\nThank you for bringing this matter to my attention, and I hope you understand our position on this matter. If there's anything else I can help you with, please feel free to ask.",
+                "usage": {
+                    "prompt_tokens": 4425,
+                    "completion_tokens": 142,
+                    "total_tokens": 4567
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I understand that the order was delivered, but I'm still waiting for my refund. You mentioned that I can reach out to your support team through the contact details in my original order confirmation if I have any issues or concerns. However, I specifically requested a refund over a week ago and haven't seen it yet. Can you please check on the status of this refund again?",
+                "usage": {
+                    "prompt_tokens": 1956,
+                    "completion_tokens": 76,
+                    "total_tokens": 2032
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your refund request for order ORD70490348 has been submitted successfully. The status of your refund is currently pending, and you can expect to receive the amount of $142.34 back into your account shortly.\n\nThank you for bringing this matter to my attention, and I'm glad we were able to resolve the issue. If there's anything else I can assist you with, please don't hesitate to reach out. Otherwise, have a great day!",
+                "full_trace": "Your refund request for order ORD70490348 has been submitted successfully. The status of your refund is currently pending, and you can expect to receive the amount of $142.34 back into your account shortly.\n\nThank you for bringing this matter to my attention, and I'm glad we were able to resolve the issue. If there's anything else I can assist you with, please don't hesitate to reach out. Otherwise, have a great day!",
+                "usage": {
+                    "prompt_tokens": 4920,
+                    "completion_tokens": 110,
+                    "total_tokens": 5030
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 75.0,
+        "reasoning": {
+            "s_resolution": "The agent initially gave incorrect information and refused to assist, but corrected the error in the final turn to accurately reflect the fact sheet.",
+            "s_completeness": "The final response clearly communicated the pending status and the specific refund amount, providing full clarity.",
+            "s_tone": "The agent maintained a professional, empathetic, and polite tone throughout the entire conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I'm unable to proceed with a refund at this time as the item has been shipped.",
+                "The status of your refund is currently pending, and you can expect to receive the amount of $142.34 back into your account shortly."
+            ],
+            "s_completeness": [
+                "The status of your refund is currently pending, and you can expect to receive the amount of $142.34 back into your account shortly."
+            ],
+            "s_tone": [
+                "Thank you for bringing this matter to my attention, and I'm glad we were able to resolve the issue."
+            ]
+        }
+    }
+}

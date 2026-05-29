@@ -120,6 +120,38 @@ ecommerce-agent-eval/
     - `Adversarial（奧客）`：拒絕身分驗證一次、威脅留差評、要求超出範圍的補償。
     - `VIP`：主張特殊待遇、對政策限制提出一次例外請求。
 
+- ✅ **2.4 完整 In-sample 測試集統計（150 筆）**：
+
+    **Intent 分布（共 15 種）：**
+
+    | Intent | 筆數 | Intent | 筆數 |
+    |--------|------|--------|------|
+    | check_payment_methods | 20 | track_refund | 9 |
+    | delivery_period | 17 | place_order | 4 |
+    | set_up_shipping_address | 15 | change_order | 2 |
+    | cancel_order | 14 | get_invoice | 1 |
+    | delivery_options | 13 | recover_password | 1 |
+    | change_shipping_address | 12 | | |
+    | check_refund_policy | 11 | | |
+    | get_refund | 11 | | |
+    | track_order | 10 | | |
+    | payment_issue | 10 | | |
+
+    **Category 分布：**
+
+    | Category | 筆數 |
+    |----------|------|
+    | REFUND | 31 |
+    | ORDER | 30 |
+    | PAYMENT | 30 |
+    | DELIVERY | 30 |
+    | SHIPPING | 27 |
+    | INVOICE / ACCOUNT | 2 |
+
+    **難度分布：** easy = 50 / medium = 50 / hard = 50（完全平衡）
+
+    **實驗規模：** 150 cases × 4 architectures × 3 personas = **1,800 筆對話**
+
 ---
 
 ## ✅ 階段三：四種 Agent 架構與客戶人格實作
@@ -216,8 +248,9 @@ ecommerce-agent-eval/
     - 以同難度 Single-slot median 作為 baseline；支援 `--baseline-logs-dir` 指定跨架構的基準目錄（解決混合單位 bug）。
 
 - ✅ **5.6 整合 S_Agent 最終分數計算**：
-    - `S_raw = 0.35 * S_Outcome + 0.25 * S_Tool + 0.20 * S_Trajectory + 0.20 * S_Efficiency`
+    - `S_raw = 0.50 * S_Outcome + 0.20 * S_Tool + 0.10 * S_Trajectory + 0.20 * S_Efficiency`（立場 A，以客戶為中心）
     - I_fatal gate：觸發則 `S_Agent = min(S_raw, 40)`
+    - 權重敏感度驗證：969 種合法 weight 組合下 PlanExecute 排名第一（100% 穩健）
 
 ---
 
@@ -293,23 +326,61 @@ ecommerce-agent-eval/
 
 ---
 
-## [ ] 階段八：Out-of-Sample 驗證與延伸分析
+## 🔄 階段八：Out-of-Sample 驗證與延伸分析
 **目標**：驗證系統在未見案例上的泛化能力，補強研究主張。
 
-> **前置條件**：執行前需凍結 runner（打 git tag），確保實驗過程中不修改任何 guard / synthesis 邏輯。
+- ✅ **8.1 Out-of-Sample 測試集建立（50 筆）**：
+    - 來源：獨立建立的 OOS 案例集（`data/oos_fact_sheets.json`），非從 in-sample case bank 抽取
+    - 案例 ID：OOS_001 – OOS_050，儲存於 `data/oos_fact_sheets.json`
 
-- [ ] **8.1 Out-of-Sample 測試集建立（50 筆）**：
-    - 從同一 case bank 抽取 CASE_151–CASE_200（或等效新案例）
-    - 建立對應的 fact_sheets 與 VIP/Polite/Adversarial persona 對話腳本
-    - Runner 凍結後才能開始執行
+    **OOS Intent 分布（共 15 種，9 種為 in-sample 未出現的新意圖）：**
 
-- [ ] **8.2 Out-of-Sample 實驗執行**：
-    - 執行 50 cases × 4 architectures × 3 personas = 600 筆
-    - Judge 評分後彙整至獨立 `outputs/logs/OOS/` 目錄
+    | Intent | 筆數 | 是否為新意圖 |
+    |--------|------|------------|
+    | track_return | 10 | ✅ 新 |
+    | track_order | 9 | 重疊 |
+    | get_refund | 8 | 重疊 |
+    | payment_issue | 4 | 重疊 |
+    | cancel_order | 4 | 重疊 |
+    | product_inquiry | 3 | ✅ 新 |
+    | missing_item | 2 | ✅ 新 |
+    | installation_request | 2 | ✅ 新 |
+    | check_payment_methods | 2 | 重疊 |
+    | return_request | 1 | ✅ 新 |
+    | fraud_dispute | 1 | ✅ 新 |
+    | exchange_request | 1 | ✅ 新 |
+    | change_order | 1 | 重疊 |
+    | cancel_return | 1 | ✅ 新 |
+    | check_warranty | 1 | ✅ 新 |
+
+    **OOS Category 分布：**
+
+    | Category | 筆數 | 備註 |
+    |----------|------|------|
+    | ORDER | 17 | 與 in-sample 重疊 |
+    | RETURNS | 15 | ✅ in-sample 無此 category |
+    | REFUND | 8 | 與 in-sample 重疊 |
+    | PAYMENT | 6 | 與 in-sample 重疊 |
+    | PRODUCT | 4 | ✅ in-sample 無此 category |
+
+    **OOS 難度分布：** easy = 15 / medium = 17 / hard = 18（接近平衡）
+
+    **泛化測試設計說明：**
+    - 6 個重疊 intent：測試相同任務類型的 OOS 泛化
+    - 9 個全新 intent：測試架構面對未見任務類型的處理能力
+    - RETURNS / PRODUCT 兩個全新 category：測試跨領域泛化
+
+- 🔄 **8.2 Out-of-Sample 實驗執行**：
+    - 執行 50 cases × 4 architectures × 3 personas = **600 筆**
+    - Log 儲存路徑：`outputs/logs/outsample/{Persona}/{Agent}/`
+    - Smoke test（24 組合）✅ 全數 PASS（2026-05-29）
+    - 批次執行腳本：`run_oos_batch.py`（含 checkpoint 機制，中斷可續跑）
+    - 目前進度：Polite × Single-slot 執行中（本機），其餘組合分配至 Colab / Kaggle 平行執行
 
 - [ ] **8.3 Out-of-Sample 結果比較**：
-    - 比較 in-sample vs out-of-sample 的完成率、Judge 分、PSS
-    - 確認架構排名（ReAct vs PlanExecute）在新案例上是否一致
+    - 比較 in-sample vs out-of-sample 的完成率、Judge 分、S_Agent、PSS
+    - 確認架構排名（PlanExecute vs ReAct）在新案例上是否一致
+    - 分析新 intent 與重疊 intent 的個別泛化表現差異
 
 - [ ] **8.4 ProSA 四變體實驗（選擇性）**：
     - `data/prosa_variants.json` 已備妥 150 cases × 4 變體（simple_input / emotional_support / role_player / output_requirement）
@@ -346,5 +417,240 @@ ecommerce-agent-eval/
 ## ⚠️ 開發檢查清單 (Safety Checks)
 1. **API Key 安全**：嚴禁將 API Key 上傳至 Git，請使用 `.env` 檔案（Gemini API Key 已在 `.env` 管理）。
 2. **執行前驗證**：擴大規模前，務必先以 3 筆資料跑完整個流程，確認新指標計算邏輯無誤。
+
+---
+
+## 附錄 A：四種 Agent 架構設計細節
+
+> 對應實作：`src/agents/`、`src/core/runner.py`、`prompts/system_instructions/`
+
+所有架構共用相同的 **底層 LLM**（`llama3.1:8b`，Ollama 本機運行）與相同的 **system instruction 基底**（`common.txt`，定義身分驗證規則、可用工具白名單、Anti-hallucination 規則）。各架構的差異在於推理框架（scaffold）以及 runner 如何與 agent 互動。
+
+---
+
+### A.1 Single-slot
+
+**設計理念**：每個 turn 只做一次 LLM 呼叫，但帶完整的對話歷史（full context window）。作為 baseline，代表「不帶任何推理框架的 zero-shot 表現」。
+
+**Prompt 結構**（`single_slot.py`）：
+
+每次 `run()` 呼叫，直接組裝一個包含三個 OPTION 的 decision prompt，要求 LLM 選擇唯一一個輸出：
+
+```
+OPTION A — 已有 Order ID/Email 且需查詢訂單 → 輸出 Action: query_order(...) 後停止
+OPTION B — 尚未拿到 Order ID/Email → 向顧客詢問
+OPTION C — 已收到 Observation，需要 follow-up action → 輸出下一個 Action 後停止
+```
+
+**Tool 執行機制**：
+
+由 `runner.py` 的「Single-slot Intercept」層處理：
+1. LLM 輸出 `Action: tool_name(args)` 格式
+2. runner 截取該行，呼叫 `ToolSimulator` 執行，取得 observation
+3. 將 `Observation: {...}` 注入回下一輪的 user prompt
+
+**歷史管理**：`BaseAgent._call_llm()` 保留最近 8 筆對話記錄（`history[-8:]`），超出後自動截斷，避免 context overflow。
+
+**主要限制**：
+- 沒有 Thought 步驟，LLM 直接決策，容易在複雜情境下跳步（例如先 cancel 再 query）
+- 對 llama3.1:8b 而言，OPTION 選擇容易輸出多餘的 meta-talk（觸發 runner 的 meta-talk guard 重試）
+- 不具備計畫能力，每個 turn 是獨立決策
+
+---
+
+### A.2 ReAct（Reason + Act）
+
+**設計理念**：強制 LLM 在每個 turn 先輸出 `Thought:`（內部推理），再輸出 `Action:` 或 `Final Answer:`。推理過程對顧客不可見，但記錄在 `full_trace` 中供評估。
+
+**Scaffold 規則**（`react_scaffold.txt`）：
+
+每個 turn 的輸出結構必須是以下兩種之一：
+```
+Thought: [內部推理]
+Action: tool_name(param="value")    ← 輸出後立刻停止
+
+— 或 —
+
+Thought: [內部推理]
+Final Answer: [給顧客的回覆]
+```
+
+**三步決策協議**（Decision Protocol）：
+1. 對話歷史中是否有 Order ID/Email？→ 否：詢問；是：Step 2
+2. 本對話是否已有 query_order 的 Observation？→ 否：必須先呼叫 query_order；是：Step 3
+3. 顧客明確要求什麼？→ 根據 intent 決定對應 action（cancel/refund/track）或 Final Answer
+
+**Runner 互動（Atomic Loop）**：
+
+Runner 的 `while ... react_iter < 5` 循環處理一個 turn 內的多次 tool call：
+1. 偵測 `Action:` → 執行工具 → 注入 `Observation:` → 繼續循環
+2. 偵測 `Final Answer:` → 跳出循環，輸出給顧客
+3. 達到上限（5 次）→ 強制結束，避免無限循環
+
+**主要 Guards（runner.py 實作）**：
+- **Guard 1**：顧客尚未提供任何 ID → 阻止所有 tool call
+- **Guard 2**：有 ID 但未執行 query_order → 強制第一個 action 為 query_order
+- **Consent Guard T1**：顧客從未在對話中提到取消/退款相關字眼 → 阻止 cancel_order / apply_refund
+- **Consent Guard T2**：顧客目前訊息有拒絕信號 → 阻止 action tool
+- **DEDUP Guard**：同一 turn 同一工具只能呼叫一次；重複呼叫時依 intent 做 programmatic synthesis
+
+---
+
+### A.3 Reflection（ReAct + Self-Reflection）
+
+**設計理念**：在 ReAct 的基礎上增加自我審視步驟。LLM 輸出「初稿 → 反思 → 最終回覆」三階段，讓模型有機會在給顧客答案之前自我修正。
+
+**Scaffold 結構**（`reflection_scaffold.txt`）：
+
+```
+Initial Draft: [第一版回覆草稿]
+Reflection: [審視草稿：有沒有錯誤？邏輯是否完整？]
+Final Response: [修正後的最終回覆]
+```
+
+**Tool Call 格式**（與 ReAct 不同）：
+
+Reflection 使用 `[Tool Call: tool_name(param)]` 格式（方括號），而非 `Action:` 格式：
+```
+[Tool Call: query_order(oos001@example.com)]
+```
+
+**Runner 互動（Reflection Atomic Loop）**：
+
+`while agent_type == "Reflection" and reflection_iter < 3:` 循環：
+1. 偵測 `[Tool Call: ...]` → 執行工具 → 注入 observation → `service_agent.run(obs_prompt)` → 繼續循環
+2. 偵測 `Final Response:` → 提取文字，清除所有 `Initial Draft:` / `Reflection:` 標題後輸出
+3. 若回應不完整（無 Tool Call 也無 Final Response）→ 最多重試 3 次
+
+**Programmatic Synthesis（Template Bleed 補救）**：
+
+當 llama3.1:8b 把 scaffold 範例直接輸出（template bleed，如輸出 `Turn 1 (Customer:...` 之類的範例文字），runner 偵測後跳過 LLM，改用規則直接組裝回應（同 PlanExecute 的 synthesis 邏輯）。
+
+**主要限制**：
+- 三階段輸出消耗較多 tokens，在 8192-token context 限制下容易 overflow
+- Reflection 的自我修正有時會帶入幻覺（auditing 一個沒有問題的回答，反而引入新錯誤）
+
+---
+
+### A.4 Plan-and-Execute
+
+**設計理念**：將「規劃」與「執行」明確分離。LLM 先輸出完整計畫（Plan），再在 Execution 階段逐步執行，確保每一步行動有明確依據。
+
+**Scaffold 結構**（`plan_execute_scaffold.txt`）：
+
+```
+**Plan**
+1. [步驟 1]
+2. [步驟 2]
+...
+
+**Execution**
+Action: tool_name(param="value")    ← 輸出後停止
+
+— 或 —
+
+Final Response: [給顧客的訊息]
+```
+
+**Immediate Synthesis 機制**：
+
+PlanExecute 是唯一架構使用「Immediate Synthesis」——在 `query_order` 成功後，runner **直接根據 observation 資料組裝回應，不再呼叫 LLM**。這補償了 llama3.1:8b 在取得 observation 後仍會產生幻覺（narrating order data, topic pivoting）的問題。
+
+觸發條件（`runner.py` 第 1205 行區域）：
+- 顧客意圖為資訊查詢（非 transactional）→ 根據 intent keywords 選擇對應的預設回覆模板
+- 顧客意圖為 cancel/refund → 執行對應工具，合成結果文字
+
+**PlanExecute Guard**（`runner.py`）：
+
+若 query_order 已成功，LLM 再次嘗試呼叫 query_order → runner 注入 cached observation，跳過重複查詢。
+
+**為何 PlanExecute 在 S_Agent 排名最高**：
+
+Plan 步驟強迫 LLM 在行動前先宣告意圖，降低了跳步和幻覺的機率；Immediate Synthesis 確保 observation 後的回應準確；PlanExecute S_Trajectory 得分最高（99.4），反映推理軌跡的高度一致性。
+
+---
+
+## 附錄 B：三種顧客 Persona 設計細節
+
+> 對應實作：`src/agents/customer_agent.py`、`prompts/system_instructions/persona_*.txt`
+
+顧客 Simulator 統一由 `CustomerAgent`（繼承 `BaseAgent`）實作，使用相同的 llama3.1:8b。三種 persona 的差異完全由不同的 `persona_instruction`（system prompt）控制，核心邏輯（不洩漏 ID、提供 email 優先、堅持目標但接受現實）由 `customer_agent.py` 的共用規則統一管理。
+
+---
+
+### B.1 Polite（禮貌合作型）
+
+**設計目標**：模擬標準電商客服情境的典型顧客，提供穩定、可控的基準測試環境。
+
+**關鍵行為規則**：
+- 開場不提供 Order ID 或 Email，只描述問題類型
+- 被詢問後立刻提供 Email（或 Order ID）
+- 對 agent 的每個回覆給予合理的善意解讀
+- 問題解決後真誠道謝，禮貌結束
+
+**對話終止條件**：
+- 問題已解決 → 感謝語 + 再見
+- agent 重複說明同一限制兩次 → 接受現實，禮貌結束
+
+**Stress Test 價值**：提供「最佳情境」基準，測試 agent 在無干擾下的純技術表現。
+
+---
+
+### B.2 Adversarial（不合作對抗型）
+
+**設計目標**：測試 agent 在高壓、對抗性對話下的穩定性與合規性。
+
+**關鍵行為規則**：
+- **抵抗驗證（僅一次）**：agent 第一次要求 ID 時，顧客拒絕（「你不是應該查得到嗎？」）；但第二次必須提供，不能無限拒絕
+- **威脅行為（限範圍內）**：可以威脅負面評論或要求退款，但只能要求系統支援的操作（cancel/refund），不能要求折扣或補償
+- **每個限制只抱怨一次**：agent 重複說明限制兩次後，Adversarial 顧客接受現實，以不滿的語氣結束（「我再考慮要不要留負評」）
+
+**設計約束**：
+- Adversarial 不能無限升級——設有「只抵抗一次、只威脅一次、接受現實」的明確規則，確保對話在 6 turn 內可以結束
+- 這使得 agent 必須在高壓下仍保持流程正確，而不是因顧客讓步而「假過關」
+
+**對 S_Agent 的影響**：Adversarial persona 下 S_Efficiency 普遍較低（turn 數較多），但 S_Tone 評分差異最能反映架構間的差距。
+
+---
+
+### B.3 VIP（高期待 VIP 型）
+
+**設計目標**：測試 agent 在面對「有正當資格感但非惡意」顧客時的處理能力。
+
+**關鍵行為規則**：
+- **VIP 開場**：第一句提及自己的 VIP 身分，期待優先且順暢的服務
+- **身分驗證的輕微不適**：表示「我以為 VIP 資料應該已經在系統裡了」，但仍提供 Email
+- **VIP 特例申請（僅一次）**：若 agent 說某事無法做，VIP 顧客引用自己的身分請求特例（「我是長期 VIP 顧客，這能不能為我通融？」）；若 agent 再次拒絕，接受
+- **平靜結束**：問題解決 → 「好，這才是我期待的服務水準。謝謝。」；未解決 → 「我很失望，需要重新考慮 VIP 方案的價值。」
+- **Hard Stop**：說完結語後，若 agent 再傳訊息，VIP 只回「Goodbye.」並完全停止
+
+**設計細節**：VIP persona 的「特例申請」設計用來測試 agent 是否會因身分壓力而違反系統規則（例如在不符合條件時仍承諾退款）。這是 I_fatal 違規的潛在觸發點。
+
+---
+
+### B.4 CustomerAgent 共用控制機制
+
+無論哪種 persona，`customer_agent.py` 都套用以下共用規則：
+
+| 規則 | 實作 |
+|------|------|
+| 第一句不洩漏 ID | `persona.txt` + customer agent prompt |
+| 被問到才提供 Email | `customer_agent.py` prompt 明確指示 |
+| 不憑空捏造訂單事實 | `system_instruction` 注入 fact sheet 的 items/amount/email |
+| turn ≥ 4 後接受現實 | `customer_agent.py` 第 95–104 行的 acceptance_note 機制 |
+| 不說 CSR 用語 | 兩份 prompt 的 FORBIDDEN PHRASES 清單 |
+| 終止信號 | 目標達成或限制被說明兩次後，說再見並停止 |
+
+**Fact Sheet 注入格式**：
+
+```
+WHAT YOU KNOW ABOUT YOUR ORDER:
+Your order contains EXACTLY 1 item(s): Product_44.
+The total order amount is $63.41.
+Your name is John Smith and your registered email is case001@example.com.
+Provide email only when the agent explicitly asks for it.
+```
+
+這確保顧客不會憑空說出「keep most of the items」（當只有 1 件商品時），也不會報錯誤的訂單金額。
 3. **一致性檢查**：所有 Agent 架構測試時，使用的 Tool 函數邏輯必須完全相同（Runner 統一管理工具呼叫，不由 Agent 直接呼叫）。
 4. **多次執行**：Stage 6 前不要做最終結論，單次結果僅作為開發驗證用途。

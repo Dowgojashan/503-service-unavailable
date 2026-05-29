@@ -1,0 +1,144 @@
+{
+    "metadata": {
+        "case_id": "OOS_003",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 64.08
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 34658,
+        "total_completion_tokens": 691,
+        "grand_total_tokens": 35349
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting over a week for someone to pick up my return, and your team keeps telling me it's 'scheduled' without anyone actually showing up. This is incredibly frustrating because I've already paid for the item and can't get my refund until you finally collect it.\"",
+                "usage": {
+                    "prompt_tokens": 1693,
+                    "completion_tokens": 57,
+                    "total_tokens": 1750
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4445,
+                    "completion_tokens": 56,
+                    "total_tokens": 4501
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation from last time and see that we've already discussed this?\"",
+                "usage": {
+                    "prompt_tokens": 1846,
+                    "completion_tokens": 35,
+                    "total_tokens": 1881
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2446,
+                    "completion_tokens": 21,
+                    "total_tokens": 2467
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is oos003@example.com. Now, can you please tell me when someone will actually show up to pick up my return? I've been waiting for over a week and it's ridiculous that I still don't have an answer.\"",
+                "usage": {
+                    "prompt_tokens": 1910,
+                    "completion_tokens": 53,
+                    "total_tokens": 1963
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on the status of your return. According to our records, it was delivered on May 1st with a total amount of $238.70. Since the item has already been delivered, I'm afraid we won't be able to collect it for a refund. If you have any other questions or concerns, please don't hesitate to reach out.",
+                "full_trace": "I've checked on the status of your return. According to our records, it was delivered on May 1st with a total amount of $238.70. Since the item has already been delivered, I'm afraid we won't be able to collect it for a refund. If you have any other questions or concerns, please don't hesitate to reach out.",
+                "usage": {
+                    "prompt_tokens": 4821,
+                    "completion_tokens": 87,
+                    "total_tokens": 4908
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not what I asked for. You're still not answering my question about when someone will pick up my return. I don't care if the item was delivered or not - I want to know when it will be collected so I can get my refund. This is ridiculous and I'm extremely frustrated with your team's lack of communication.\"",
+                "usage": {
+                    "prompt_tokens": 2160,
+                    "completion_tokens": 69,
+                    "total_tokens": 2229
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand that you're still waiting for a collection of your return. However, according to our records, the item was delivered on May 1st. Unfortunately, this means we won't be able to collect it for a refund. I apologize if this isn't what you were expecting. If there's anything else I can help you with or if you have any other questions, please don't hesitate to ask.",
+                "full_trace": "I understand that you're still waiting for a collection of your return. However, according to our records, the item was delivered on May 1st. Unfortunately, this means we won't be able to collect it for a refund. I apologize if this isn't what you were expecting. If there's anything else I can help you with or if you have any other questions, please don't hesitate to ask.",
+                "usage": {
+                    "prompt_tokens": 4987,
+                    "completion_tokens": 97,
+                    "total_tokens": 5084
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"I don't care about the item being delivered or not - I want to know when someone will actually show up to collect my return so I can get my refund. You're just repeating yourself and not answering my question. Can you please tell me what's going on with the collection? When will it happen?\"",
+                "usage": {
+                    "prompt_tokens": 2331,
+                    "completion_tokens": 63,
+                    "total_tokens": 2394
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2801,
+                    "completion_tokens": 37,
+                    "total_tokens": 2838
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 2
+        },
+        "final_score_0_100": 5.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the return tracking request and incorrectly claimed the return was impossible, contradicting the pending refund status.",
+            "s_completeness": "The agent provided no information on the return status and ignored the customer's repeated requests for a collection date.",
+            "s_tone": "The agent was robotic, repetitive, and dismissive of the customer's clear frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, this means we won't be able to collect it for a refund."
+            ],
+            "s_completeness": [
+                "If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for."
+            ]
+        }
+    }
+}

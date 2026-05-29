@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "OOS_030",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 43.72
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23792,
+        "total_completion_tokens": 425,
+        "grand_total_tokens": 24217
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting over three weeks for my refund after sending back the damaged laptop, and I'm getting fed up with the lack of updates. This company is an absolute joke!\"",
+                "usage": {
+                    "prompt_tokens": 1686,
+                    "completion_tokens": 37,
+                    "total_tokens": 1723
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4405,
+                    "completion_tokens": 56,
+                    "total_tokens": 4461
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1811,
+                    "completion_tokens": 26,
+                    "total_tokens": 1837
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2417,
+                    "completion_tokens": 21,
+                    "total_tokens": 2438
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, I'll give you my email. It's oos030@example.com. Now, can we please focus on getting this refund sorted out? I'm tired of being told to wait and want someone to actually look into it today.\"",
+                "usage": {
+                    "prompt_tokens": 1866,
+                    "completion_tokens": 50,
+                    "total_tokens": 1916
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on your order and it appears that it has been delivered successfully. The total amount for this order was $243.56 USD. Is there anything else I can assist you with regarding this order?",
+                "full_trace": "I've checked on your order and it appears that it has been delivered successfully. The total amount for this order was $243.56 USD. Is there anything else I can assist you with regarding this order?",
+                "usage": {
+                    "prompt_tokens": 4757,
+                    "completion_tokens": 56,
+                    "total_tokens": 4813
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not true! I never received my order and I'm still waiting for a refund. You're just trying to brush me off with some generic response. Look into it properly this time, please. I want a full refund for the damaged laptop because you clearly can't even deliver what I paid for.\"",
+                "usage": {
+                    "prompt_tokens": 2051,
+                    "completion_tokens": 63,
+                    "total_tokens": 2114
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your refund request for the damaged laptop has been submitted successfully. The status of this refund is currently Processing, and you can expect a refund amount of $219.20 to be credited back to your account once it's processed.\n\nThis concludes our assistance with your refund request. If you have any further questions or concerns, please don't hesitate to reach out to us. Otherwise, thank you for choosing our service, and we hope you'll consider shopping with us again in the future.",
+                "full_trace": "Your refund request for the damaged laptop has been submitted successfully. The status of this refund is currently Processing, and you can expect a refund amount of $219.20 to be credited back to your account once it's processed.\n\nThis concludes our assistance with your refund request. If you have any further questions or concerns, please don't hesitate to reach out to us. Otherwise, thank you for choosing our service, and we hope you'll consider shopping with us again in the future.",
+                "usage": {
+                    "prompt_tokens": 4799,
+                    "completion_tokens": 116,
+                    "total_tokens": 4915
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order, verified the customer, and provided accurate information regarding the existing refund status and amount.",
+            "s_completeness": "The response clearly communicated the current status of the refund and the expected amount, leaving no ambiguity for the customer.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation, effectively managing the customer's frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your refund request for the damaged laptop has been submitted successfully. The status of this refund is currently Processing, and you can expect a refund amount of $219.20 to be credited back to your account once it's processed."
+            ],
+            "s_completeness": [
+                "The status of this refund is currently Processing, and you can expect a refund amount of $219.20 to be credited back to your account once it's processed."
+            ],
+            "s_tone": [
+                "This concludes our assistance with your refund request. If you have any further questions or concerns, please don't hesitate to reach out to us."
+            ]
+        }
+    }
+}

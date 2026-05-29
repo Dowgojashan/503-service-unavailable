@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "OOS_037",
+        "agent_type": "ReAct",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 24.75
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 15550,
+        "total_completion_tokens": 203,
+        "grand_total_tokens": 15753
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I've been trying to resolve this payment error for over a week now and my card keeps getting declined despite having sufficient funds. My order is still sitting in \"pending\" status and I'm really frustrated about it.",
+                "usage": {
+                    "prompt_tokens": 1553,
+                    "completion_tokens": 46,
+                    "total_tokens": 1599
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is oos037@example.com. Can we please focus on resolving this payment issue? I've been trying to get my order processed for over a week now and it's still stuck in \"pending\" status.",
+                "usage": {
+                    "prompt_tokens": 1709,
+                    "completion_tokens": 46,
+                    "total_tokens": 1755
+                }
+            },
+            "service_agent": {
+                "final_answer": "I see your order ORD37936371 (Product_19) is Processing. For payment disputes or billing errors, please contact your bank directly or our billing support team who can investigate in detail. Is there anything else I can help you with today?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order and provided the only viable path for resolving a payment decline issue.",
+            "s_completeness": "The agent provided all necessary information, including order status and clear instructions on how to proceed.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For payment disputes or billing errors, please contact your bank directly or our billing support team who can investigate in detail."
+            ],
+            "s_completeness": [
+                "I see your order ORD37936371 (Product_19) is Processing. For payment disputes or billing errors, please contact your bank directly or our billing support team who can investigate in detail."
+            ],
+            "s_tone": [
+                "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?"
+            ]
+        }
+    }
+}

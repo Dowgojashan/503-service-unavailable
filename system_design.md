@@ -243,44 +243,103 @@ ecommerce-agent-eval/
 
 ---
 
-## [ ] 階段六（6.2–6.4）及 Phase 2 擴大實驗
+## ✅ 階段六（6.3）：Phase 2 擴大實驗執行
+**目標**：完成 150 筆 × 4 架構 × 3 Persona 的完整實驗。
 
-- [ ] **6.2 LLM Judge 信度驗證**：
-    - 對 final score 落在 60–75 區間的 case 進行 10% 人工抽樣複核。
-    - 計算 judge 與人工評分的 Spearman 相關係數，目標 ρ ≥ 0.75。
-    - `eval/stability.py --judge-check` 可產生待填寫的 checklist；`--spearman` 可在填寫後計算 ρ。
-
-- [ ] **6.3 擴大測試規模（Phase 2，150 筆）**：
-    - Phase 1 穩定性驗證通過，可執行完整 150 筆測試。
-    - 前置條件：確立 Task Complexity Index（見 evaluation_framework.md §6.5）後分組執行。
-
-- [ ] **6.4 I_fatal Cap 敏感度分析**：
-    - 對現有資料套用 hard zero、cap=30、cap=40、severity penalty 四種設定。
-    - 比較各設定下架構 NetValue 排名是否一致，決定最終 Cap 值。
-    - `eval/stability.py --sensitivity` 可執行此分析。
+- ✅ **6.3 Phase 2 實驗全數執行完畢**：
+    - 總計 **1,800 筆**對話 log（150 cases × 4 architectures × 3 personas），全數儲存至 `outputs/logs/`
+    - Judge 模型：`gemini-3.1-flash-lite`，1,800 筆全數評分完成（無缺漏）
+    - 執行環境：本機（Single-slot/ReAct/PlanExecute/VIP 部分）+ Kaggle / Google Colab（Reflection 大批量）
 
 ---
 
-## [ ] 階段七：分析、視覺化與論文整理
-**目標**：將數據轉化為論文圖表與結論。
+## ✅ 階段七（7.1–7.3）：Phase 2 結果分析
+**目標**：分析 1,800 筆實驗數據，輸出各 Persona 及跨 Persona 比較報告。
 
-- [ ] **7.1 計算 ProxyCost 與 NetValue**：
-    - 依 `evaluation_framework.md §4.8` 公式計算各架構的 ProxyCost、NetValue、Delta_MB。
-    - V_i 依任務難度設定：Easy=1, Medium=2, Hard=3。
+> 分析結果記錄於 `result.md`。評估指標簡化為 LLM-as-Judge（Fulfillment / Logic / Tone）+ 任務完成率 + Token 成本效益，捨棄 Phase 1 的 S_Agent 複合指標（因 Phase 2 規模下 rule-based grounding 資料無法逐筆維護）。
 
-- [ ] **7.2 S_Agent 權重敏感度分析**：
-    - 比較三種權重設定（0.35/0.25/0.20/0.20、等權重 25/25/25/25、Outcome 導向 50/20/15/15）下架構排名是否一致。
+- ✅ **7.1 Polite Persona 四架構比較**（`result.md` §1）：
+    - 完成率：ReAct 99.3% ≈ PlanExecute 98.7%，Reflection 48.7% 最差
+    - 品質：ReAct 66.17 > PlanExecute 63.56 > Single-slot 59.00 > Reflection 54.73
+    - 成本效益：PlanExecute 42.7 質量/萬 token 最高
 
-- [ ] **7.3 產生結果圖表**：
-    - 各難度下架構 NetValue 比較（bar chart）。
-    - Trade-off Matrix（X: S_Agent, Y: ProxyCost，bubble size: Delta_MB）。
-    - 各 Persona 下的架構穩定性比較（SD bar chart）。
-    - 典型失敗案例整理（hallucination、LOOP_FAILURE）。
+- ✅ **7.2 Adversarial Persona 四架構比較**（`result.md` §2）：
+    - 完成率：ReAct 100%（唯一零 PENDING），PlanExecute 97.3%
+    - 品質：ReAct 70.20 大幅領先，PlanExecute 63.60
+    - Single-slot 在 Adversarial 下品質崩跌 -8.4 分（最不穩定）
 
-- [ ] **7.4 論文結論整理**：
-    - 各難度下最適合架構的結論（以 NetValue 為主要依據）。
-    - Runner 穩健性強化對實驗有效性的影響討論。
-    - LLM Judge 信度驗證結果。
+- ✅ **7.3 VIP Persona 四架構比較**（`result.md` §3）：
+    - ReAct 品質達 72.98（三個 Persona 中所有架構的最高分）
+    - PlanExecute 成本效益（42.21）≈ ReAct（42.32），幾乎並列
+
+- ✅ **7.4 跨 Persona 比較**（`result.md` §4）：
+    - ReAct 品質隨 Persona 複雜度單調遞增（Polite→Adv→VIP：66→70→73）
+    - PlanExecute 跨 Persona 最穩定，品質波動 < 2 分
+    - 全局建議：成本優先選 PlanExecute，品質優先選 ReAct
+
+- ✅ **7.5 Synthesis 介入率分析**（`analysis_synthesis.py`）：
+    - PlanExecute 的 runner-level synthesis 介入率約 96%
+    - 介入組 vs 純 LLM 組的品質與完成率差異已量化
+
+- ✅ **7.6 敏感度分析（PSS）**（`result.md` §5）：
+    - 借用 ProSA 的 PromptSensiScore 框架，以三種 Persona 作為 prompt 變體
+    - PlanExecute PSS 均值最低（17.96，最穩健），Reflection 最高（28.70）
+    - ReAct 完成率一致性最高（98% 案例三 Persona 均解決）
+
+- ✅ **7.7 ProSA 任務分層分析**（`result.md` §6）：
+    - PSS by Intent：`cancel_order`、`check_refund_policy` 最敏感；`change_shipping_address` 最穩健
+    - PSS by Difficulty：簡單案例（difficulty=1）PSS 反而最高（反直覺）——能解決的案例才有分化空間
+    - PSS vs 品質相關性：ReAct r = -0.293（最強負相關），Reflection r = -0.008（幾乎無關）
+
+---
+
+## [ ] 階段八：Out-of-Sample 驗證與延伸分析
+**目標**：驗證系統在未見案例上的泛化能力，補強研究主張。
+
+> **前置條件**：執行前需凍結 runner（打 git tag），確保實驗過程中不修改任何 guard / synthesis 邏輯。
+
+- [ ] **8.1 Out-of-Sample 測試集建立（50 筆）**：
+    - 從同一 case bank 抽取 CASE_151–CASE_200（或等效新案例）
+    - 建立對應的 fact_sheets 與 VIP/Polite/Adversarial persona 對話腳本
+    - Runner 凍結後才能開始執行
+
+- [ ] **8.2 Out-of-Sample 實驗執行**：
+    - 執行 50 cases × 4 architectures × 3 personas = 600 筆
+    - Judge 評分後彙整至獨立 `outputs/logs/OOS/` 目錄
+
+- [ ] **8.3 Out-of-Sample 結果比較**：
+    - 比較 in-sample vs out-of-sample 的完成率、Judge 分、PSS
+    - 確認架構排名（ReAct vs PlanExecute）在新案例上是否一致
+
+- [ ] **8.4 ProSA 四變體實驗（選擇性）**：
+    - `data/prosa_variants.json` 已備妥 150 cases × 4 變體（simple_input / emotional_support / role_player / output_requirement）
+    - 若執行：選 2 個架構（建議 ReAct + PlanExecute）× 50 cases × 4 variants = 400 筆
+    - 計算原版 instruction-level PSS，與 persona-level PSS 對照
+
+---
+
+## [ ] 階段九：視覺化與論文整理
+**目標**：將數據轉化為可發表的圖表與論文結論。
+
+- [ ] **9.1 產生結果圖表**：
+    - 三 Persona 下四架構完成率與 Judge 分比較（grouped bar chart）
+    - PSS 分布圖（各架構 violin/box plot）
+    - Intent 分層 PSS 熱力圖（架構 × intent）
+    - 成本效益散點圖（X: Token，Y: Judge，bubble: 完成率）
+
+- [ ] **9.2 LLM Judge 信度驗證**：
+    - 對 final score 落在 60–75 區間的 case 進行 10% 人工抽樣複核
+    - 計算 Spearman ρ（目標 ≥ 0.75）
+
+- [ ] **9.3 論文方法論部分補充**：
+    - Synthesis 介入率對公平性影響的 limitations 段落
+    - System-level evaluation 框架定位說明
+    - Out-of-sample 驗證結果（待 8.3 完成後補入）
+
+- [ ] **9.4 論文結論整理**：
+    - 各 Persona 下最適架構建議（ReAct vs PlanExecute 取捨原則）
+    - PSS / ProSA 分析對架構選擇的啟示
+    - 對未來研究的建議（公平 prompt 控制、更大規模模型測試）
 
 ---
 

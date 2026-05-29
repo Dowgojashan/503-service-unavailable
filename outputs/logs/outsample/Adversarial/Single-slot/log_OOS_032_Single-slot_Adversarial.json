@@ -115,5 +115,64 @@
                 }
             }
         }
-    ]
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 2
+        },
+        "final_score_0_100": 5.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the refund status and falsely claimed that refunds cannot be processed for shipped orders, contradicting the fact sheet.",
+            "s_completeness": "The agent provided no information regarding the pending refund status and offered no next steps, leaving the customer's request entirely unaddressed.",
+            "s_tone": "The agent was repetitive and dismissive, using robotic phrases that ignored the customer's specific concerns and frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, since your order has already shipped, we cannot process any refunds at this time."
+            ],
+            "s_completeness": [
+                "If you have any further questions or concerns, please don't hesitate to contact us."
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.725696+00:00",
+        "s_answer_quality": 5.0,
+        "s_grounding": 66.7,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": false,
+            "amount_match": true
+        },
+        "s_outcome": 29.7,
+        "s_tool": 83.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 61.5,
+        "s_agent": 61.5,
+        "proxy_cost": 32.56,
+        "net_value": 0.2894
+    }
 }

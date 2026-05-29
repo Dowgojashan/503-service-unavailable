@@ -1,0 +1,116 @@
+{
+    "metadata": {
+        "case_id": "OOS_045",
+        "agent_type": "ReAct",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 25.37
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 16066,
+        "total_completion_tokens": 221,
+        "grand_total_tokens": 16287
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order that I'd like resolved promptly. The shipping is taking longer than expected and I've decided I don't actually need the items anymore, so could you please cancel this for me?",
+                "usage": {
+                    "prompt_tokens": 1815,
+                    "completion_tokens": 52,
+                    "total_tokens": 1867
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is oos045@example.com. Now, about cancelling order #88492: I'd appreciate it if you could cancel this and issue a refund to my original payment method as soon as possible.",
+                "usage": {
+                    "prompt_tokens": 1963,
+                    "completion_tokens": 58,
+                    "total_tokens": 2021
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other payment options shown at checkout when placing a new order. For your current order ORD44870094 (Product_62), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent identified the correct order but failed to execute or even acknowledge the customer's request to cancel the order.",
+            "s_completeness": "The agent provided no information regarding the cancellation request, leaving the customer's core need entirely unaddressed.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your current order ORD44870094 (Product_62), payment has already been processed. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I'd be happy to help!"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.872438+00:00",
+        "s_answer_quality": 35.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true
+        },
+        "s_outcome": 61.0,
+        "s_tool": 58.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 0.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 75.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": false
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 69.7,
+        "s_agent": 69.7,
+        "proxy_cost": 23.54,
+        "net_value": 0.4616
+    }
+}

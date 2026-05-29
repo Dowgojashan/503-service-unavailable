@@ -1,0 +1,117 @@
+{
+    "metadata": {
+        "case_id": "OOS_021",
+        "agent_type": "ReAct",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 25.28
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 16068,
+        "total_completion_tokens": 212,
+        "grand_total_tokens": 16280
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and my order for the headphones hasn't updated on the tracking link since it left the warehouse three days ago. Could you please check where the package is and let me know when I can expect it?",
+                "usage": {
+                    "prompt_tokens": 1817,
+                    "completion_tokens": 48,
+                    "total_tokens": 1865
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is oos021@example.com. Now, about my order... I'd appreciate it if you could check the tracking status and let me know when I can expect delivery.",
+                "usage": {
+                    "prompt_tokens": 1963,
+                    "completion_tokens": 53,
+                    "total_tokens": 2016
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD89458862 (Electronics_44) is currently Processing. Is there anything else I can help you with today?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 30.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status but failed to address the customer's core request for tracking information and delivery expectations.",
+            "s_completeness": "The response is incomplete as it ignores the customer's specific questions, leaving them without the information they need.",
+            "s_tone": "The agent was initially professional but became robotic and dismissive in the final response by ignoring the customer's stated needs."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD89458862 (Electronics_44) is currently Processing."
+            ],
+            "s_completeness": [
+                "Your order ORD89458862 (Electronics_44) is currently Processing. Is there anything else I can help you with today?"
+            ],
+            "s_tone": [
+                "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.862142+00:00",
+        "s_answer_quality": 30.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true
+        },
+        "s_outcome": 58.0,
+        "s_tool": 58.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 0.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 75.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": false
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 68.2,
+        "s_agent": 68.2,
+        "proxy_cost": 23.53,
+        "net_value": 0.4467
+    }
+}

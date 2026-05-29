@@ -1,0 +1,137 @@
+{
+    "metadata": {
+        "case_id": "OOS_027",
+        "agent_type": "ReAct",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 33.28
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 21712,
+        "total_completion_tokens": 252,
+        "grand_total_tokens": 21964
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I just received my new dishwasher, but I'm not sure how to schedule the professional installation service that was included with my order. Can you tell me what steps I need to take?\"",
+                "usage": {
+                    "prompt_tokens": 1665,
+                    "completion_tokens": 38,
+                    "total_tokens": 1703
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up the installation details from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1797,
+                    "completion_tokens": 27,
+                    "total_tokens": 1824
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is oos027@example.com. Now can we please talk about scheduling the installation? I don't want to have to wait another day for someone to show up.\"",
+                "usage": {
+                    "prompt_tokens": 1866,
+                    "completion_tokens": 39,
+                    "total_tokens": 1905
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD42812316 (Product_77) is currently Delivered, shipped on 2024-05-01. Is there anything else I can help you with today?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 2
+        },
+        "final_score_0_100": 5.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's core intent of scheduling an installation, despite successfully verifying the order.",
+            "s_completeness": "The response provided no information on how to book the installation, rendering the interaction useless for the customer.",
+            "s_tone": "The agent was overly robotic, repeating the exact same verification request in Turn 2 without addressing the customer's query, and failed to provide a helpful closing."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD42812316 (Product_77) is currently Delivered, shipped on 2024-05-01. Is there anything else I can help you with today?"
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with today?"
+            ],
+            "s_tone": [
+                "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.661421+00:00",
+        "s_answer_quality": 5.0,
+        "s_grounding": 50.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": false
+        },
+        "s_outcome": 23.0,
+        "s_tool": 75.0,
+        "tool_detail": {
+            "tool_f1": 1.0,
+            "arg_correctness": 0.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 50.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": false,
+            "no_redundancy": true,
+            "identity_verified": false
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 51.5,
+        "s_agent": 51.5,
+        "proxy_cost": 34.77,
+        "net_value": 0.1673
+    }
+}

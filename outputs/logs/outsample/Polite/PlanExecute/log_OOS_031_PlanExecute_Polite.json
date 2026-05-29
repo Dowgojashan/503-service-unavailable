@@ -75,5 +75,64 @@
                 }
             }
         }
-    ]
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 3,
+            "s_tone": 4
+        },
+        "final_score_0_100": 55.0,
+        "reasoning": {
+            "s_resolution": "The agent initially gave false information stating refunds were not possible for delivered orders, which contradicts the fact sheet and business rules.",
+            "s_completeness": "The agent failed to provide any details regarding the 'Processing' status or expected timeline, leaving the customer's core question about the delay unanswered.",
+            "s_tone": "The agent maintained a professional tone throughout the interaction despite the factual errors."
+        },
+        "evidence": {
+            "s_resolution": [
+                "However, since your order has been delivered, our system doesn't allow for cancellations or refunds at this point.",
+                "Your refund for order ORD68453016 has been successfully processed."
+            ],
+            "s_completeness": [
+                "Your refund for order ORD68453016 has been successfully processed."
+            ],
+            "s_tone": [
+                "I understand you're concerned about your refund."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.748759+00:00",
+        "s_answer_quality": 55.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true
+        },
+        "s_outcome": 73.0,
+        "s_tool": 100.0,
+        "tool_detail": {
+            "tool_f1": 1.0,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "apply_refund",
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 86.5,
+        "s_agent": 86.5,
+        "proxy_cost": 18.91,
+        "net_value": 0.6759
+    }
 }

@@ -1,0 +1,36 @@
+========================================================================
+OOS S_Agent Weight Sensitivity Analysis
+  Input : outputs\reports\oos_s_agent_results.csv  (600 rows)
+  Sweep : step=0.05, total combos=969
+  Baseline weights: Outcome=0.5 Tool=0.2 Traj=0.1 Eff=0.2
+========================================================================
+
+--- Baseline scores (current weights) ---
+  #1  PlanExecute     mean=73.19
+  #2  Single-slot     mean=69.95
+  #3  ReAct           mean=65.82
+  #4  Reflection      mean=60.81
+
+--- Rank Frequency (% of all weight combos) ---
+  Architecture      Rank 1    Rank 2    Rank 3    Rank 4
+  --------------------------------------------------------
+  ReAct               0.0%      5.3%     43.7%     51.1%
+  PlanExecute        99.9%      0.1%      0.0%      0.0%
+  Reflection          0.0%      0.0%     51.1%     48.9%
+  Single-slot         0.1%     94.6%      5.3%      0.0%
+
+--- Top-1 Rank Stability ---
+  Baseline top-1: PlanExecute
+  Combos where top-1 differs: 1 / 969 (0.1%)
+  Challengers:
+    Single-slot: 1 combos (0.1%)
+  Example upset combos:
+    Outcome=0.05 Tool=0.05 Traj=0.85 Eff=0.05 → Single-slot (95.7)
+
+--- Score Range Across All Weight Combos ---
+  PlanExecute     min=61.2  mean=82.9  max=95.8  range=34.6
+  Single-slot     min=58.5  mean=80.0  max=95.7  range=37.2
+  ReAct           min=57.0  mean=69.1  max=93.2  range=36.2
+  Reflection      min=45.8  mean=67.5  max=93.2  range=47.3
+
+========================================================================

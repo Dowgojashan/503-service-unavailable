@@ -135,5 +135,63 @@
                 }
             }
         }
-    ]
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 3
+        },
+        "final_score_0_100": 10.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to acknowledge the existing pending refund status and repeatedly provided false information that a return pickup was impossible due to delivery status.",
+            "s_completeness": "The agent provided no actionable information regarding the customer's actual return request, instead repeating a canned refusal that ignored the context of the pending refund.",
+            "s_tone": "While the agent maintained a polite vocabulary, the repeated, robotic refusal to address the customer's specific question made the interaction frustrating and dismissive."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, since the item has already been delivered on 2024-05-01, our return pickup service will not be able to collect it from you."
+            ],
+            "s_completeness": [
+                "Unfortunately, since the item has already been delivered on 2024-05-01, our return pickup service will not be able to collect it from you."
+            ],
+            "s_tone": [
+                "I understand that you're looking for information about the return pickup for your order ORD99722078."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.716947+00:00",
+        "s_answer_quality": 10.0,
+        "s_grounding": 50.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": false
+        },
+        "s_outcome": 26.0,
+        "s_tool": 83.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 80.4,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 55.7,
+        "s_agent": 55.7,
+        "proxy_cost": 38.09,
+        "net_value": 0.1761
+    }
 }

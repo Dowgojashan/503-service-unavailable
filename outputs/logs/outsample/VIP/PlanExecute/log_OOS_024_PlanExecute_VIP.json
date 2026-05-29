@@ -1,0 +1,137 @@
+{
+    "metadata": {
+        "case_id": "OOS_024",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 31.63
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18306,
+        "total_completion_tokens": 413,
+        "grand_total_tokens": 18719
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm just checking on the status of my bookshelf order because the estimated delivery date passed two days ago and I haven't received a tracking update yet. Could you let me know when I can expect it to arrive?",
+                "usage": {
+                    "prompt_tokens": 1820,
+                    "completion_tokens": 47,
+                    "total_tokens": 1867
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (ORDxxx format) or registered email so I can look into the status of your bookshelf order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (ORDxxx format) or registered email so I can look into the status of your bookshelf order?\"",
+                "usage": {
+                    "prompt_tokens": 2844,
+                    "completion_tokens": 57,
+                    "total_tokens": 2901
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is oos024@example.com.",
+                "usage": {
+                    "prompt_tokens": 1959,
+                    "completion_tokens": 26,
+                    "total_tokens": 1985
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I've checked your account details and found that your bookshelf order (ORD81385205) was shipped on May 1st. Since it has been a few days since shipping, I'd like to confirm if everything is okay with the delivery. If you haven't received any tracking updates yet, please let me know and we can look into it further.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the customer's intent based on their original request.\n\n**Execution**:\nFinal Response: \"I've checked your account details and found that your bookshelf order (ORD81385205) was shipped on May 1st. Since it has been a few days since shipping, I'd like to confirm if everything is okay with the delivery. If you haven't received any tracking updates yet, please let me know and we can look into it further.\"",
+                "usage": {
+                    "prompt_tokens": 6174,
+                    "completion_tokens": 132,
+                    "total_tokens": 6306
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "That's helpful to know, but I'm still concerned about the lack of tracking updates. Can you tell me why there hasn't been an update on the shipping status? And more importantly, when can I expect my bookshelf to arrive?",
+                "usage": {
+                    "prompt_tokens": 2110,
+                    "completion_tokens": 49,
+                    "total_tokens": 2159
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD81385205 (Furniture_26) is currently Shipped, shipped on 2024-05-01. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain the shipping status and estimated delivery time based on the order data.\n\n**Execution**:\nFinal Response: \"According to our records, your bookshelf (ORD81385205) was shipped on May 1st. Since it's been a few days since shipping, you can expect it to arrive within the standard shipping timeframe for this carrier. Unfortunately, I don't have real-time tracking information available, but I can offer to look into it further if you'd like.\"",
+                "usage": {
+                    "prompt_tokens": 3399,
+                    "completion_tokens": 102,
+                    "total_tokens": 3501
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 30.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's core need for an explanation regarding the missing tracking updates and an updated delivery estimate.",
+            "s_completeness": "The response provided no new information to help the customer understand the delay or next steps, effectively ignoring the customer's specific questions.",
+            "s_tone": "The agent was professional but became robotic and dismissive by ignoring the customer's concerns and attempting to end the interaction prematurely."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD81385205 (Furniture_26) is currently Shipped, shipped on 2024-05-01."
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Your order ORD81385205 (Furniture_26) is currently Shipped, shipped on 2024-05-01. Is there anything else I can help you with?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.842103+00:00",
+        "s_answer_quality": 30.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true
+        },
+        "s_outcome": 58.0,
+        "s_tool": 83.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 75.7,
+        "s_agent": 75.7,
+        "proxy_cost": 19.06,
+        "net_value": 0.5664
+    }
+}

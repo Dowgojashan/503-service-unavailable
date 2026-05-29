@@ -588,3 +588,436 @@ ProSA 原論文發現困難任務（MATH）PSS 較高，但在本研究中呈相
 | 難度 vs 敏感性 | 簡單案例 PSS 反而最高（能做到才有分化空間） |
 | PSS-品質相關性 | ReAct 最強（-0.29），敏感 = 品質風險；Reflection 幾乎無關 |
 | 架構建議 | PlanExecute 在大多數意圖下敏感度最低，適合需穩健部署的場景 |
+
+---
+
+---
+
+# Out-of-Sample（OOS）泛化評估結果
+
+> **資料來源**：50 筆 OOS 案例 × 4 架構 × 3 Persona = **600 場對話**  
+> OOS 案例涵蓋 15 種意圖（含 `track_return`、`missing_item`、`fraud_dispute`、`product_inquiry` 等訓練分布外新意圖，以及 `track_order`、`cancel_order` 等與 in-sample 重疊的意圖）。  
+> 成本代理指標改以**執行秒數（execution_seconds）**取代 token 數（OOS 日誌未統一記錄 token 用量）。
+
+---
+
+## OOS — Polite Persona
+
+### 1. 任務完成率
+
+| 架構 | SUCCESS | FAILED_INCOMPLETE | LOOP_FAILURE | 完成率 |
+|------|---------|------------------|-------------|--------|
+| Single-slot | 22 | 23 | 5 | 44% |
+| ReAct | 29 | 0 | 21 | 58% |
+| **PlanExecute** | **49** | 0 | 1 | **98%** |
+| Reflection | 28 | 20 | 2 | 56% |
+
+- PlanExecute 維持 98% 完成率，與 in-sample 幾乎相同
+- **ReAct 完成率大幅下滑**：in-sample 99.3% → OOS 58%，21 筆 LOOP_FAILURE；面對分布外意圖，ReAct 的迭代推理無法收斂
+- Single-slot / Reflection 完成率皆不足 60%，表現與 in-sample 相近或更差
+
+### 2. 品質（LLM-as-Judge）
+
+| 架構 | Judge 均分 /100 | s_resolution /5 | s_completeness /5 | s_tone /5 |
+|------|----------------|-----------------|------------------|----------|
+| Reflection | **32.7** | 1.92 | 2.00 | 3.74 |
+| ReAct | 36.2 | 2.18 | 1.92 | **3.92** |
+| Single-slot | 32.4 | 2.02 | 2.08 | 3.30 |
+| PlanExecute | 29.4 | 1.86 | 1.76 | 3.60 |
+
+- **四架構 Judge 均分全面崩跌**：in-sample Polite 均分 54–66，OOS 僅 29–36
+- PlanExecute 出現悖論：完成率最高（98%）但 Judge 均分最低（29.4）——Immediate Synthesis 以「I can help with tracking/cancellation/refund」結束對話，runner 判定 SUCCESS，但 Judge 評分為顧客需求完全未被回應
+- s_resolution 全架構均約 1.9（接近滿分 5 的最低段），顯示 OOS 意圖幾乎無法被正確解決
+- s_tone 仍維持 3.3–3.9，語氣表現相對穩定，是唯一未明顯下滑的維度
+
+### 3. 執行時間（成本代理）
+
+| 架構 | 平均秒數 | 相對倍數 | Judge / 秒 × 10 |
+|------|---------|---------|----------------|
+| **ReAct** | **32.8s** | **1.0×** | **11.0** |
+| PlanExecute | 36.0s | 1.1× | 8.2 |
+| Single-slot | 54.5s | 1.7× | 5.9 |
+| Reflection | 228.7s | **7.0×** | **1.4** |
+
+- Reflection 在 OOS 下的執行時間是 ReAct 的 7 倍，但品質幾乎持平，效益最差
+- ReAct 成本最低且品質最高，OOS Polite 下效益最佳（11.0）
+
+### 4. S_Agent 子分項
+
+| 架構 | S_Outcome | S_Tool | S_Trajectory | S_Efficiency | **S_Agent** |
+|------|-----------|--------|--------------|-------------|-------------|
+| **PlanExecute** | 56 | **79** | 98 | **100** | **73.8** |
+| Single-slot | 53 | 75 | **100** | 90 | 69.6 |
+| ReAct | **61** | 54 | 72 | 99 | 68.3 |
+| Reflection | 49 | 62 | **100** | 32 | 53.3 |
+
+- S_Trajectory 方面，ReAct 大幅下降（in-sample 63.1 → OOS Polite 72）：新意圖使 ReAct 的 reason-act 循環更容易進入死循環
+- Reflection S_Efficiency 嚴重拖累（32），反思機制在 OOS 下產生大量無效迭代
+
+---
+
+## OOS — Adversarial Persona
+
+### 1. 任務完成率
+
+| 架構 | SUCCESS | FAILED_INCOMPLETE | LOOP_FAILURE | 完成率 |
+|------|---------|------------------|-------------|--------|
+| Single-slot | 23 | 21 | 6 | 46% |
+| ReAct | 37 | 0 | 13 | 74% |
+| **PlanExecute** | **46** | 3 | 1 | **92%** |
+| Reflection | 43 | 6 | 1 | 86% |
+
+- ReAct 相比 Polite 有所回升（58% → 74%）：Adversarial persona 的一次抵抗後提供 ID，反而加速進入工具呼叫，減少 LOOP
+- Reflection 在 Adversarial 下完成率最高（86%），可能因情境觸發了更多程式化合成路徑
+
+### 2. 品質（LLM-as-Judge）
+
+| 架構 | Judge 均分 /100 | s_resolution /5 | s_completeness /5 | s_tone /5 |
+|------|----------------|-----------------|------------------|----------|
+| ReAct | **31.9** | **2.22** | 1.90 | 2.98 |
+| Reflection | 29.4 | 1.94 | 1.80 | **3.32** |
+| Single-slot | 23.3 | 1.78 | 1.78 | 2.54 |
+| PlanExecute | 22.1 | 1.66 | 1.60 | 2.88 |
+
+- 所有架構品質相比 Polite 進一步下滑（均降 6–8 分）
+- s_tone 在 Adversarial 下普遍降低（特別是 Single-slot 2.54、ReAct 2.98），面對攻擊性客戶語氣受影響
+- PlanExecute 在 Adversarial 下 Judge 均分墊底（22.1），PE Synthesis 模板對攻擊性語境更顯生硬
+
+### 3. 執行時間（成本代理）
+
+| 架構 | 平均秒數 | Judge / 秒 × 10 |
+|------|---------|----------------|
+| **ReAct** | **42.8s** | **7.5** |
+| Single-slot | 54.7s | 4.3 |
+| PlanExecute | 45.1s | 4.9 |
+| Reflection | 166.5s | 1.8 |
+
+### 4. S_Agent 子分項
+
+| 架構 | S_Outcome | S_Tool | S_Trajectory | S_Efficiency | **S_Agent** |
+|------|-----------|--------|--------------|-------------|-------------|
+| **PlanExecute** | 53 | **77** | **100** | 98 | **71.4** |
+| Single-slot | 49 | 75 | **100** | **95** | 68.6 |
+| ReAct | **58** | 54 | 50 | **100** | 64.6 |
+| Reflection | 56 | 79 | **100** | 37 | 61.1 |
+
+- **ReAct S_Trajectory = 50**：Adversarial 的一次抵抗加上 OOS 意圖不確定性，導致 ReAct 反覆嘗試工具呼叫後仍無法收斂，路徑品質大幅惡化
+- Reflection S_Tool 上升至 79，在此 persona 下表現異常優秀——可能因攻擊性語境觸發更直接的工具呼叫決策
+
+---
+
+## OOS — VIP Persona
+
+### 1. 任務完成率
+
+| 架構 | SUCCESS | FAILED_INCOMPLETE | LOOP_FAILURE | 完成率 |
+|------|---------|------------------|-------------|--------|
+| Single-slot | 26 | 16 | 8 | 52% |
+| **ReAct** | **48** | 0 | 2 | **96%** |
+| **PlanExecute** | **49** | 0 | 1 | **98%** |
+| **Reflection** | **49** | 0 | 1 | **98%** |
+
+- VIP persona 使 ReAct 和 Reflection 的完成率大幅回升：VIP 客戶表達明確、目標清晰，OOS 意圖雖然新穎，但對話結構較有規律，agent 更容易找到收斂路徑
+- Reflection 在 VIP 下達到 98%，與 PlanExecute 並列第一——與 Polite 的 56% 對比巨大
+
+### 2. 品質（LLM-as-Judge）
+
+| 架構 | Judge 均分 /100 | s_resolution /5 | s_completeness /5 | s_tone /5 |
+|------|----------------|-----------------|------------------|----------|
+| **Reflection** | **38.4** | 2.16 | 1.88 | **4.46** |
+| ReAct | 37.8 | **2.26** | 1.78 | 4.24 |
+| Single-slot | 35.4 | 2.00 | **2.30** | 3.62 |
+| PlanExecute | 30.4 | 1.92 | 1.84 | 3.52 |
+
+- VIP 下 Judge 均分最高，四架構均較 Adversarial 回升
+- **Reflection 品質反超 ReAct**（38.4 vs 37.8）：VIP 情境下 Reflection 的多輪反思找到了更自然的語調，s_tone = 4.46 是所有 OOS 組合中最高
+- PlanExecute 品質仍墊底（30.4）：PE Synthesis 模板對 VIP 的尊貴語境最不適配
+
+### 3. 執行時間（成本代理）
+
+| 架構 | 平均秒數 | Judge / 秒 × 10 |
+|------|---------|----------------|
+| **ReAct** | **27.3s** | **13.8** |
+| PlanExecute | 34.6s | 8.8 |
+| Single-slot | 56.6s | 6.3 |
+| Reflection | 108.7s | 3.5 |
+
+- VIP 下 ReAct 最快（27.3s）且品質第二高，成本效益（13.8）是三個 persona 中最佳
+
+### 4. S_Agent 子分項
+
+| 架構 | S_Outcome | S_Tool | S_Trajectory | S_Efficiency | **S_Agent** |
+|------|-----------|--------|--------------|-------------|-------------|
+| **PlanExecute** | 58 | **79** | **99** | **100** | **74.4** |
+| Single-slot | 57 | 76 | **100** | 89 | 71.6 |
+| Reflection | **63** | **80** | **100** | 52 | 68.0 |
+| ReAct | 53 | 54 | 75 | 99 | 64.6 |
+
+- Reflection 在 VIP 下 S_Outcome（63）和 S_Tool（80）均達到 OOS 最高值，但 S_Efficiency（52）的低效懲罰拉低了 S_Agent
+- ReAct 的 S_Trajectory（75）在 VIP 下略有回升，但仍低於 in-sample（63.1）
+
+---
+
+## OOS 跨 Persona 比較
+
+### 1. 完成率跨 Persona（OOS）
+
+| 架構 | Polite | Adversarial | VIP | 趨勢 |
+|------|--------|------------|-----|------|
+| Single-slot | 44% | 46% | 52% | 微幅上升，全程低位 |
+| ReAct | 58% | 74% | **96%** | VIP 大幅回升（+38pp）|
+| PlanExecute | **98%** | 92% | **98%** | 全程穩定高位 |
+| Reflection | 56% | 86% | **98%** | Adversarial/VIP 大幅改善 |
+
+### 2. Judge 品質跨 Persona（OOS）
+
+| 架構 | Polite | Adversarial | VIP | 最高點 |
+|------|--------|------------|-----|--------|
+| Single-slot | 32.4 | 23.3 | 35.4 | VIP |
+| ReAct | **36.2** | **31.9** | 37.8 | VIP（持續最高）|
+| PlanExecute | 29.4 | 22.1 | 30.4 | VIP（全程最低）|
+| Reflection | 32.7 | 29.4 | **38.4** | VIP（VIP 反超）|
+
+- 四架構 OOS Judge 均分均集中在 22–38 分，對比 in-sample 的 51–73 分，品質呈系統性崩跌
+- **PlanExecute 在三個 persona 下 Judge 均分均最低**，完成率與品質形成最大悖論
+- Reflection 在 VIP 下品質最高（38.4），是唯一在某個 persona 下超越 ReAct 的架構
+
+### 3. 執行時間跨 Persona（OOS）
+
+> 單位：秒（execution_seconds）。OOS 未統一記錄 token，以執行秒數作為成本代理。
+
+| 架構 | Polite | Adversarial | VIP | **均值** | 相對倍數 |
+|------|--------|------------|-----|---------|---------|
+| **ReAct** | **32.8s** | 42.8s | **27.3s** | **34.3s** | **1.0×** |
+| PlanExecute | 36.0s | 45.1s | 34.6s | 38.6s | 1.1× |
+| Single-slot | 54.5s | 54.7s | 56.6s | 55.3s | 1.6× |
+| Reflection | 228.7s | 166.5s | 108.7s | 168.0s | **4.9×** |
+
+- ReAct 在 OOS 下速度最快（in-sample 時 token 用量中等）；其 reason-act 循環在 LOOP 案例中雖多輪，但成功案例收斂很快
+- Reflection 仍是最慢架構，Polite 下平均 228.7 秒（近 4 分鐘），但 VIP 下降至 108.7 秒——VIP 對話觸發了較多早期終止路徑
+
+### 4. 成本效益跨 Persona（OOS）
+
+> 指標：Judge 均分 / 秒 × 10（數值越高 = 每單位時間產生的品質越高）
+
+| 架構 | Polite | Adversarial | VIP | **均值效益** |
+|------|--------|------------|-----|------------|
+| **ReAct** | **11.0** | **7.5** | **13.8** | **10.8** |
+| PlanExecute | 8.2 | 4.9 | 8.8 | 7.3 |
+| Single-slot | 5.9 | 4.3 | 6.3 | 5.5 |
+| Reflection | 1.4 | 1.8 | 3.5 | 2.2 |
+
+- **OOS 下成本效益排名與 in-sample 不同**：in-sample PlanExecute 第一（42.7），OOS 反而 ReAct 第一（10.8）
+- PlanExecute 在 OOS 下品質大幅下滑（Judge 均分 22–30），而執行速度維持相近，導致效益排名從第一滑落至第二
+- Reflection 效益最差（2.2），Polite 下僅 1.4，每秒產出的品質遠不如其他架構
+- Single-slot 效益中等（5.5），執行時間偏長但結構簡單
+
+### 5. S_Agent 跨 Persona（OOS）
+
+| 架構 | Polite | Adversarial | VIP | **OOS 均值** | In-sample 均值 | 跌幅 |
+|------|--------|------------|-----|------------|--------------|------|
+| **PlanExecute** | **73.8** | **71.4** | **74.4** | **73.2** | 83.07 | -9.9 |
+| Single-slot | 69.6 | 68.6 | 71.6 | 70.0 | 78.53 | -8.5 |
+| ReAct | 68.3 | 64.6 | 64.6 | 65.8 | 76.37 | **-10.6** |
+| Reflection | 53.3 | 61.1 | 68.0 | 60.8 | 65.80 | -5.0 |
+
+- **ReAct 跌幅最大（-10.6 分）**：in-sample 下靠迭代推理解決問題，OOS 新意圖讓推理循環無法收斂，S_Trajectory 大幅惡化
+- **Reflection 跌幅最小（-5.0 分）**：本身在 in-sample 表現已低，OOS 下跌空間有限；且 Programmatic Synthesis 在某些情境意外提供了穩定的輸出
+- **排名逆轉**：in-sample ReAct > Single-slot（76.37 vs 78.53），OOS Single-slot > ReAct（70.0 vs 65.8）
+
+---
+
+## OOS S_Agent 總體子分項分析
+
+| 架構 | S_Outcome | S_Tool | S_Trajectory | S_Efficiency | **S_Agent（OOS）** | **S_Agent（In-sample）** |
+|------|-----------|--------|--------------|-------------|-----------------|---------------------|
+| **PlanExecute** | 56 | **78** | **99** | **99** | **73.2** | 83.07 |
+| Single-slot | 53 | 75 | **100** | 91 | 70.0 | 78.53 |
+| ReAct | **57** | 54 | 66 | **99** | 65.8 | 76.37 |
+| Reflection | 56 | 74 | **100** | 40 | 60.8 | 65.80 |
+
+**關鍵發現：**
+- **S_Trajectory**：ReAct 在 OOS 下從 63.1 進一步惡化至 66（且 Adversarial 下僅 50）——新意圖讓 ReAct 的 reason-act 循環更難收斂
+- **S_Tool**：ReAct 在 OOS 下仍維持 54，與 in-sample（47.7）略有改善——工具呼叫正確性反而不是主要問題
+- **S_Efficiency**：Reflection 在 OOS 下降至 40（in-sample 23.6 → OOS 40）反而略有改善，因反思循環在部分 OOS 案例中提早終止
+- **S_Outcome**：四架構均集中在 53–57，差距縮小——OOS 下所有架構的問題解決能力趨於相近
+
+---
+
+## OOS 權重敏感度分析
+
+### 方法說明
+
+與 in-sample 相同，對 S_Agent 公式的四個 weight 進行全量掃描（step=0.05，每個 weight ≥ 0.05，加總=1），共 **969 種**合法組合，針對 OOS 600 筆紀錄重新計算各架構 S_Agent 均值並記錄排名。
+
+---
+
+### 1. Rank Frequency（各排名出現比例）
+
+| 架構 | Rank 1 | Rank 2 | Rank 3 | Rank 4 |
+|------|--------|--------|--------|--------|
+| **PlanExecute** | **99.9%** | 0.1% | 0.0% | 0.0% |
+| Single-slot | 0.1% | **94.6%** | 5.3% | 0.0% |
+| ReAct | 0.0% | 5.3% | **43.7%** | 51.1% |
+| Reflection | 0.0% | 0.0% | 51.1% | **48.9%** |
+
+### 2. Top-1 穩定性
+
+| 指標 | 數值 |
+|------|------|
+| 基準 Top-1 | PlanExecute |
+| Top-1 不變的 weight 組合數 | **968 / 969（99.9%）** |
+| 唯一翻轉條件 | W_Trajectory = 0.85（其餘各 0.05）→ Single-slot 以 95.7 奪冠 |
+
+**PlanExecute 在 OOS 下的排名穩健性與 in-sample 幾乎相同（in-sample 100%，OOS 99.9%）**，只有在「軌跡權重極端誇大（85%）」的非現實條件下才被翻轉。
+
+### 3. 分數區間
+
+| 架構 | 最低分 | 均分 | 最高分 | 區間幅度 |
+|------|--------|------|--------|---------|
+| PlanExecute | 61.2 | 82.9 | 95.8 | 34.6 |
+| Single-slot | 58.5 | 80.0 | 95.7 | 37.2 |
+| ReAct | 57.0 | 69.1 | 93.2 | 36.2 |
+| Reflection | 45.8 | 67.5 | 93.2 | **47.3** |
+
+- Reflection 的分數區間最大（47.3），顯示其 S_Agent 對 weight 設計最敏感——S_Efficiency 極低，一旦效率權重降低，其他維度的優勢就顯現
+- PlanExecute 均分（82.9）與 Single-slot（80.0）差距在 OOS 下縮小（in-sample 差 4.5 分，OOS 均值差縮至 2.9）
+
+---
+
+## OOS ProSA 分析（Prompt Sensitivity Score）
+
+### 方法說明
+
+與 in-sample PSS 相同，以三個 persona 之間的 Judge 均分（s_answer_quality）計算各 case 的 PSS_i：
+
+```
+PSS_i = (|score_Polite - score_Adversarial| + |score_Polite - score_VIP| + |score_Adversarial - score_VIP|) / 3
+```
+
+> **注意**：OOS Judge 均分集中在 22–38 分（vs in-sample 51–73），分數範圍壓縮，OOS PSS 絕對值天然偏小，重點看**架構間相對排名**，而非與 in-sample 數字直接比較。
+
+---
+
+### 1. 整體 PSS 比較（OOS）
+
+| 架構 | PSS 均值 | PSS 最大值 | PSS 標準差 | PSS > 20（高敏感） |
+|------|---------|----------|----------|-----------------|
+| **ReAct** | **17.20** | 60.00 | 12.78 | 10（20%）|
+| **PlanExecute** | 18.33 | 63.33 | 15.89 | 12（24%）|
+| Reflection | 20.13 | 63.33 | 14.09 | 18（36%）|
+| Single-slot | 20.87 | 63.33 | 18.33 | 18（36%）|
+
+- **OOS 下 ReAct PSS 最低（最穩健）**，與 in-sample 結果相反（in-sample ReAct PSS = 20.27，PlanExecute 最低 17.96）
+- Single-slot PSS 最高（20.87），OOS 下跨 persona 品質最不一致
+- 四架構最大值均達到 63.33，表示每個架構都有某些 case 在三個 persona 間分數差距極大
+
+### 2. Pairwise Persona Delta（OOS）
+
+| 架構 | Polite vs Adversarial | Polite vs VIP | Adversarial vs VIP |
+|------|----------------------|--------------|-------------------|
+| **ReAct** | **15.97** | 20.35 | **15.61** |
+| PlanExecute | 18.00 | **16.35** | 20.65 |
+| Reflection | 23.35 | 19.00 | 18.05 |
+| Single-slot | **24.35** | 17.20 | 21.05 |
+
+- Single-slot 在 Polite vs Adversarial 落差最大（24.35）——與 in-sample 結論一致，攻擊性客戶讓 Single-slot 品質崩跌
+- Reflection 在 Polite vs Adversarial 也高（23.35），但 Adversarial vs VIP 相對穩定（18.05）
+- ReAct 的三組 pair delta 最為均衡（15.61–20.35），無明顯弱點 persona
+
+### 3. PSS 分布（OOS）
+
+| 架構 | 低敏感 PSS ≤ 10 | 中敏感 10–20 | 高敏感 PSS > 20 |
+|------|--------------|------------|---------------|
+| PlanExecute | 18（36%）| 20（40%）| 12（24%）|
+| **ReAct** | **16（32%）**| **24（48%）**| **10（20%）**|
+| Reflection | 14（28%）| 18（36%）| 18（36%）|
+| Single-slot | 18（36%）| 14（28%）| 18（36%）|
+
+- ReAct 高敏感案例最少（20%），Reflection / Single-slot 並列最多（36%）
+- PlanExecute 低敏感比例最高（36%），適合需要跨客戶風格穩定輸出的場景
+
+### 4. PSS by Difficulty（OOS）
+
+| 難度 | n | PSS 均值 | Judge 均分 |
+|------|---|---------|----------|
+| easy | 60 | 19.11 | 33.44 |
+| medium | 68 | 20.39 | 32.77 |
+| hard | 72 | **17.96** | 29.00 |
+
+- **OOS 下困難案例 PSS 反而最低（17.96）**：新意圖的困難案例在三個 persona 下均一致低分（均分 29.0），差距自然縮小——「一致失敗」讓 PSS 小
+- Easy 案例 PSS 反而偏高（19.11），因部分 overlapping 意圖（如 track_order）在 easy 難度下偶有高分，形成跨 persona 的分差
+
+### 5. PSS by Intent（OOS）
+
+| Intent | n | PSS 均值 | Judge 均分 | 類型 |
+|--------|---|---------|---------|------|
+| **cancel_order** | 16 | **39.90** | 56.41 | 重疊意圖 |
+| return_request | 4 | 30.00 | 30.62 | 新意圖 |
+| payment_issue | 16 | 26.56 | 28.23 | 重疊意圖 |
+| change_order | 4 | 22.92 | 80.62 | 重疊意圖 |
+| get_refund | 32 | 21.93 | 38.46 | 重疊意圖 |
+| cancel_return | 4 | 20.83 | 25.83 | 新意圖 |
+| product_inquiry | 12 | 18.89 | 22.99 | 新意圖 |
+| track_order | 36 | 15.83 | 40.00 | 重疊意圖 |
+| track_return | 40 | 12.83 | 18.67 | 新意圖 |
+| missing_item | 8 | 12.08 | 22.50 | 新意圖 |
+| installation_request | 8 | 8.75 | 15.73 | 新意圖 |
+| **check_warranty** | 4 | **5.83** | 11.46 | 新意圖 |
+
+**關鍵發現 — 重疊意圖 vs 純新意圖的 PSS 分化**：
+
+- **重疊意圖（PSS 高）**：`cancel_order`（39.90）、`payment_issue`（26.56）、`change_order`（22.92）——這些意圖 in-sample 時 agent 有機會成功，OOS 下有些 persona 觸發成功路徑（高分），有些失敗（低分），分差大
+- **純新意圖（PSS 低）**：`track_return`（12.83）、`installation_request`（8.75）、`check_warranty`（5.83）——無論哪個 persona，agent 均一致無法處理，三個 persona 分數均偏低，差距自然縮小
+- **`cancel_order` PSS 高達 39.90** 的解釋：此意圖在 OOS 下偶爾被 agent 成功執行（Judge 均分 56），Polite 下更容易成功，Adversarial 下常失敗，導致三個 persona 間出現大幅落差
+
+### 6. S_Agent 跨 Persona 一致性（OOS）
+
+> S_Agent ≥ 50 視為「已解決」
+
+| 架構 | 三 persona 全解決 | 混合（部分解決）| 三 persona 全失敗 |
+|------|----------------|-------------|----------------|
+| **PlanExecute** | **49（98%）** | 1（2%）| 0（0%）|
+| ReAct | 45（90%）| 5（10%）| 0（0%）|
+| Single-slot | 45（90%）| 5（10%）| 0（0%）|
+| Reflection | 26（**52%**）| 24（**48%**）| 0（0%）|
+
+- PlanExecute 在 OOS 下完成一致性最高（98%），幾乎每個 case 在所有 persona 下都能達到 S_Agent ≥ 50
+- Reflection 只有 52% 的 case 三個 persona 全部解決，48% 處於混合狀態——同一個 OOS 問題，某些 persona 下成功、某些 persona 下失敗，完成一致性最差
+- 值得注意：OOS 下四架構均無「三 persona 全失敗」案例（vs in-sample Single-slot 有 25% 全失敗），說明 OOS 的失敗主要是「品質差」而非「完全無法完成」
+
+### 7. OOS ProSA 綜合結論
+
+| 維度 | 最穩健 | 最脆弱 |
+|------|-------|-------|
+| PSS 均值（品質穩定性）| **ReAct（17.20）** | Single-slot（20.87）|
+| Polite vs Adversarial 落差 | **ReAct（15.97）** | Single-slot（24.35）|
+| 完成一致性 | **PlanExecute（98%）** | Reflection（52%）|
+| 高敏感案例比例 | **ReAct（20%）** | Reflection / Single-slot（36%）|
+| 最敏感意圖 | — | cancel_order（PSS 39.90，重疊意圖高分差）|
+| 最穩健意圖 | — | check_warranty（PSS 5.83，新意圖一致低分）|
+
+**OOS 下 ReAct 是品質最穩健的架構**（PSS 17.20），與 in-sample 下 PlanExecute 最穩健的結論相反。這是因為 OOS 壓縮了所有架構的 Judge 分數，而 ReAct 在跨 persona 間的分差最小。**PlanExecute 的完成一致性仍是最高（98%）**，但品質穩定性排第二。Reflection 在 OOS 下完成一致性最差（52%），顯示反思機制對 OOS 新意圖的適應能力最弱。
+
+---
+
+## OOS 整體結論
+
+### 泛化能力排名
+
+| 排名 | 架構 | OOS S_Agent | In-sample S_Agent | 泛化跌幅 | 評語 |
+|------|------|------------|-----------------|---------|------|
+| #1 | **PlanExecute** | **73.2** | 83.07 | -9.9 | 最佳泛化，Immediate Synthesis 提供穩定結構 |
+| #2 | Single-slot | 70.0 | 78.53 | -8.5 | 意外穩健，結構簡單反而減少 OOS 誤判 |
+| #3 | ReAct | 65.8 | 76.37 | **-10.6** | 泛化跌幅最大，迭代推理在新意圖下容易失控 |
+| #4 | Reflection | 60.8 | 65.80 | -5.0 | 跌幅最小但基礎最低，OOS 下無明顯亮點 |
+
+### 主要 OOS 行為模式
+
+| 現象 | 觀察 | 解釋 |
+|------|------|------|
+| **PlanExecute 完成率虛高** | 98% SUCCESS 但 Judge 均分僅 29–30 | PE Synthesis 以通用模板結束對話，runner 計為 SUCCESS，但顧客需求未被實際回應 |
+| **ReAct LOOP 激增** | Polite LOOP 率 42%（in-sample 幾乎 0） | 新意圖無對應的工具動作，ReAct 在 reason-act 循環中不斷嘗試直到上限 |
+| **Single-slot 反超 ReAct** | OOS S_Agent 70.0 > 65.8 | Single-slot 無迭代機制，遇到無法處理的意圖直接結束，反而避免了長時間 LOOP 的懲罰 |
+| **全架構 Judge 崩跌** | OOS Judge 22–38 vs In-sample 51–73 | 新意圖（track_return、product_inquiry 等）無法被現有工具集處理，agent 只能給出通用回覆 |
+| **Reflection VIP 異常優秀** | VIP 完成率 98%、Judge 38.4（最高）| VIP 對話結構清晰，觸發 Programmatic Synthesis 的機率較低，反思機制反而能有效生成回覆 |

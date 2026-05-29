@@ -1,0 +1,117 @@
+{
+    "metadata": {
+        "case_id": "OOS_011",
+        "agent_type": "ReAct",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 25.4
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 16059,
+        "total_completion_tokens": 214,
+        "grand_total_tokens": 16273
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - it looks like a return was processed for an item I never actually sent back. Could you please look into this and make sure my account isn't being used by someone else?",
+                "usage": {
+                    "prompt_tokens": 1813,
+                    "completion_tokens": 52,
+                    "total_tokens": 1865
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is oos011@example.com. And yes, I'm concerned about unauthorized activity on my account. Can we please focus on resolving this issue with the return?",
+                "usage": {
+                    "prompt_tokens": 1958,
+                    "completion_tokens": 51,
+                    "total_tokens": 2009
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD76105494 (Book_36) is currently Delivered, shipped on 2024-05-01. Is there anything else I can help you with today?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 3
+        },
+        "final_score_0_100": 10.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's core request regarding a fraudulent return and account security, failing to address the intent entirely.",
+            "s_completeness": "The response provided no information or next steps regarding the reported fraud, rendering the interaction useless for the customer.",
+            "s_tone": "The agent was initially professional but became dismissive and robotic by ignoring the customer's stated concern in the final response."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD76105494 (Book_36) is currently Delivered, shipped on 2024-05-01. Is there anything else I can help you with today?"
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with today?"
+            ],
+            "s_tone": [
+                "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.858119+00:00",
+        "s_answer_quality": 10.0,
+        "s_grounding": 50.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": false
+        },
+        "s_outcome": 26.0,
+        "s_tool": 58.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 0.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 75.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": false
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 52.2,
+        "s_agent": 52.2,
+        "proxy_cost": 23.53,
+        "net_value": 0.2867
+    }
+}

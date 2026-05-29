@@ -135,5 +135,63 @@
                 }
             }
         }
-    ]
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 4,
+            "s_tone": 3
+        },
+        "final_score_0_100": 82.5,
+        "reasoning": {
+            "s_resolution": "The agent accurately identified the order status and confirmed the package had not shipped, fully resolving the customer's factual inquiry.",
+            "s_completeness": "The agent provided the requested information, though the response was somewhat repetitive and lacked proactive support for the customer's frustration.",
+            "s_tone": "The agent was professional but became overly robotic and dismissive of the customer's emotional state by repeatedly using canned closing phrases."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order, ORD32457884, has not been shipped yet. It's currently in a \"Processing\" status."
+            ],
+            "s_completeness": [
+                "Your order, ORD32457884, has not been shipped yet. It's currently in a \"Processing\" status."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.720921+00:00",
+        "s_answer_quality": 82.5,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true
+        },
+        "s_outcome": 89.5,
+        "s_tool": 83.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 84.9,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 88.4,
+        "s_agent": 88.4,
+        "proxy_cost": 38.74,
+        "net_value": 0.4966
+    }
 }

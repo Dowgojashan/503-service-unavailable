@@ -1,0 +1,136 @@
+{
+    "metadata": {
+        "case_id": "OOS_014",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 34.15
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18674,
+        "total_completion_tokens": 474,
+        "grand_total_tokens": 19148
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order that I'd like resolved promptly. I requested a return for my order yesterday but I haven't received any update on when the courier will come to pick it up. Could you please let me know when I should expect someone to arrive?",
+                "usage": {
+                    "prompt_tokens": 1815,
+                    "completion_tokens": 63,
+                    "total_tokens": 1878
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order.\n\n**Execution**:\nFinal Response: \"To better assist you, could you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?\"",
+                "usage": {
+                    "prompt_tokens": 2860,
+                    "completion_tokens": 63,
+                    "total_tokens": 2923
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is oos014@example.com. Now, about my return: I requested it yesterday and still haven't received any update on the pickup schedule. Can you please tell me when I should expect someone to arrive?",
+                "usage": {
+                    "prompt_tokens": 1965,
+                    "completion_tokens": 61,
+                    "total_tokens": 2026
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand you're concerned about the return pickup for your order ORD99722078, but since it has already been delivered, our return policy doesn't apply in this case. If you have any issues with the product or would like to discuss further, please contact our support team and they'll be happy to assist you.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's concern about the return pickup schedule.\n\n**Execution**:\nFinal Response: \"I understand you're concerned about the return pickup for your order ORD99722078, but since it has already been delivered, our return policy doesn't apply in this case. If you have any issues with the product or would like to discuss further, please contact our support team and they'll be happy to assist you.\"",
+                "usage": {
+                    "prompt_tokens": 6361,
+                    "completion_tokens": 124,
+                    "total_tokens": 6485
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I understand that's the standard policy, but as a long-standing VIP member, is there anything that can be done for me specifically regarding my return request? I'm still waiting for an update on when the courier will arrive to pick up my order. Can you please clarify this for me?",
+                "usage": {
+                    "prompt_tokens": 2135,
+                    "completion_tokens": 59,
+                    "total_tokens": 2194
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD99722078 with Product_79, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Clarify the return pickup status for the customer's order.\n\n**Execution**:\nFinal Response: \"I understand your concern about the return pickup for your order ORD99722078, but since it has already been delivered, our standard policy doesn't allow for returns or pickups. However, as a VIP member, I can offer to escalate this issue to our support team, who will review your case and provide a personalized solution. They'll be in touch with you shortly to discuss further.\"",
+                "usage": {
+                    "prompt_tokens": 3538,
+                    "completion_tokens": 104,
+                    "total_tokens": 3642
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 4
+        },
+        "final_score_0_100": 15.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's request to track their return pickup and previously provided false information about the return policy.",
+            "s_completeness": "The agent failed to provide any information regarding the pickup status, leaving the customer's request entirely unaddressed.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD99722078 with Product_79, currently Delivered."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.837433+00:00",
+        "s_answer_quality": 15.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true
+        },
+        "s_outcome": 49.0,
+        "s_tool": 83.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 71.2,
+        "s_agent": 71.2,
+        "proxy_cost": 19.16,
+        "net_value": 0.5204
+    }
+}

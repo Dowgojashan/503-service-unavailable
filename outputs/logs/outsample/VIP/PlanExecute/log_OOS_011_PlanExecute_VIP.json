@@ -1,0 +1,136 @@
+{
+    "metadata": {
+        "case_id": "OOS_011",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 31.56
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18326,
+        "total_completion_tokens": 411,
+        "grand_total_tokens": 18737
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I'm a VIP member and I have an issue with my order - it looks like a return was processed for an item I never actually sent back, which is Book_36.\"",
+                "usage": {
+                    "prompt_tokens": 1813,
+                    "completion_tokens": 37,
+                    "total_tokens": 1850
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with our system?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's an order-specific request.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with our system?\"",
+                "usage": {
+                    "prompt_tokens": 2834,
+                    "completion_tokens": 65,
+                    "total_tokens": 2899
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"I would have thought my VIP account details were already on file, but fine — my email is oos011@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1936,
+                    "completion_tokens": 26,
+                    "total_tokens": 1962
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Thank you for providing your email address, oos011@example.com. I've checked our system and found that your order ORD76105494 has already been delivered. Since it's a closed order, we can't make any changes to it. If you have any concerns or issues with the delivery, please don't hesitate to contact our support team for assistance.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's concern about their VIP account details being on file.\n\n**Execution**:\nFinal Response: \"Thank you for providing your email address, oos011@example.com. I've checked our system and found that your order ORD76105494 has already been delivered. Since it's a closed order, we can't make any changes to it. If you have any concerns or issues with the delivery, please don't hesitate to contact our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 6207,
+                    "completion_tokens": 135,
+                    "total_tokens": 6342
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I understand that my order was delivered, but I'm still concerned about the return being processed for an item I never sent back. As a VIP member, is there anything that can be done to investigate this discrepancy and ensure my account isn't being used by someone else?\"",
+                "usage": {
+                    "prompt_tokens": 2087,
+                    "completion_tokens": 55,
+                    "total_tokens": 2142
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD76105494 with Book_36, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Investigate the return discrepancy for Book_36 in order ORD76105494.\n\n**Execution**:\nFinal Response: \"I understand your concern about the return being processed for an item you never sent back, Book_36. As a VIP member, I'll look into this further to ensure your account is secure and not being used by someone else. Can you please confirm if you've contacted our support team before regarding this issue?\"",
+                "usage": {
+                    "prompt_tokens": 3449,
+                    "completion_tokens": 93,
+                    "total_tokens": 3542
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's request to investigate a potential account security issue/fraud, offering irrelevant services instead.",
+            "s_completeness": "The response failed to provide any information or next steps regarding the fraud dispute, forcing the customer to seek help elsewhere.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD76105494 with Book_36, currently Delivered."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.835907+00:00",
+        "s_answer_quality": 35.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true
+        },
+        "s_outcome": 61.0,
+        "s_tool": 83.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 77.2,
+        "s_agent": 77.2,
+        "proxy_cost": 19.07,
+        "net_value": 0.5813
+    }
+}

@@ -1,0 +1,157 @@
+{
+    "metadata": {
+        "case_id": "OOS_016",
+        "agent_type": "ReAct",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 48.79
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 32031,
+        "total_completion_tokens": 355,
+        "grand_total_tokens": 32386
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened. This company is an absolute joke!\"",
+                "usage": {
+                    "prompt_tokens": 1690,
+                    "completion_tokens": 18,
+                    "total_tokens": 1708
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do you need that? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1826,
+                    "completion_tokens": 18,
+                    "total_tokens": 1844
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is oos016@example.com. Now can you tell me where my order is? I've been waiting for three weeks and I'm fed up with this nonsense.\"",
+                "usage": {
+                    "prompt_tokens": 1886,
+                    "completion_tokens": 39,
+                    "total_tokens": 1925
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD91094783 with Appliance_26, which is currently Shipped. I can help with order tracking, cancellation, or refund requests. Is there anything else I can help you with today?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not good enough. I don't care if it's shipped - where is it? I want a full refund for this mess. If I have to wait another week for something that's supposedly 'out for delivery', I'm leaving the worst review this company has ever seen.\"",
+                "usage": {
+                    "prompt_tokens": 2053,
+                    "completion_tokens": 58,
+                    "total_tokens": 2111
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD91094783 (Appliance_26) is currently Shipped, shipped on 2024-05-01. I can check more detailed real-time carrier tracking if needed. Is there anything else I can help you with today?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 42.5,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's request for a refund or provide the tracking information, instead offering to perform the task in a future turn.",
+            "s_completeness": "The response is incomplete because the agent did not provide the tracking details requested by the customer, forcing the customer to ask again.",
+            "s_tone": "The agent was professional but robotic, failing to acknowledge the customer's frustration and repeating a generic closing script."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD91094783 (Appliance_26) is currently Shipped, shipped on 2024-05-01. I can check more detailed real-time carrier tracking if needed."
+            ],
+            "s_completeness": [
+                "I can check more detailed real-time carrier tracking if needed. Is there anything else I can help you with today?"
+            ],
+            "s_tone": [
+                "Your order ORD91094783 (Appliance_26) is currently Shipped, shipped on 2024-05-01. I can check more detailed real-time carrier tracking if needed."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.656764+00:00",
+        "s_answer_quality": 42.5,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true
+        },
+        "s_outcome": 65.5,
+        "s_tool": 58.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 0.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 50.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": false,
+            "no_redundancy": true,
+            "identity_verified": false
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 69.4,
+        "s_agent": 69.4,
+        "proxy_cost": 47.03,
+        "net_value": 0.2237
+    }
+}

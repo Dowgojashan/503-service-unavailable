@@ -52,10 +52,10 @@ _DOLLAR_RE = re.compile(r'\$\s*[\d,]+\.?\d*')
 # Difficulty → V_i mapping (evaluation_framework.md §4.8)
 V_MAP = {"easy": 1, "medium": 2, "hard": 3}
 
-# S_Agent weights (§4.7)
-W_OUTCOME     = 0.35
-W_TOOL        = 0.25
-W_TRAJECTORY  = 0.20
+# S_Agent weights (§4.7) — customer-centric (Stance A): resolution quality prioritised
+W_OUTCOME     = 0.50
+W_TOOL        = 0.20
+W_TRAJECTORY  = 0.10
 W_EFFICIENCY  = 0.20
 
 # S_Outcome weights (§4.2)

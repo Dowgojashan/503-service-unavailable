@@ -343,6 +343,149 @@ PSS_i = (|score_P - score_A| + |score_P - score_V| + |score_A - score_V|) / 3
 
 ---
 
+## 平均對話輪數（Dialogue Turns）
+
+> 輪數 = 每個對話 log 的最後一筆 `turn` 值，代表客戶與 agent 完成一次完整對話所需的來回次數。  
+> 資料來源：全部 1,944 筆 insample logs（4 架構 × 162 case × 3 persona）。
+
+---
+
+### 1. 各架構總體均值
+
+| 架構 | 平均輪數 | 中位數 | 最少 | 最多 |
+|------|---------|--------|------|------|
+| **ReAct** | **2.60** | 2 | 2 | 4 |
+| PlanExecute | 3.02 | 3 | 2 | 6 |
+| Reflection | 3.67 | 3 | 1 | 6 |
+| Single-slot | 4.14 | 4 | 2 | 6 |
+
+- **ReAct 對話最短**：平均 2.6 輪，中位數僅 2——通常一個來回即可解決，極少需要第三輪
+- **Single-slot 對話最長**：平均 4.1 輪，即便結構最簡單，卻常陷入重複澄清或無效回應的循環
+- PlanExecute 雖然在架構上多了規劃步驟，但最終輪數僅 3.0，效率仍優於 Reflection 與 Single-slot
+- Reflection 的 max=1 代表有案例一輪即中止（通常為 REFUSAL），上限 6 輪顯示少數案例在反思循環中耗時
+
+---
+
+### 2. 各架構 × Persona 輪數拆解
+
+| 架構 | Polite | Adversarial | VIP |
+|------|--------|------------|-----|
+| **ReAct** | 2.30 | 3.35 | **2.15** |
+| **PlanExecute** | 2.73 | 3.68 | **2.65** |
+| Reflection | 3.86 | 3.92 | **3.24** |
+| Single-slot | 4.14 | **4.66** | 3.62 |
+
+- **Adversarial persona 使所有架構的對話輪數增加**：平均多 0.6–1.0 輪，對 Single-slot 衝擊最大（+0.5 輪）
+- **VIP persona 輪數最短**：VIP 客戶表達精確，agent 需要的澄清輪次更少
+- ReAct 在 VIP 下的 2.15 輪是所有組合中最低，幾乎每次一個來回就能解決
+
+---
+
+### 3. 輪數 vs 完成率交叉解讀
+
+| 架構 | 平均輪數 | 完成率（均值）| 解讀 |
+|------|---------|-------------|------|
+| **ReAct** | **2.60** | **99.8%** | 少輪高效，邊做邊決策不拖延 |
+| **PlanExecute** | 3.02 | 98.2% | 多規劃 step 輕微拉長，但仍高效 |
+| Reflection | 3.67 | 65.4% | 多輪反思卻完成率低，輪數用於反思而非解決 |
+| Single-slot | 4.14 | 59.5% | 輪數最多但完成率最低，反覆來回卻無效 |
+
+- ReAct「少輪 + 高完成率」的組合最理想：高效且有效
+- Single-slot / Reflection 的輪數多反而代表對話陷入困境，不代表問題更深入解決
+- **輪數多 ≠ 品質好**：Reflection 平均 3.67 輪但 Judge 均分只有 60.7，Single-slot 4.14 輪但均分只有 57.4
+
+---
+
+## S_Agent 綜合評分
+
+### 評分公式（立場 A — 以客戶為中心）
+
+```
+S_Agent = 0.50 × S_Outcome   +  0.20 × S_Tool  +  0.10 × S_Trajectory  +  0.20 × S_Efficiency
+```
+
+> W_Outcome 設為 0.50，反映「有沒有真正解決問題」是 CS agent 最核心的衡量標準。  
+> W_Trajectory 降低至 0.10，因為推理軌跡是 agent 的內部過程，客戶感受不到。  
+> 資料來源：全部 1,800 筆 insample logs。
+
+---
+
+### 1. 各架構子分項均值
+
+| 架構 | S_Outcome | S_Tool | S_Trajectory | S_Efficiency | **S_Agent** |
+|------|-----------|--------|--------------|--------------|-------------|
+| **PlanExecute** | 79.0 | **72.8** | **99.4** | 97.0 | **83.07** |
+| Single-slot | 74.4 | 71.7 | **99.9** | 85.2 | 78.53 |
+| ReAct | **81.8** | 47.7 | 63.1 | **98.0** | 76.37 |
+| Reflection | 75.2 | 67.8 | **100.0** | 23.6 | 65.80 |
+
+**子分項解讀：**
+- **S_Outcome**：ReAct 最高（81.8）——它的迭代推理讓它在真正解決問題上勝過其他架構
+- **S_Tool**：ReAct 最低（47.7）——ReAct 的工具呼叫錯誤率高，常呼叫錯誤工具或傳錯參數
+- **S_Trajectory**：Reflection / PlanExecute / Single-slot 均接近 100，ReAct 只有 63.1——ReAct 的 reason-act 迭代循環產生較多冗餘步驟
+- **S_Efficiency**：Reflection 嚴重墊底（23.6）——token 用量是 PlanExecute 的 6 倍，效率懲罰最重
+
+---
+
+### 2. 整體 S_Agent 排名
+
+| 排名 | 架構 | S_Agent | vs #1 |
+|------|------|---------|-------|
+| #1 | **PlanExecute** | **83.07** | — |
+| #2 | Single-slot | 78.53 | -4.54 |
+| #3 | ReAct | 76.37 | -6.70 |
+| #4 | Reflection | 65.80 | -17.27 |
+
+PlanExecute 在四個子分項中沒有任何一項是第一，但它在每個維度都表現穩健，沒有明顯弱點，最終以均衡優勢奪冠。
+
+---
+
+### 3. S_Agent 跨 Persona 比較
+
+| 架構 | Polite | Adversarial | VIP | 波動幅度 |
+|------|--------|------------|-----|---------|
+| **PlanExecute** | **82.77** | **82.40** | **84.05** | **1.65** |
+| Single-slot | 78.69 | 76.71 | 80.18 | 3.47 |
+| ReAct | 76.20 | 74.92 | 77.99 | 3.07 |
+| Reflection | 64.62 | 65.78 | 66.99 | 2.37 |
+
+- PlanExecute 跨 persona 波動最小（1.65 分），與 PSS 分析結論一致
+- 所有架構在 VIP persona 下 S_Agent 最高，Adversarial 下最低
+
+---
+
+### 4. 權重敏感度分析摘要
+
+針對 969 種合法 weight 組合（每個 weight ≥ 0.05，四者總和 = 1，步長 0.05）掃描排名穩定性：
+
+| 架構 | 排名 #1 | 排名 #2 | 排名 #3 | 排名 #4 |
+|------|---------|---------|---------|---------|
+| **PlanExecute** | **100%** | 0% | 0% | 0% |
+| Single-slot | 0% | **87%** | 13% | 0% |
+| ReAct | 0% | 13% | 46% | 41% |
+| Reflection | 0% | 0% | 41% | 59% |
+
+**PlanExecute 在所有 969 種 weight 組合下均排名第一，結論零例外。**  
+這代表「PlanExecute 是最佳架構」這個結論對評分公式的設計假設完全穩健，不受 weight 選擇影響。
+
+---
+
+### 5. 綜合結論
+
+| 維度 | 最強 | 最弱 |
+|------|------|------|
+| 整體 S_Agent | **PlanExecute（83.07）** | Reflection（65.80）|
+| 問題解決品質（S_Outcome）| **ReAct（81.8）** | Single-slot（74.4）|
+| 工具使用正確性（S_Tool）| **PlanExecute（72.8）** | ReAct（47.7）|
+| 對話效率（S_Efficiency）| **ReAct（98.0）** | Reflection（23.6）|
+| 排名穩健性 | **PlanExecute（100% #1）** | Reflection（0% top-2）|
+
+**PlanExecute 是推薦的生產部署架構**，在客戶導向評分下各維度均衡且排名完全穩健。  
+ReAct 的問題解決品質最高（S_Outcome 81.8），若場景允許略高的工具錯誤率，也是可行選擇。  
+Reflection 因效率極低，在實際部署中成本效益最差，不建議採用。
+
+---
+
 ## ProSA 分析（Prompt Sensitivity by Task Category）
 
 ### 方法說明

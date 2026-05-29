@@ -14,9 +14,10 @@ except ImportError:
     _JUDGE_AVAILABLE = False
 
 class DialogueRunner:
-    def __init__(self, model_name="llama3.1:8b"):
+    def __init__(self, model_name="llama3.1:8b", fact_sheets_path="data/fact_sheets.json"):
         self.model_name = model_name
         self.instructions_dir = "prompts/system_instructions"
+        self.fact_sheets_path = fact_sheets_path
         self.api_error_log = []  # Track API errors for diagnostics
 
     def _load_instruction(self, filename):
@@ -49,7 +50,7 @@ class DialogueRunner:
 
         return order_id, reason
 
-    def run_conversation(self, case_id, fact_sheet, agent_type, persona_type, max_turns=6, run_id: Optional[int] = None):
+    def run_conversation(self, case_id, fact_sheet, agent_type, persona_type, max_turns=6, run_id: Optional[int] = None, dataset: str = "insample"):
         """
         Runs a multi-turn conversation with ReAct Atomicity and State Protection.
         """
@@ -258,7 +259,7 @@ class DialogueRunner:
 
             # Initialize tool simulator and per-turn dedup tracker (shared by Reflection and ReAct loops)
             from src.tools.simulator import ToolSimulator
-            _sim = ToolSimulator()
+            _sim = ToolSimulator(self.fact_sheets_path)
             tools_called_this_turn = set()
             react_iter = 0
             react_no_action_count = 0
@@ -1412,7 +1413,7 @@ class DialogueRunner:
                     print(f"--- [SINGLE-SLOT INTERCEPT] Executing: {tool_name}({tool_param}) ---")
                     
                     from src.tools.simulator import ToolSimulator
-                    sim = ToolSimulator()
+                    sim = ToolSimulator(self.fact_sheets_path)
                     if tool_name == "query_order":
                         observation = sim.query_order(case_id, tool_param)
                     elif tool_name == "track_shipping":
@@ -1725,7 +1726,7 @@ class DialogueRunner:
         }
         
         # Save to organised subdirectory: outputs/logs/{persona_type}/{agent_type}/
-        log_dir = os.path.join("outputs", "logs", persona_type, agent_type)
+        log_dir = os.path.join("outputs", "logs", dataset, persona_type, agent_type)
         os.makedirs(log_dir, exist_ok=True)
         _run_suffix = f"_run{run_id}" if run_id is not None else ""
         log_path = os.path.join(log_dir, f"log_{case_id}_{agent_type}_{persona_type}{_run_suffix}.json")
@@ -1742,7 +1743,7 @@ class DialogueRunner:
 
         # --- LLM-as-a-Judge (optional, requires GEMINI_API_KEY) ---
         if _JUDGE_AVAILABLE and os.environ.get("GEMINI_API_KEY"):
-            fact_sheets_path = "data/fact_sheets.json"
+            fact_sheets_path = self.fact_sheets_path
             judge_csv = "outputs/judge_results.csv"
             try:
                 judge_result = judge_single_case(

@@ -318,11 +318,17 @@ S_Efficiency(a, i) = min(100, max(0, Latency_baseline,d / Latency_a,i * 100))
 
 ### 4.7 S_Agent 最終分數
 
+**權重設計立場（Stance A — 以客戶為中心）：**  
+W_Outcome 設為 0.50，反映「有沒有真正解決問題」是 CS agent 最核心的衡量標準。  
+W_Trajectory 降低至 0.10，因為推理軌跡是 agent 的內部過程，客戶感受不到。
+
 ```
-S_raw = 0.35 * S_Outcome + 0.25 * S_Tool + 0.20 * S_Trajectory + 0.20 * S_Efficiency
+S_raw = 0.50 * S_Outcome + 0.20 * S_Tool + 0.10 * S_Trajectory + 0.20 * S_Efficiency
 S_Agent = S_raw                    （若 I_fatal = 0）
 S_Agent = min(S_raw, 40)           （若 I_fatal = 1）
 ```
+
+**穩健性驗證：** 針對 969 種合法 weight 組合（各 weight ≥ 0.05，步長 0.05）進行敏感度分析，PlanExecute 在所有組合下均排名第一（100%），結論對 weight 選擇完全穩健。
 
 ---
 

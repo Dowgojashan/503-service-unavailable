@@ -31,14 +31,15 @@ def log_path(out_dir: Path, case_id: str, agent: str, persona: str) -> Path:
     return out_dir / f"log_{case_id}_{agent}_{persona}.json"
 
 
-def main(agent_type: str, persona_type: str):
+def main(agent_type: str, persona_type: str, start: int = 1, end: int = 50):
     out_dir = OUT_BASE / persona_type / agent_type
     out_dir.mkdir(parents=True, exist_ok=True)
 
     with open(OOS_FACT_SHEETS, encoding="utf-8") as f:
         all_fs = json.load(f)
 
-    case_ids = sorted(all_fs.keys())  # OOS_001 … OOS_050
+    all_case_ids = sorted(all_fs.keys())  # OOS_001 … OOS_050
+    case_ids = [c for c in all_case_ids if start <= int(c.split("_")[1]) <= end]
     total    = len(case_ids)
 
     runner = DialogueRunner(
@@ -97,5 +98,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--agent",   required=True, choices=VALID_AGENTS)
     parser.add_argument("--persona", required=True, choices=VALID_PERSONAS)
+    parser.add_argument("--start",   type=int, default=1,  help="First case number (inclusive, 1-50)")
+    parser.add_argument("--end",     type=int, default=50, help="Last case number (inclusive, 1-50)")
     args = parser.parse_args()
-    main(args.agent, args.persona)
+    main(args.agent, args.persona, args.start, args.end)

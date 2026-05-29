@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "OOS_002",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 53.88
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 29598,
+        "total_completion_tokens": 543,
+        "grand_total_tokens": 30141
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I'm a VIP member and I've been waiting over a week for someone to pick up my defective laptop, but there's still no update on the delivery status. Can you please tell me exactly when the courier is coming?\"",
+                "usage": {
+                    "prompt_tokens": 1822,
+                    "completion_tokens": 46,
+                    "total_tokens": 1868
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4423,
+                    "completion_tokens": 56,
+                    "total_tokens": 4479
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"I would have thought my VIP account details were already on file, but fine — my email is oos002@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1945,
+                    "completion_tokens": 26,
+                    "total_tokens": 1971
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for providing your email address. I've checked on the status of your order, ORD77911038. Unfortunately, it has already been delivered on May 1st. Since the item has arrived, we can't cancel or modify the order at this point. If you have any other questions or concerns, please don't hesitate to reach out.",
+                "full_trace": "Thank you for providing your email address. I've checked on the status of your order, ORD77911038. Unfortunately, it has already been delivered on May 1st. Since the item has arrived, we can't cancel or modify the order at this point. If you have any other questions or concerns, please don't hesitate to reach out.",
+                "usage": {
+                    "prompt_tokens": 4381,
+                    "completion_tokens": 85,
+                    "total_tokens": 4466
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I understand that the item was delivered on May 1st, but I'm still waiting for someone to pick up my defective laptop. That's not the same as delivery - it means the courier hasn't even collected it yet. Can you please tell me when the pickup is scheduled?\"",
+                "usage": {
+                    "prompt_tokens": 2102,
+                    "completion_tokens": 58,
+                    "total_tokens": 2160
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand your concern about the pickup status of your laptop. However, according to our system, the order has already been marked as delivered on May 1st. Unfortunately, this means that the courier has completed their delivery process, and we cannot provide further updates on a scheduled pickup at this time. If you have any other questions or concerns, please don't hesitate to reach out.",
+                "full_trace": "I understand your concern about the pickup status of your laptop. However, according to our system, the order has already been marked as delivered on May 1st. Unfortunately, this means that the courier has completed their delivery process, and we cannot provide further updates on a scheduled pickup at this time. If you have any other questions or concerns, please don't hesitate to reach out.",
+                "usage": {
+                    "prompt_tokens": 4721,
+                    "completion_tokens": 91,
+                    "total_tokens": 4812
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"I'm disappointed in this resolution. As a long-standing VIP member, I'd appreciate it if you could escalate this further and get someone to investigate why there's still no pickup scheduled for my defective laptop. I've been waiting over a week, and the lack of communication is unacceptable.\"",
+                "usage": {
+                    "prompt_tokens": 2314,
+                    "completion_tokens": 58,
+                    "total_tokens": 2372
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2703,
+                    "completion_tokens": 37,
+                    "total_tokens": 2740
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 4
+        },
+        "final_score_0_100": 15.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the return pickup intent, repeatedly misinterpreting the customer's request as a delivery inquiry.",
+            "s_completeness": "The agent provided no information on the return status or escalation, leaving the customer with no resolution or next steps.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the interaction despite the failure to assist."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for."
+            ]
+        }
+    }
+}

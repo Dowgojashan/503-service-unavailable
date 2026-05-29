@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "OOS_028",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 40.68
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 19941,
+        "total_completion_tokens": 527,
+        "grand_total_tokens": 20468
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order that I'd like resolved promptly. I've been waiting over three weeks for my refund after returning the damaged jacket, but every time I contact you, I'm told to \"wait a few more days\" - it's getting ridiculous.",
+                "usage": {
+                    "prompt_tokens": 1830,
+                    "completion_tokens": 63,
+                    "total_tokens": 1893
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4456,
+                    "completion_tokens": 56,
+                    "total_tokens": 4512
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is oos028@example.com. Can we please focus on getting my refund processed? I'm not interested in waiting any longer for something that's been promised to me as a VIP member.",
+                "usage": {
+                    "prompt_tokens": 1977,
+                    "completion_tokens": 57,
+                    "total_tokens": 2034
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for providing your email address. I've checked on the status of your order, ORD28618006. It appears that it was delivered on May 1st with a total amount of $96.93. The item in question was Lifestyle_34.\n\nSince your order has already been delivered, I'm afraid we cannot process a refund for you at this time. However, if you have any issues with the product or would like to discuss further, please don't hesitate to reach out to our support team.\n\nIs there anything else I can assist you with today?",
+                "full_trace": "Thank you for providing your email address. I've checked on the status of your order, ORD28618006. It appears that it was delivered on May 1st with a total amount of $96.93. The item in question was Lifestyle_34.\n\nSince your order has already been delivered, I'm afraid we cannot process a refund for you at this time. However, if you have any issues with the product or would like to discuss further, please don't hesitate to reach out to our support team.\n\nIs there anything else I can assist you with today?",
+                "usage": {
+                    "prompt_tokens": 4476,
+                    "completion_tokens": 129,
+                    "total_tokens": 4605
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a VIP member, I expect more than just being told \"we can't process a refund\" without exploring options further. Given my history with this company and the fact that I've already returned the damaged item, is there any way we can make an exception to get my money back? I'm not interested in discussing issues with the product or waiting for further assistance - I just want my $96.93 refunded immediately.",
+                "usage": {
+                    "prompt_tokens": 2253,
+                    "completion_tokens": 86,
+                    "total_tokens": 2339
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your refund request for ORD28618006 has been submitted successfully. The amount of $87.24 will be processed as per our standard refund policy. You can expect to see this amount credited back to your original payment method within the next 5-7 business days.\n\nThank you for choosing our company, and we appreciate your patience in this matter. If there's anything else we can assist you with, please don't hesitate to reach out. Otherwise, it was a pleasure serving you, and we hope to have the opportunity to serve you again in the future. Goodbye!",
+                "full_trace": "Your refund request for ORD28618006 has been submitted successfully. The amount of $87.24 will be processed as per our standard refund policy. You can expect to see this amount credited back to your original payment method within the next 5-7 business days.\n\nThank you for choosing our company, and we appreciate your patience in this matter. If there's anything else we can assist you with, please don't hesitate to reach out. Otherwise, it was a pleasure serving you, and we hope to have the opportunity to serve you again in the future. Goodbye!",
+                "usage": {
+                    "prompt_tokens": 4949,
+                    "completion_tokens": 136,
+                    "total_tokens": 5085
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 4,
+            "s_tone": 5
+        },
+        "final_score_0_100": 55.0,
+        "reasoning": {
+            "s_resolution": "The agent hallucinated that they were submitting a new refund request when the fact sheet shows the refund was already in a 'Processing' status.",
+            "s_completeness": "The agent provided the correct refund amount and expected timeline, though the preceding confusion regarding the refund status impacts the overall clarity.",
+            "s_tone": "The agent maintained a professional, empathetic, and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your refund request for ORD28618006 has been submitted successfully."
+            ],
+            "s_completeness": [
+                "The amount of $87.24 will be processed as per our standard refund policy. You can expect to see this amount credited back to your original payment method within the next 5-7 business days."
+            ],
+            "s_tone": [
+                "Thank you for choosing our company, and we appreciate your patience in this matter."
+            ]
+        }
+    }
+}

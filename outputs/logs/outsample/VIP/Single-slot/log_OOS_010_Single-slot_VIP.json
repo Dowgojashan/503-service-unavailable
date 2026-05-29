@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "OOS_010",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 38.79
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 19871,
+        "total_completion_tokens": 447,
+        "grand_total_tokens": 20318
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order that I'd like resolved promptly. The item I received yesterday is damaged and doesn't match the photos on the website at all - it's not what I ordered.",
+                "usage": {
+                    "prompt_tokens": 1823,
+                    "completion_tokens": 49,
+                    "total_tokens": 1872
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4428,
+                    "completion_tokens": 56,
+                    "total_tokens": 4484
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is oos010@example.com. Now, regarding the issue with my order: I'd like to return this item for a full refund because it's damaged and doesn't match the product photos on your website. Can you tell me if I need to pay for the return shipping myself?",
+                "usage": {
+                    "prompt_tokens": 1950,
+                    "completion_tokens": 76,
+                    "total_tokens": 2026
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for providing your email address. I've checked on your order, ORD98978584. Unfortunately, it appears that your item has already been delivered. However, since the item was damaged and doesn't match the product photos on our website, we can process a return for a full refund.\n\nPlease note that as per our policy, you will not be responsible for the return shipping costs. We'll provide a pre-paid return shipping label so you can easily send back the item.\n\nIf you'd like to proceed with the return, I'll guide you through the next steps.",
+                "full_trace": "Thank you for providing your email address. I've checked on your order, ORD98978584. Unfortunately, it appears that your item has already been delivered. However, since the item was damaged and doesn't match the product photos on our website, we can process a return for a full refund.\n\nPlease note that as per our policy, you will not be responsible for the return shipping costs. We'll provide a pre-paid return shipping label so you can easily send back the item.\n\nIf you'd like to proceed with the return, I'll guide you through the next steps.",
+                "usage": {
+                    "prompt_tokens": 4485,
+                    "completion_tokens": 130,
+                    "total_tokens": 4615
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I appreciate the update on my order and the offer for a pre-paid return shipping label. However, I'd like to clarify one thing: since I'm a VIP member, is there any way we can expedite this process? I'd like to get the damaged item back as soon as possible so I can receive a full refund.",
+                "usage": {
+                    "prompt_tokens": 2247,
+                    "completion_tokens": 68,
+                    "total_tokens": 2315
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your refund request for ORD98978584 has been submitted successfully. You will receive an email with further instructions once the refund is processed. Thank you for your patience and cooperation. This concludes our assistance on this matter. Have a great day!",
+                "full_trace": "Your refund request for ORD98978584 has been submitted successfully. You will receive an email with further instructions once the refund is processed. Thank you for your patience and cooperation. This concludes our assistance on this matter. Have a great day!",
+                "usage": {
+                    "prompt_tokens": 4938,
+                    "completion_tokens": 68,
+                    "total_tokens": 5006
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent followed all identity verification protocols and correctly executed the refund request without inventing any facts.",
+            "s_completeness": "The agent clearly explained the next steps for the customer to receive their refund instructions.",
+            "s_tone": "The agent maintained a professional, polite, and efficient tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your refund request for ORD98978584 has been submitted successfully."
+            ],
+            "s_completeness": [
+                "You will receive an email with further instructions once the refund is processed."
+            ],
+            "s_tone": [
+                "Thank you for your patience and cooperation. This concludes our assistance on this matter. Have a great day!"
+            ]
+        }
+    }
+}

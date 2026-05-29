@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "OOS_029",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 41.18
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 20165,
+        "total_completion_tokens": 526,
+        "grand_total_tokens": 20691
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order that I'd like resolved promptly. My refund for Product_91 hasn't shown up after over three weeks, and I've been told to just wait another few days multiple times already - I need some actual clarity on when it will be back in my account.",
+                "usage": {
+                    "prompt_tokens": 1840,
+                    "completion_tokens": 68,
+                    "total_tokens": 1908
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4466,
+                    "completion_tokens": 56,
+                    "total_tokens": 4522
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is oos029@example.com. Can we please focus on getting my refund sorted out? I'm not looking for another \"wait a few more days\" answer; I need to know when it will be back in my account.",
+                "usage": {
+                    "prompt_tokens": 2002,
+                    "completion_tokens": 65,
+                    "total_tokens": 2067
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for providing your email address. I've checked on the status of your order, ORD35055011. It has been delivered with a total amount of $107.06. Since it's already shipped, I'm afraid we can't cancel or modify the items in this order.\n\nHowever, regarding your refund for Product_91, I see that it was processed as part of the original order. If you haven't received the refund yet, please allow some additional time for the processing to complete. You should receive an update on your account within a few more days.\n\nIf there's anything else I can assist you with, please let me know. Otherwise, thank you for shopping with us and have a great day!",
+                "full_trace": "Thank you for providing your email address. I've checked on the status of your order, ORD35055011. It has been delivered with a total amount of $107.06. Since it's already shipped, I'm afraid we can't cancel or modify the items in this order.\n\nHowever, regarding your refund for Product_91, I see that it was processed as part of the original order. If you haven't received the refund yet, please allow some additional time for the processing to complete. You should receive an update on your account within a few more days.\n\nIf there's anything else I can assist you with, please let me know. Otherwise, thank you for shopping with us and have a great day!",
+                "usage": {
+                    "prompt_tokens": 4501,
+                    "completion_tokens": 159,
+                    "total_tokens": 4660
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I understand that the order is shipped and can't be modified, but I'm still waiting on my refund for Product_91. As a VIP member, I expect more timely communication about this issue. Can you tell me exactly when I should receive the refund? I've been told to wait multiple times already, and I need a specific date or timeframe so I can plan accordingly.",
+                "usage": {
+                    "prompt_tokens": 2346,
+                    "completion_tokens": 77,
+                    "total_tokens": 2423
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your refund request for Product_91 has been submitted successfully. The status of this refund is currently Pending, and you can expect to receive $96.35 back in your account once it's processed. Please allow some additional time for this to be completed. If there's anything else I can assist you with, please let me know. Otherwise, thank you for shopping with us and have a great day!",
+                "full_trace": "Your refund request for Product_91 has been submitted successfully. The status of this refund is currently Pending, and you can expect to receive $96.35 back in your account once it's processed. Please allow some additional time for this to be completed. If there's anything else I can assist you with, please let me know. Otherwise, thank you for shopping with us and have a great day!",
+                "usage": {
+                    "prompt_tokens": 5010,
+                    "completion_tokens": 101,
+                    "total_tokens": 5111
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 42.5,
+        "reasoning": {
+            "s_resolution": "The agent provided accurate factual information but failed to address the customer's core need for a specific timeline, repeating the vague advice the customer explicitly rejected.",
+            "s_completeness": "The response lacks actionable information, leaving the customer with no clarity on when the refund will actually arrive.",
+            "s_tone": "The agent was professional but relied on repetitive, robotic scripts that ignored the customer's expressed frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your refund request for Product_91 has been submitted successfully. The status of this refund is currently Pending, and you can expect to receive $96.35 back in your account once it's processed."
+            ],
+            "s_completeness": [
+                "Please allow some additional time for this to be completed."
+            ],
+            "s_tone": [
+                "If there's anything else I can assist you with, please let me know. Otherwise, thank you for shopping with us and have a great day!"
+            ]
+        }
+    }
+}

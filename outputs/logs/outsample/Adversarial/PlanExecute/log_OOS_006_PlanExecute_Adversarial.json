@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "OOS_006",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 43.33
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23640,
+        "total_completion_tokens": 548,
+        "grand_total_tokens": 24188
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my return for the laptop I sent back a week ago. The courier still hasn't shown up to pick it up, and I'm getting really frustrated.\"",
+                "usage": {
+                    "prompt_tokens": 1669,
+                    "completion_tokens": 42,
+                    "total_tokens": 1711
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"To better assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 2839,
+                    "completion_tokens": 63,
+                    "total_tokens": 2902
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation from last week?\"",
+                "usage": {
+                    "prompt_tokens": 1812,
+                    "completion_tokens": 27,
+                    "total_tokens": 1839
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To assist you with your issue, I need to verify some information about your order. Could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Confirm that the customer's request is order-specific (check order, cancel, refund, track shipping).\n2. Ask for their Order ID (ORDxxx format) or registered email address.\n\n**Execution**:\nFinal Response: \"To assist you with your issue, I need to verify some information about your order. Could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 3028,
+                    "completion_tokens": 95,
+                    "total_tokens": 3123
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is oos006@example.com. Now can we please focus on getting this return sorted out? I've been waiting for a week and still no pickup. What's going on with the courier?\"",
+                "usage": {
+                    "prompt_tokens": 1900,
+                    "completion_tokens": 45,
+                    "total_tokens": 1945
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand you're concerned about the return of your Electronics_88 item. Since your order has already been delivered, I'm afraid we can't cancel or re-place it. However, if there were any issues with the product (damaged, incorrect, or quality-related), please contact our support team and they'll be happy to assist you within our 30-day return policy.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's concern about the return and courier pickup.\n\n**Execution**:\nFinal Response: \"I understand you're concerned about the return of your Electronics_88 item. Since your order has already been delivered, I'm afraid we can't cancel or re-place it. However, if there were any issues with the product (damaged, incorrect, or quality-related), please contact our support team and they'll be happy to assist you within our 30-day return policy.\"",
+                "usage": {
+                    "prompt_tokens": 6679,
+                    "completion_tokens": 136,
+                    "total_tokens": 6815
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not what I'm asking for. I don't want to cancel or replace the item, I just want to know when someone is coming to pick up my return. Can you please check on the status of the pickup and give me an update? This is ridiculous that it's taken a week already.\"",
+                "usage": {
+                    "prompt_tokens": 2125,
+                    "completion_tokens": 63,
+                    "total_tokens": 2188
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD57732717 with Electronics_88, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Acknowledge the customer's concern about the return pickup status.\n\n**Execution**:\nFinal Response: \"I understand your frustration with the delayed pickup. Unfortunately, our system doesn't provide real-time tracking or updates on pickup schedules for returns. If you'd like to escalate this issue, please contact our support team and they'll be happy to assist you.\"",
+                "usage": {
+                    "prompt_tokens": 3588,
+                    "completion_tokens": 77,
+                    "total_tokens": 3665
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 4
+        },
+        "final_score_0_100": 15.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's specific request to track the return pickup status, failing to resolve the core need.",
+            "s_completeness": "The response provided no information regarding the courier pickup, leaving the customer with no actionable next steps.",
+            "s_tone": "The agent remained professional and empathetic throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD57732717 with Electronics_88, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I understand you're concerned about the return of your Electronics_88 item."
+            ]
+        }
+    }
+}

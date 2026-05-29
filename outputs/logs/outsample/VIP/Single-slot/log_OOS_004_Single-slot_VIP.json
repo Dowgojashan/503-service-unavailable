@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "OOS_004",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 35.09
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 19428,
+        "total_completion_tokens": 317,
+        "grand_total_tokens": 19745
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I'm a VIP member and I've been waiting over a week for someone to pick up my return, despite multiple emails I've sent. The item is defective and I just want it processed or refunded already.\"",
+                "usage": {
+                    "prompt_tokens": 1830,
+                    "completion_tokens": 43,
+                    "total_tokens": 1873
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4417,
+                    "completion_tokens": 56,
+                    "total_tokens": 4473
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"I would have thought my VIP account details were already on file, but fine — my email is oos004@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1958,
+                    "completion_tokens": 26,
+                    "total_tokens": 1984
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for providing your email address. I've checked on your order and it appears that it has been delivered successfully. The order number is ORD76798339, and the total amount was $217.99 USD. You received one item: Product_46. If there's anything else I can assist you with, please let me know. Otherwise, thank you for shopping with us!",
+                "full_trace": "Thank you for providing your email address. I've checked on your order and it appears that it has been delivered successfully. The order number is ORD76798339, and the total amount was $217.99 USD. You received one item: Product_46. If there's anything else I can assist you with, please let me know. Otherwise, thank you for shopping with us!",
+                "usage": {
+                    "prompt_tokens": 4374,
+                    "completion_tokens": 92,
+                    "total_tokens": 4466
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"That's not correct. I'm still waiting for someone to pick up my return. The issue is with the defective item, not delivery. Can you please tell me when someone will be coming or just process my refund immediately?\"",
+                "usage": {
+                    "prompt_tokens": 2129,
+                    "completion_tokens": 46,
+                    "total_tokens": 2175
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order, ORD76798339, has been successfully cancelled for the reason you specified. We appreciate your patience and understanding in this matter. Thank you for shopping with us!",
+                "full_trace": "Your order, ORD76798339, has been successfully cancelled for the reason you specified. We appreciate your patience and understanding in this matter. Thank you for shopping with us!",
+                "usage": {
+                    "prompt_tokens": 4720,
+                    "completion_tokens": 54,
+                    "total_tokens": 4774
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 4
+        },
+        "final_score_0_100": 15.0,
+        "reasoning": {
+            "s_resolution": "The agent hallucinated that the order was cancelled when it was already delivered, failing to address the customer's actual request regarding a return pickup.",
+            "s_completeness": "The response is entirely unhelpful as it provides false information about a cancellation instead of addressing the return status or the pending refund.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order, ORD76798339, has been successfully cancelled for the reason you specified."
+            ],
+            "s_completeness": [
+                "Your order, ORD76798339, has been successfully cancelled for the reason you specified."
+            ],
+            "s_tone": [
+                "We appreciate your patience and understanding in this matter."
+            ]
+        }
+    }
+}

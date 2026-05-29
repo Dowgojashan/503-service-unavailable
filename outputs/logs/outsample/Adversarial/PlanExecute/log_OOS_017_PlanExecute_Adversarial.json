@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "OOS_017",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 28.65
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14687,
+        "total_completion_tokens": 349,
+        "grand_total_tokens": 15036
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've emailed three times now about updating the shipping address for my affiliate order, but it still hasn't been changed and I'm terrified it's going to ship to my old house. This has been going on for over a week, and I need someone to actually fix this before it gets sent out.\"",
+                "usage": {
+                    "prompt_tokens": 1687,
+                    "completion_tokens": 62,
+                    "total_tokens": 1749
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the affiliate order? This will help me look into updating the shipping address for you.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order exists.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the affiliate order? This will help me look into updating the shipping address for you.\"",
+                "usage": {
+                    "prompt_tokens": 2859,
+                    "completion_tokens": 77,
+                    "total_tokens": 2936
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up the order from our conversation? I've already explained the problem three times now.\"",
+                "usage": {
+                    "prompt_tokens": 1885,
+                    "completion_tokens": 36,
+                    "total_tokens": 1921
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand your concern about updating the shipping address. To assist you further, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the affiliate order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Confirm the customer's request is order-specific (check order, cancel, refund, track shipping).\n2. Ask for their Order ID (ORDxxx format) or registered email address.\n\n**Execution**:\nFinal Response: \"I understand your concern about updating the shipping address. To assist you further, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the affiliate order?\"",
+                "usage": {
+                    "prompt_tokens": 3066,
+                    "completion_tokens": 91,
+                    "total_tokens": 3157
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is oos017@example.com. Now can we please focus on updating the shipping address? I've already explained this three times and I'm getting tired of repeating myself. Can you actually do something about it or not?\"",
+                "usage": {
+                    "prompt_tokens": 1967,
+                    "completion_tokens": 50,
+                    "total_tokens": 2017
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD49800425. Unfortunately, our system doesn't support changing the shipping address once an order is placed. If you need a different address, the best option is to cancel and re-place the order. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Verify the order exists using the provided email address.\n\n**Execution**:\nAction: query_order(email=\"oos017@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3223,
+                    "completion_tokens": 33,
+                    "total_tokens": 3256
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly followed business rules regarding address changes and offered the appropriate alternative.",
+            "s_completeness": "The agent provided a clear explanation of the limitation and the required next steps for the customer.",
+            "s_tone": "The agent maintained a professional and empathetic tone throughout the interaction, even when the customer was frustrated."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed. If you need a different address, the best option is to cancel and re-place the order."
+            ],
+            "s_completeness": [
+                "If you need a different address, the best option is to cancel and re-place the order."
+            ],
+            "s_tone": [
+                "I understand your concern about updating the shipping address."
+            ]
+        }
+    }
+}

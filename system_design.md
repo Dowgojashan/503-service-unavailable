@@ -370,17 +370,40 @@ ecommerce-agent-eval/
     - 9 個全新 intent：測試架構面對未見任務類型的處理能力
     - RETURNS / PRODUCT 兩個全新 category：測試跨領域泛化
 
-- 🔄 **8.2 Out-of-Sample 實驗執行**：
-    - 執行 50 cases × 4 architectures × 3 personas = **600 筆**
+- ✅ **8.2 Out-of-Sample 實驗執行**：
+    - 執行 50 cases × 4 architectures × 3 personas = **600 筆**（全數完成）
     - Log 儲存路徑：`outputs/logs/outsample/{Persona}/{Agent}/`
-    - Smoke test（24 組合）✅ 全數 PASS（2026-05-29）
-    - 批次執行腳本：`run_oos_batch.py`（含 checkpoint 機制，中斷可續跑）
-    - 目前進度：Polite × Single-slot 執行中（本機），其餘組合分配至 Colab / Kaggle 平行執行
+    - 執行環境：本機（Single-slot / PlanExecute）+ Google Colab + Kaggle（Reflection × Adversarial）
+    - 批次執行腳本：`run_oos_batch.py`（含 `--start` / `--end` 參數，支援分段執行與 checkpoint 續跑）
+    - **Judge 補評**：15 筆因 Gemini 503 錯誤缺評分，透過 `rejudge_missing.py` 全數補齊；600 筆 judge 分數完整無缺漏
 
-- [ ] **8.3 Out-of-Sample 結果比較**：
-    - 比較 in-sample vs out-of-sample 的完成率、Judge 分、S_Agent、PSS
-    - 確認架構排名（PlanExecute vs ReAct）在新案例上是否一致
-    - 分析新 intent 與重疊 intent 的個別泛化表現差異
+- ✅ **8.3 Out-of-Sample 結果比較**（結果記錄於 `result.md` OOS 章節）：
+
+    **OOS S_Agent 排名：**
+
+    | 架構 | Polite | Adversarial | VIP | 整體 | vs In-sample |
+    |------|--------|-------------|-----|------|-------------|
+    | PlanExecute | 73.8 | 71.4 | 74.4 | **73.2** | ▲+1.2 |
+    | Single-slot | 69.6 | 68.6 | 71.6 | **70.0** | ▼-5.5 |
+    | ReAct | 68.3 | 64.6 | 64.6 | **65.8** | ▼-7.9 |
+    | Reflection | 53.3 | 61.1 | 68.0 | **60.8** | ▼-7.9 |
+
+    - **架構排名一致**：PlanExecute 在 OOS 仍排名第一，且是唯一 S_Agent 不降反升的架構
+    - **泛化失敗確認**：LLM Judge 分數全面崩跌（OOS 範圍 22–38 vs In-sample 51–73），肇因為 9 個未見 intent
+    - **PE Synthesis 悖論**：PlanExecute Immediate Synthesis 對新 intent 生成通用模板回應 → completion rate 最高（98%）但 Judge 最低
+    - **ReAct LOOP 爆炸**：OOS Polite 下 LOOP_FAILURE 率 42%（21/50），新 intent 導致 Reason-Act 循環不收斂
+
+    **OOS 權重敏感度分析（969 種合法組合）：**
+    - PlanExecute 排名第一的比例：99.9%（968/969）；唯一例外在 W_Trajectory=0.85 時 Single-slot 勝出
+
+    **OOS ProSA PSS 分析（跨 Persona 穩定性）：**
+
+    | 架構 | PSS 均值 | 穩定性排名 |
+    |------|---------|----------|
+    | ReAct | 17.20 | 最穩定 |
+    | PlanExecute | 18.33 | 第二 |
+    | Reflection | 20.13 | 第三 |
+    | Single-slot | 20.87 | 最不穩定 |
 
 - [ ] **8.4 ProSA 四變體實驗（選擇性）**：
     - `data/prosa_variants.json` 已備妥 150 cases × 4 變體（simple_input / emotional_support / role_player / output_requirement）
@@ -389,7 +412,7 @@ ecommerce-agent-eval/
 
 ---
 
-## [ ] 階段九：視覺化與論文整理
+## 🔄 階段九：視覺化與論文整理
 **目標**：將數據轉化為可發表的圖表與論文結論。
 
 - [ ] **9.1 產生結果圖表**：
@@ -402,13 +425,24 @@ ecommerce-agent-eval/
     - 對 final score 落在 60–75 區間的 case 進行 10% 人工抽樣複核
     - 計算 Spearman ρ（目標 ≥ 0.75）
 
-- [ ] **9.3 論文方法論部分補充**：
-    - Synthesis 介入率對公平性影響的 limitations 段落
-    - System-level evaluation 框架定位說明
-    - Out-of-sample 驗證結果（待 8.3 完成後補入）
+- ✅ **9.3 論文方法論部分撰寫**（`final_project.md` §1 Methodologies）：
+    - §1.1 Research Design Overview（1,800 in-sample + 600 OOS）
+    - §1.2 Simulated Dialogue Environment（llama3.1:8b、Fact Sheet、Tool Simulator、history[-8:]）
+    - §1.3 四種 CSR Agent 架構（Single-slot OPTION A/B/C、ReAct max 5 iter、Reflection 3-phase、PlanExecute Immediate Synthesis）
+    - §1.4 三種顧客 Persona（Polite / Adversarial / VIP 及行為約束）
+    - §1.5 S_Agent 指標與公式（sub-score 表、I_fatal cap）
+    - §1.6 LLM-as-Judge（Gemini 盲測、3 維度、4-step CoT）
+    - §1.7 實驗設計（in-sample 150 cases、OOS 50 cases、checkpoint-resume）
+    - §1.8 權重敏感度分析（969 種合法組合）
 
-- [ ] **9.4 論文結論整理**：
+- [ ] **9.4 論文 Results 章節（`final_project.md` §2）**：
+    - In-sample 四架構全 Persona 定量結果表
+    - OOS 泛化結果（S_Agent、Judge、LOOP率）
+    - 權重敏感度與 ProSA PSS 摘要
+
+- [ ] **9.5 論文 Analysis and Discussion（`final_project.md` §3）**：
     - 各 Persona 下最適架構建議（ReAct vs PlanExecute 取捨原則）
+    - PE Synthesis 悖論分析（高完成率 vs 低 Judge 的解釋）
     - PSS / ProSA 分析對架構選擇的啟示
     - 對未來研究的建議（公平 prompt 控制、更大規模模型測試）
 

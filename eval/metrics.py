@@ -10,9 +10,9 @@ Implements evaluation_framework.md §4.2–4.8:
   4.7  S_Agent        — integrated final score
   4.8  ProxyCost / NetValue / Delta_MB
 
-Note on latency: current logs lack wall-clock timestamps, so S_Efficiency
-uses grand_total_tokens as a latency proxy (linear with Ollama local inference).
-Future runs record execution_seconds in metadata for exact latency.
+S_Efficiency uses execution_seconds as a latency proxy when available (recorded
+by the runner). Logs without execution_seconds fall back to grand_total_tokens.
+Baselines are computed separately per unit to avoid cross-unit comparisons.
 
 Usage (CLI):
   python -m eval.metrics --logs-dir outputs/logs --output-csv outputs/reports/s_agent_results.csv

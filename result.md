@@ -486,6 +486,86 @@ Reflection 因效率極低，在實際部署中成本效益最差，不建議採
 
 ---
 
+## 成本效益分析（ProxyCost / NetValue / Delta_MB）
+
+### 指標定義
+
+```
+ProxyCost  = 100 × (0.5×TokenNorm + 0.3×LLMCallNorm + 0.2×ToolCallNorm)
+NetValue   = V_i × S_Agent / 100 − 0.01 × ProxyCost
+Delta_MB   = NetValue(arch) − NetValue(Single-slot)    ← Single-slot 為基準
+```
+
+- **V_i**：任務難度權重（Easy=1, Medium=2, Hard=3），反映高難度任務的業務價值更高
+- **λ = 0.01**：成本敏感係數，使 ProxyCost 最大貢獻（1.0）與 V_i 項尺度相當
+- 正規化（TokenNorm 等）以**全部 1,944 筆 log 的全域 max** 為分母（tokens=241,655, LLM calls=6, tool calls=4），確保跨架構比較基準一致
+
+---
+
+### 1. In-Sample 成本效益（全 1,800 筆）
+
+| 架構 | ProxyCost（均值）| NetValue（均值）| Delta_MB（均值）| Delta_MB > 0 比例 |
+|------|----------------|----------------|----------------|-----------------|
+| **PlanExecute** | **20.83** | **1.429** | **+0.162** | **72.9%** |
+| Single-slot | 28.70 | 1.247 | 0.000（基準）| — |
+| ReAct | 30.30 | 1.202 | -0.059 | 38.9% |
+| Reflection | 33.90 | 0.938 | -0.267 | 28.6% |
+
+**Delta_MB by 難度（In-sample）：**
+
+| 架構 | Easy | Medium | Hard |
+|------|------|--------|------|
+| **PlanExecute** | **+0.057** | **+0.222** | **+0.228** |
+| Single-slot | 0.000 | 0.000 | 0.000 |
+| ReAct | -0.107 | -0.035 | -0.026 |
+| Reflection | -0.117 | -0.231 | **-0.501** |
+
+**關鍵解讀：**
+- **PlanExecute 是唯一 Delta_MB > 0 的架構**：72.9% 的案例相較 Single-slot 有正向成本效益，Hard 任務優勢最大（+0.228），符合「Immediate Synthesis 在明確任務下效益最高」的邏輯
+- **ReAct 僅略微負值（-0.059）**：品質優勢（S_Outcome 81.8）幾乎能抵銷額外的迭代成本，差距僅 6%，在品質導向場景仍是可接受選擇
+- **Reflection 明顯不划算（-0.267）**：Hard 任務 Delta_MB 達 -0.501，複雜任務反而耗費最多 token 卻換來最低品質，負效益最嚴重
+
+---
+
+### 2. OOS 成本效益（全 600 筆）
+
+| 架構 | ProxyCost（均值）| NetValue（均值）| Delta_MB（均值）| Delta_MB > 0 比例 |
+|------|----------------|----------------|----------------|-----------------|
+| **PlanExecute** | **22.01** | **0.512** | **+0.125** | **78.0%** |
+| Single-slot | 31.28 | 0.387 | 0.000（基準）| — |
+| ReAct | 29.51 | 0.363 | -0.023 | 41.3% |
+| Reflection | 33.40 | 0.274 | -0.113 | 46.7% |
+
+**Delta_MB by 難度（OOS）：**
+
+| 架構 | Easy | Medium | Hard |
+|------|------|--------|------|
+| **PlanExecute** | **+0.129** | **+0.094** | **+0.151** |
+| Single-slot | 0.000 | 0.000 | 0.000 |
+| ReAct | -0.033 | -0.017 | -0.021 |
+| Reflection | -0.121 | -0.078 | -0.139 |
+
+**OOS vs In-sample 關鍵變化：**
+- **PlanExecute 仍是唯一正值架構（+0.125）**，且正值比例在 OOS 下反而上升至 78%——Immediate Synthesis 的低成本優勢在 OOS 下仍完整保留，即使 Synthesis 輸出的是通用模板
+- **ReAct Delta_MB 從 -0.059 改善至 -0.023**：OOS 下 ReAct 的 LOOP_FAILURE 案例直接終止（不消耗後續 token），反而降低了部分成本，使負值縮小
+- **Reflection OOS Delta_MB 好轉（-0.267 → -0.113）**：VIP Persona 下大幅節省 token（19,431 vs in-sample 71,290），拉低了均值 ProxyCost
+- **所有架構 NetValue 絕對值均下降**（In-sample 0.94–1.43 → OOS 0.27–0.51），因 OOS S_Agent 系統性下滑（品質崩跌），即使 ProxyCost 相近，成本調整後價值也大幅縮水
+
+---
+
+### 3. 成本效益綜合結論
+
+| 維度 | In-sample | OOS |
+|------|-----------|-----|
+| Delta_MB 最高 | **PlanExecute（+0.162）** | **PlanExecute（+0.125）** |
+| Delta_MB 最低 | Reflection（-0.267）| Reflection（-0.113）|
+| 唯一正值架構 | **PlanExecute（72.9%）** | **PlanExecute（78.0%）** |
+| Hard 任務最划算 | **PlanExecute（+0.228）** | **PlanExecute（+0.151）** |
+
+**核心結論**：在 Single-slot 作為基準下，**PlanExecute 是唯一在兩個資料集中均能產生正向邊際效益的架構**，且在中高難度任務中優勢最顯著。ReAct 的成本調整後效益略低於 Single-slot（僅 -0.06），若場景優先考量解決品質而非成本效率，仍屬合理升級選擇。Reflection 無論在何種情境下均為負效益，不建議部署。
+
+---
+
 ## ProSA 分析（Prompt Sensitivity by Task Category）
 
 ### 方法說明
@@ -597,7 +677,7 @@ ProSA 原論文發現困難任務（MATH）PSS 較高，但在本研究中呈相
 
 > **資料來源**：50 筆 OOS 案例 × 4 架構 × 3 Persona = **600 場對話**  
 > OOS 案例涵蓋 15 種意圖（含 `track_return`、`missing_item`、`fraud_dispute`、`product_inquiry` 等訓練分布外新意圖，以及 `track_order`、`cancel_order` 等與 in-sample 重疊的意圖）。  
-> 成本代理指標改以**執行秒數（execution_seconds）**取代 token 數（OOS 日誌未統一記錄 token 用量）。
+> OOS 日誌完整記錄 token 與執行秒數，兩項指標均可用。
 
 ---
 

@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_117",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 32.61
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18293,
+        "total_completion_tokens": 356,
+        "grand_total_tokens": 18649
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I placed an order about a week ago but haven't received it yet and I'm worried something went wrong with the shipping.\"",
+                "usage": {
+                    "prompt_tokens": 1517,
+                    "completion_tokens": 29,
+                    "total_tokens": 1546
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4388,
+                    "completion_tokens": 56,
+                    "total_tokens": 4444
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email is user117@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1594,
+                    "completion_tokens": 10,
+                    "total_tokens": 1604
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on your order and it's currently marked as shipped with a shipping date of May 1st. The total amount for this order is $399.28 USD, and it includes one item: Product_31. Since your order has already been shipped, I'm afraid we can't cancel or modify it at this point. If you have any other questions or concerns, please let me know.",
+                "full_trace": "I've checked on your order and it's currently marked as shipped with a shipping date of May 1st. The total amount for this order is $399.28 USD, and it includes one item: Product_31. Since your order has already been shipped, I'm afraid we can't cancel or modify it at this point. If you have any other questions or concerns, please let me know.",
+                "usage": {
+                    "prompt_tokens": 4309,
+                    "completion_tokens": 95,
+                    "total_tokens": 4404
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I understand that my order was shipped on May 1st, but I'm still concerned about receiving my item. Since it's been over a week and I haven't received it yet, can we discuss the possibility of a refund for the item? I paid $399.28 for Product_31 and I'd like to get a refund if it's not going to arrive.\"",
+                "usage": {
+                    "prompt_tokens": 1757,
+                    "completion_tokens": 77,
+                    "total_tokens": 1834
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your refund request for Product_31 has been submitted successfully. The status of this refund is currently pending, and you can expect to receive a refund amount of $185.52 USD once it's processed. You'll be notified via email when the refund is completed. Thank you for your patience and understanding. This concludes our conversation regarding your order.",
+                "full_trace": "Your refund request for Product_31 has been submitted successfully. The status of this refund is currently pending, and you can expect to receive a refund amount of $185.52 USD once it's processed. You'll be notified via email when the refund is completed. Thank you for your patience and understanding. This concludes our conversation regarding your order.",
+                "usage": {
+                    "prompt_tokens": 4728,
+                    "completion_tokens": 89,
+                    "total_tokens": 4817
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the refund status and amount from the fact sheet and fulfilled the customer's request for a refund.",
+            "s_completeness": "The agent provided all necessary information regarding the refund status and the expected communication method for completion.",
+            "s_tone": "The agent maintained a professional, polite, and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your refund request for Product_31 has been submitted successfully. The status of this refund is currently pending, and you can expect to receive a refund amount of $185.52 USD once it's processed."
+            ],
+            "s_completeness": [
+                "You'll be notified via email when the refund is completed."
+            ],
+            "s_tone": [
+                "Thank you for your patience and understanding. This concludes our conversation regarding your order."
+            ]
+        }
+    }
+}

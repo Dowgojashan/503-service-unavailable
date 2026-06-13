@@ -1,0 +1,85 @@
+{
+    "metadata": {
+        "case_id": "CASE_082",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 19.4
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 10481,
+        "total_completion_tokens": 172,
+        "grand_total_tokens": 10653
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I need to change the delivery address because it was entered incorrectly when I placed the order. The item is Product_6 and the total amount is $102.5.",
+                "usage": {
+                    "prompt_tokens": 1783,
+                    "completion_tokens": 51,
+                    "total_tokens": 1834
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4432,
+                    "completion_tokens": 56,
+                    "total_tokens": 4488
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user82@example.com. Now, about changing the delivery address for my order... I'd appreciate it if we could focus on resolving this issue as quickly as possible.",
+                "usage": {
+                    "prompt_tokens": 1872,
+                    "completion_tokens": 53,
+                    "total_tokens": 1925
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD08592089 is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user82@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2394,
+                    "completion_tokens": 12,
+                    "total_tokens": 2406
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 3,
+            "s_tone": 5
+        },
+        "final_score_0_100": 60.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the address change policy but provided illogical advice to contact a carrier for an order that is already refunded.",
+            "s_completeness": "The response is incomplete/confusing because it directs the customer to a carrier for an order that is not being shipped.",
+            "s_tone": "The agent maintained a professional and concise tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "Since your order ORD08592089 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Since your order ORD08592089 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

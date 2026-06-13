@@ -1,0 +1,87 @@
+{
+    "metadata": {
+        "case_id": "CASE_034",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 14.13
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 7575,
+        "total_completion_tokens": 119,
+        "grand_total_tokens": 7694
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm trying to change the shipping address because I just moved. Can you help me with this?",
+                "usage": {
+                    "prompt_tokens": 1507,
+                    "completion_tokens": 38,
+                    "total_tokens": 1545
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Action: Could you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 2163,
+                    "completion_tokens": 25,
+                    "total_tokens": 2188
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user34@example.com. I'd appreciate it if we could focus on changing my shipping address since I just moved and the package hasn't arrived yet. Can you help me with updating the address?",
+                "usage": {
+                    "prompt_tokens": 1609,
+                    "completion_tokens": 44,
+                    "total_tokens": 1653
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD32763465 is currently Shipped, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user34@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2296,
+                    "completion_tokens": 12,
+                    "total_tokens": 2308
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly followed identity verification protocols, accurately stated the policy regarding address changes, and provided factual order information.",
+            "s_completeness": "The agent clearly explained the limitation and provided a logical next step for the customer to pursue.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "Since your order ORD32763465 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "I'd be happy to help!",
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

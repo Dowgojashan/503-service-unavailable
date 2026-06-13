@@ -1,0 +1,85 @@
+{
+    "metadata": {
+        "case_id": "CASE_093",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 16.07
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9477,
+        "total_completion_tokens": 182,
+        "grand_total_tokens": 9659
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I was trying to check out but couldn't see the shipping options for my item, Product_86. Can you help me figure out what's going on?",
+                "usage": {
+                    "prompt_tokens": 1782,
+                    "completion_tokens": 49,
+                    "total_tokens": 1831
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (ORDxxx format) so I can look into this further?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) since they mentioned an issue with their order.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (ORDxxx format) so I can look into this further?\"",
+                "usage": {
+                    "prompt_tokens": 2846,
+                    "completion_tokens": 54,
+                    "total_tokens": 2900
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user93@example.com. Now, about the shipping options for Product_86, can you tell me how I can see them?",
+                "usage": {
+                    "prompt_tokens": 1871,
+                    "completion_tokens": 46,
+                    "total_tokens": 1917
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout. Your order ORD00785553 (Product_86) is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to verify it exists and retrieve its details.\n\n**Execution**:\nAction: query_order(email=\"user93@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2978,
+                    "completion_tokens": 33,
+                    "total_tokens": 3011
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent followed all verification protocols, correctly identified the order status, and accurately explained the business policy regarding delivery options.",
+            "s_completeness": "The agent provided all necessary information to answer the customer's question about shipping methods and order status.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order has been placed, delivery options cannot be changed through our system.",
+                "Your order ORD00785553 (Product_86) is currently Refunded."
+            ],
+            "s_completeness": [
+                "For future orders, you can select standard, express, or priority shipping at checkout."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

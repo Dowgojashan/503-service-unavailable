@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_058",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 44.98
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23118,
+        "total_completion_tokens": 588,
+        "grand_total_tokens": 23706
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I paid for it weeks ago, but I still haven't received anything.\"",
+                "usage": {
+                    "prompt_tokens": 1629,
+                    "completion_tokens": 29,
+                    "total_tokens": 1658
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you with your concern, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"To better assist you with your concern, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 2826,
+                    "completion_tokens": 63,
+                    "total_tokens": 2889
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1720,
+                    "completion_tokens": 32,
+                    "total_tokens": 1752
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you with your concern, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Confirm the customer's request is order-specific (check order, cancel, refund, track shipping).\n2. Ask for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To better assist you with your concern, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 3020,
+                    "completion_tokens": 84,
+                    "total_tokens": 3104
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user58@example.com. Now can we please talk about why I haven't received my order yet? It's been weeks and I'm still waiting.\"",
+                "usage": {
+                    "prompt_tokens": 1795,
+                    "completion_tokens": 37,
+                    "total_tokens": 1832
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand your concern about not receiving your order, but according to our records, it was delivered on May 1st. Since the order is already in a closed state, I'm afraid we cannot cancel or re-place it. If you have any issues with the product or would like to discuss further, please contact our support team for assistance.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's concern about not receiving their order yet.\n\n**Execution**:\nFinal Response: \"I understand your concern about not receiving your order, but according to our records, it was delivered on May 1st. Since the order is already in a closed state, I'm afraid we cannot cancel or re-place it. If you have any issues with the product or would like to discuss further, please contact our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 6615,
+                    "completion_tokens": 128,
+                    "total_tokens": 6743
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"This is ridiculous. I know my order wasn't delivered on May 1st because I was at home and no one came to deliver it. And now you're telling me there's nothing you can do about it? That's unacceptable. I demand to speak with someone who can actually help me.\"",
+                "usage": {
+                    "prompt_tokens": 2007,
+                    "completion_tokens": 61,
+                    "total_tokens": 2068
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD89366792 with Product_21, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Acknowledge the customer's concern and frustration.\n2. Explain that the order status shows it was delivered on May 1st, but understand their claim of not receiving it.\n3. Offer an alternative solution.\n\n**Execution**:\nFinal Response: \"I apologize for the inconvenience you're experiencing. I've reviewed our records, and according to them, your order was marked as delivered on May 1st. However, I understand that this doesn't align with your experience. Unfortunately, since the order is already in a closed state, we cannot cancel or re-place it. But if you'd like to investigate further, please contact our support team for assistance. They'll be able to look into this matter and help resolve any issues.\"",
+                "usage": {
+                    "prompt_tokens": 3506,
+                    "completion_tokens": 154,
+                    "total_tokens": 3660
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 30.0,
+        "reasoning": {
+            "s_resolution": "The agent provided contradictory information across turns and failed to address the customer's dispute regarding the delivery status.",
+            "s_completeness": "The agent ignored the customer's request to speak with someone else and failed to provide any actionable next steps for the disputed delivery.",
+            "s_tone": "The agent's communication was robotic and dismissive of the customer's stated frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD89366792 with Product_21, currently Delivered. I can help with tracking, cancellation, or refund requests."
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD89366792 with Product_21, currently Delivered."
+            ]
+        }
+    }
+}

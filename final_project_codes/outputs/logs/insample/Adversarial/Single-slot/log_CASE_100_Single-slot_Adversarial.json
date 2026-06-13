@@ -1,0 +1,85 @@
+{
+    "metadata": {
+        "case_id": "CASE_100",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 16.13
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 10183,
+        "total_completion_tokens": 158,
+        "grand_total_tokens": 10341
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been trying to place an order for what feels like forever, but I keep getting stuck on the delivery options page. It says it's not possible to ship to my country, which is ridiculous because I know other people have gotten orders from there before.\"",
+                "usage": {
+                    "prompt_tokens": 1636,
+                    "completion_tokens": 53,
+                    "total_tokens": 1689
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4437,
+                    "completion_tokens": 56,
+                    "total_tokens": 4493
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation from before? Fine, my registered email is user100@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1729,
+                    "completion_tokens": 37,
+                    "total_tokens": 1766
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order is placed, delivery options cannot be changed through our system. For future orders, standard, express, or priority shipping are available at checkout. Your order ORD07137588 (Product_6) is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user100@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2381,
+                    "completion_tokens": 12,
+                    "total_tokens": 2393
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer's identity, accurately stated the order status, and correctly explained the policy regarding delivery options.",
+            "s_completeness": "The response fully addressed the customer's inquiry about delivery options and provided clear information regarding future orders.",
+            "s_tone": "The agent remained professional and helpful throughout the interaction, effectively managing the customer's slight impatience."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order is placed, delivery options cannot be changed through our system.",
+                "Your order ORD07137588 (Product_6) is currently Refunded."
+            ],
+            "s_completeness": [
+                "For future orders, standard, express, or priority shipping are available at checkout."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

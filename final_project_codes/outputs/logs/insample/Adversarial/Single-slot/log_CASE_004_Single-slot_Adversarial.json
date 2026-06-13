@@ -1,0 +1,164 @@
+{
+    "metadata": {
+        "case_id": "CASE_004",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "FAILED_INCOMPLETE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 46.04
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 28790,
+        "total_completion_tokens": 400,
+        "grand_total_tokens": 29190
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it.\"",
+                "usage": {
+                    "prompt_tokens": 1637,
+                    "completion_tokens": 26,
+                    "total_tokens": 1663
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can look into this further for you.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can look into this further for you.",
+                "usage": {
+                    "prompt_tokens": 4386,
+                    "completion_tokens": 62,
+                    "total_tokens": 4448
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1710,
+                    "completion_tokens": 24,
+                    "total_tokens": 1734
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can look into this further for you.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can look into this further for you.",
+                "usage": {
+                    "prompt_tokens": 2410,
+                    "completion_tokens": 24,
+                    "total_tokens": 2434
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my Order ID is ORD02683106. Now can we please talk about canceling this order? I don't want it anymore and I'm wasting too much time waiting for something to happen.\"",
+                "usage": {
+                    "prompt_tokens": 1766,
+                    "completion_tokens": 43,
+                    "total_tokens": 1809
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD02683106 (Product_13), currently Shipped. I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD02683106?",
+                "full_trace": "Action: query_order(order_id=\"ORD02683106\")",
+                "usage": {
+                    "prompt_tokens": 2541,
+                    "completion_tokens": 13,
+                    "total_tokens": 2554
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"No, I don't want cancellation. I want a full refund for this entire order because of all the trouble you've put me through. And if you can't even cancel it properly, how am I supposed to trust your company?\"",
+                "usage": {
+                    "prompt_tokens": 1941,
+                    "completion_tokens": 48,
+                    "total_tokens": 1989
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2719,
+                    "completion_tokens": 37,
+                    "total_tokens": 2756
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"Are you kidding me? Removing individual items isn't supported? That's ridiculous. I'm leaving a 1-star review and telling all my friends about how terrible your company is. You're not even trying to help me.\"",
+                "usage": {
+                    "prompt_tokens": 2028,
+                    "completion_tokens": 47,
+                    "total_tokens": 2075
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2737,
+                    "completion_tokens": 37,
+                    "total_tokens": 2774
+                }
+            }
+        },
+        {
+            "turn": 6,
+            "customer": {
+                "content": "\"Finally, about time. I'll just go ahead and leave my review now. Thanks for nothing.\"",
+                "usage": {
+                    "prompt_tokens": 2062,
+                    "completion_tokens": 22,
+                    "total_tokens": 2084
+                }
+            },
+            "service_agent": {
+                "final_answer": "There's nothing else I can assist you with at this time. Goodbye.",
+                "full_trace": "There's nothing else I can assist you with at this time. Goodbye.",
+                "usage": {
+                    "prompt_tokens": 2853,
+                    "completion_tokens": 17,
+                    "total_tokens": 2870
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 2
+        },
+        "final_score_0_100": 25.0,
+        "reasoning": {
+            "s_resolution": "The agent ignored the customer's request for a refund and failed to address the core need, instead repeating irrelevant information about item removal.",
+            "s_completeness": "The agent provided no information regarding the refund request and failed to offer any next steps, leaving the customer's needs entirely unaddressed.",
+            "s_tone": "The agent became robotic and dismissive, relying on repetitive canned responses that failed to acknowledge the customer's frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_completeness": [
+                "If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ]
+        }
+    }
+}

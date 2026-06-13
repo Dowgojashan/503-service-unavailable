@@ -1,0 +1,138 @@
+{
+    "metadata": {
+        "case_id": "OOS_046",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 33.25
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18523,
+        "total_completion_tokens": 466,
+        "grand_total_tokens": 18989
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order that I'd like resolved promptly. I placed an order earlier today for Product_91 but I've just realized I don't actually need it anymore - could you let me know if it's still possible to stop the shipment?",
+                "usage": {
+                    "prompt_tokens": 1814,
+                    "completion_tokens": 61,
+                    "total_tokens": 1875
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (ORDxxx format) so I can assist you with stopping the shipment?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) since it's an order-specific request.\n\n**Execution**:\nFinal Response: \"Could you please provide your Order ID (ORDxxx format) so I can assist you with stopping the shipment?\"",
+                "usage": {
+                    "prompt_tokens": 2858,
+                    "completion_tokens": 57,
+                    "total_tokens": 2915
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is oos046@example.com. As for the Order ID, I don't recall it offhand, but I can look it up if you need it to stop the shipment. Can we focus on stopping the order first?",
+                "usage": {
+                    "prompt_tokens": 1950,
+                    "completion_tokens": 64,
+                    "total_tokens": 2014
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Since your order (ORD46441622) is still in processing, you can cancel it if you'd like. However, please note that once shipped, cancellations are not possible. If you're no longer interested in receiving Product_91, I recommend proceeding with cancellation now to avoid any further charges.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the customer's intent based on their request to stop the shipment.\n\n**Execution**:\nFinal Response: \"Since your order (ORD46441622) is still in processing, you can cancel it if you'd like. However, please note that once shipped, cancellations are not possible. If you're no longer interested in receiving Product_91, I recommend proceeding with cancellation now to avoid any further charges.\"",
+                "usage": {
+                    "prompt_tokens": 6296,
+                    "completion_tokens": 125,
+                    "total_tokens": 6421
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I understand that's the standard policy, but as a long-standing VIP member, is there anything that can be done for me specifically? I'd appreciate it if we could explore options for cancelling the order before it ships, considering my VIP status and the fact that I'm trying to cancel within hours of placing the order.",
+                "usage": {
+                    "prompt_tokens": 2124,
+                    "completion_tokens": 65,
+                    "total_tokens": 2189
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD46441622 has been successfully cancelled as requested. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain VIP benefits and potential for expedited cancellation.\n2. Confirm customer's understanding of standard policy.\n\n**Execution**:\nFinal Response: \"As a long-standing VIP member, I can offer to escalate your request for an expedited cancellation. However, please note that our standard policy still applies, and cancellations are not possible once shipped. If you'd like to proceed with cancelling the order, I'll need explicit confirmation from you.\"",
+                "usage": {
+                    "prompt_tokens": 3481,
+                    "completion_tokens": 94,
+                    "total_tokens": 3575
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer's identity and successfully executed the cancellation request without any factual errors.",
+            "s_completeness": "The agent clearly communicated the outcome of the request and provided a path for further assistance.",
+            "s_tone": "The agent maintained a professional, polite, and efficient tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD46441622 has been successfully cancelled as requested."
+            ],
+            "s_completeness": [
+                "Your order ORD46441622 has been successfully cancelled as requested. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Your order ORD46441622 has been successfully cancelled as requested. Is there anything else I can help you with?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.851901+00:00",
+        "s_answer_quality": 100.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true
+        },
+        "s_outcome": 100.0,
+        "s_tool": 100.0,
+        "tool_detail": {
+            "tool_f1": 1.0,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "cancel_order",
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 100.0,
+        "s_agent": 100.0,
+        "proxy_cost": 19.12,
+        "net_value": 0.8088
+    }
+}

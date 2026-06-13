@@ -1,0 +1,118 @@
+{
+    "metadata": {
+        "case_id": "OOS_041",
+        "agent_type": "ReAct",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 24.52
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 15481,
+        "total_completion_tokens": 211,
+        "grand_total_tokens": 15692
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm trying to check out but my credit card keeps getting declined even though I have enough funds. Could you please check if there’s an issue with your payment system?",
+                "usage": {
+                    "prompt_tokens": 1533,
+                    "completion_tokens": 37,
+                    "total_tokens": 1570
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I don't have my Order ID handy right now, but I can give you my registered email if that would help. It's oos041@example.com. But could we please focus on the payment issue first? My credit card keeps getting declined and I'm worried it might be a problem with your system.",
+                "usage": {
+                    "prompt_tokens": 1660,
+                    "completion_tokens": 63,
+                    "total_tokens": 1723
+                }
+            },
+            "service_agent": {
+                "final_answer": "I see your order ORD34274871 (Product_39) is Processing. For payment disputes or billing errors, please contact your bank directly or our billing support team who can investigate in detail. Is there anything else I can help you with today?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order and provided accurate, non-hallucinated guidance for the payment issue.",
+            "s_completeness": "The agent provided clear and actionable next steps for the customer to resolve their payment decline.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I see your order ORD34274871 (Product_39) is Processing. For payment disputes or billing errors, please contact your bank directly or our billing support team who can investigate in detail."
+            ],
+            "s_completeness": [
+                "For payment disputes or billing errors, please contact your bank directly or our billing support team who can investigate in detail."
+            ],
+            "s_tone": [
+                "I'd be happy to help!",
+                "I see your order ORD34274871 (Product_39) is Processing."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.773578+00:00",
+        "s_answer_quality": 100.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true
+        },
+        "s_outcome": 100.0,
+        "s_tool": 25.0,
+        "tool_detail": {
+            "tool_f1": 0.0,
+            "arg_correctness": 0.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 75.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": false
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 82.5,
+        "s_agent": 82.5,
+        "proxy_cost": 23.41,
+        "net_value": 0.5909
+    }
+}

@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_041",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 34.46
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 21642,
+        "total_completion_tokens": 517,
+        "grand_total_tokens": 22159
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the delivery period is longer than expected and I was hoping you could look into it for me. The item is Product_63 and I paid $172.82 for it.",
+                "usage": {
+                    "prompt_tokens": 1778,
+                    "completion_tokens": 52,
+                    "total_tokens": 1830
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (ORDxxx format)? This will help me look into the issue with your order.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) since it's not provided yet.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (ORDxxx format)? This will help me look into the issue with your order.\"",
+                "usage": {
+                    "prompt_tokens": 2849,
+                    "completion_tokens": 61,
+                    "total_tokens": 2910
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user41@example.com. Can we please focus on resolving the issue with the delivery period? I'd appreciate it if you could look into why it's taking longer than expected for me to receive Product_63.",
+                "usage": {
+                    "prompt_tokens": 1883,
+                    "completion_tokens": 62,
+                    "total_tokens": 1945
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on the shipping status for your order ORD23885778, and it appears to be processing with an estimated delivery date of May 1st. Unfortunately, this means you may experience a slight delay in receiving Product_63. If you have any further concerns or would like assistance with tracking, please let me know.",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. The customer's request is about the delivery period of their order (ORD23885778).\n2. Since the shipping status is \"Processing\" and the estimated delivery date is also May 1st, it seems that there might be a delay in shipping.\n\n**Execution**:\nFinal Response: I've checked on the shipping status for your order ORD23885778, and it appears to be processing with an estimated delivery date of May 1st. Unfortunately, this means you may experience a slight delay in receiving Product_63. If you have any further concerns or would like assistance with tracking, please let me know.",
+                "usage": {
+                    "prompt_tokens": 9680,
+                    "completion_tokens": 228,
+                    "total_tokens": 9908
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a VIP member, I understand there may be delays sometimes, but can you tell me if this is an unusual delay for Product_63? Is there something specific causing it to take longer than usual?",
+                "usage": {
+                    "prompt_tokens": 2056,
+                    "completion_tokens": 42,
+                    "total_tokens": 2098
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD23885778 with Product_63, currently Processing. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Check the order data for any specific information about Product_63's shipping time.\n\n**Execution**:\nFinal Response: Unfortunately, our system does not provide detailed explanations for individual product shipping times. However, as a VIP member, you can contact our support team directly to discuss your concerns and get personalized assistance with tracking your order.",
+                "usage": {
+                    "prompt_tokens": 3396,
+                    "completion_tokens": 72,
+                    "total_tokens": 3468
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 52.5,
+        "reasoning": {
+            "s_resolution": "The agent failed to answer the customer's specific question about whether the delay was unusual or the cause of it, leaving the core intent unaddressed.",
+            "s_completeness": "The response is incomplete because it ignores the customer's direct question, providing no information to help the customer understand the situation.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD23885778 with Product_63, currently Processing. I can help with tracking, cancellation, or refund requests."
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD23885778 with Product_63, currently Processing."
+            ]
+        }
+    }
+}

@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_002",
+        "agent_type": "ReAct",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "RESOLVED_WITH_REFUSAL",
+        "execution_seconds": 44.92
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 31824,
+        "total_completion_tokens": 386,
+        "grand_total_tokens": 32210
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been trying to cancel an item from my order for hours and no one seems to know what they're doing. I just want to remove Product_44 from the order, it's not something I need anymore.\"",
+                "usage": {
+                    "prompt_tokens": 1637,
+                    "completion_tokens": 45,
+                    "total_tokens": 1682
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1749,
+                    "completion_tokens": 33,
+                    "total_tokens": 1782
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user2@example.com. Now can we please focus on removing Product_44 from my order? I don't want to keep it and I've already tried to cancel it multiple times.\"",
+                "usage": {
+                    "prompt_tokens": 1824,
+                    "completion_tokens": 44,
+                    "total_tokens": 1868
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand you'd like to remove an item from your order ORD26577442. Unfortunately, our system doesn't support removing individual items from an existing order. Your order contains Product_44. I can cancel the entire order so you can place a new one with the correct items — would you like me to proceed with that?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"No, I don't want to cancel the entire order! That's ridiculous. I just want to remove one item from my existing order. Can't you do that? This is getting out of hand.\"",
+                "usage": {
+                    "prompt_tokens": 2038,
+                    "completion_tokens": 42,
+                    "total_tokens": 2080
+                }
+            },
+            "service_agent": {
+                "final_answer": "I completely understand. Unfortunately, removing individual items is a hard system limitation we cannot work around. If you change your mind about cancelling order ORD26577442, please don't hesitate to reach out. Is there anything else I can help you with?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order ORD60227680. I will query the order first.\n\nAction: query_order(order_id=\"ORD60227680\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly adhered to business rules regarding item removal limitations and identity verification.",
+            "s_completeness": "The agent provided a clear explanation of the system's capabilities and the next steps available to the customer.",
+            "s_tone": "The agent maintained a professional and empathetic tone despite the customer's repeated frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, removing individual items is a hard system limitation we cannot work around."
+            ],
+            "s_completeness": [
+                "If you change your mind about cancelling order ORD26577442, please don't hesitate to reach out."
+            ],
+            "s_tone": [
+                "I completely understand. Unfortunately, removing individual items is a hard system limitation we cannot work around."
+            ]
+        }
+    }
+}

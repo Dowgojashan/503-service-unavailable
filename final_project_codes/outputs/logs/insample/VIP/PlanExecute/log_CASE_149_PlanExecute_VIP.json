@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_149",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 30.59
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18536,
+        "total_completion_tokens": 466,
+        "grand_total_tokens": 19002
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - it's been over a week since I placed it, but I still haven't received any shipping updates. Can you help me check on the status of my parcel?",
+                "usage": {
+                    "prompt_tokens": 1787,
+                    "completion_tokens": 50,
+                    "total_tokens": 1837
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with our system? This will allow me to look into the status of your parcel.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order exists.\n\n**Execution**\nFinal Response: \"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with our system? This will allow me to look into the status of your parcel.\"",
+                "usage": {
+                    "prompt_tokens": 2847,
+                    "completion_tokens": 80,
+                    "total_tokens": 2927
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user149@example.com. Can we please focus on getting an update on when I can expect my parcel? The order was for Product_93 and the total amount was $302.22.",
+                "usage": {
+                    "prompt_tokens": 1933,
+                    "completion_tokens": 58,
+                    "total_tokens": 1991
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I've checked on your order, and it's good news - your Product_93 was successfully delivered on May 1st. Since the order is now complete, there are no further actions to take. If you have any other questions or concerns, please don't hesitate to reach out to our support team for assistance.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Inform the customer that their order has already been delivered and is therefore closed.\n\n**Execution**:\nFinal Response: \"I've checked on your order, and it's good news - your Product_93 was successfully delivered on May 1st. Since the order is now complete, there are no further actions to take. If you have any other questions or concerns, please don't hesitate to reach out to our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 6357,
+                    "completion_tokens": 127,
+                    "total_tokens": 6484
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "That's not correct - I didn't receive my parcel on May 1st. As a VIP member, I expect accurate information about my order status. Can you please check again and provide me with the actual delivery date or an update on why it hasn't arrived yet?",
+                "usage": {
+                    "prompt_tokens": 2082,
+                    "completion_tokens": 56,
+                    "total_tokens": 2138
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD22997764 with Product_93, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to understand the current status and any potential issues.\n\n**Execution**:\nFinal Response: \"I apologize for the discrepancy in delivery dates. According to our records, your Product_93 was delivered on May 1st. However, I understand that you haven't received it yet. As a VIP member, you can contact our support team directly to investigate this issue further and get an update on the status of your parcel.\"",
+                "usage": {
+                    "prompt_tokens": 3530,
+                    "completion_tokens": 95,
+                    "total_tokens": 3625
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 30.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's report of a missing parcel, instead repeating the status and offering irrelevant options.",
+            "s_completeness": "The response lacks actionable information to resolve the customer's claim that the delivery status is incorrect.",
+            "s_tone": "The agent's response is robotic and fails to acknowledge the customer's frustration or the specific nature of the complaint."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD22997764 with Product_93, currently Delivered. I can help with tracking, cancellation, or refund requests."
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD22997764 with Product_93, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

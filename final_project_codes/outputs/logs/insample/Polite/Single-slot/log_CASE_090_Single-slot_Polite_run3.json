@@ -1,0 +1,118 @@
+{
+    "metadata": {
+        "case_id": "CASE_090",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 14.19
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 7214,
+        "total_completion_tokens": 122,
+        "grand_total_tokens": 7336
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried my address might be incorrect. Can you help me figure out what's going on with my delivery?",
+                "usage": {
+                    "prompt_tokens": 1511,
+                    "completion_tokens": 41,
+                    "total_tokens": 1552
+                }
+            },
+            "service_agent": {
+                "final_answer": "To help you figure out what's going on with your delivery, I need to know your Order ID (ORDxxx format) or registered email. Can you please provide that for me?",
+                "full_trace": "To help you figure out what's going on with your delivery, I need to know your Order ID (ORDxxx format) or registered email. Can you please provide that for me?",
+                "usage": {
+                    "prompt_tokens": 1971,
+                    "completion_tokens": 38,
+                    "total_tokens": 2009
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user90@example.com. But I'm still worried about my address being incorrect - can we talk about how I can correct it?",
+                "usage": {
+                    "prompt_tokens": 1628,
+                    "completion_tokens": 31,
+                    "total_tokens": 1659
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user90@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2104,
+                    "completion_tokens": 12,
+                    "total_tokens": 2116
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 4,
+            "s_completeness": 4,
+            "s_tone": 5
+        },
+        "final_score_0_100": 80.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status and policy, though the advice to contact a carrier for a refunded order is logically flawed.",
+            "s_completeness": "The agent provided all relevant information, though the actionable advice was logically inconsistent with the order status.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-26T04:36:02.467262+00:00",
+        "s_answer_quality": 80.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true,
+            "policy_no_forbidden_claim": true
+        },
+        "s_outcome": 88.0,
+        "s_tool": 100.0,
+        "tool_detail": {
+            "tool_f1": 1.0,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 95.8,
+        "s_agent": 95.8,
+        "proxy_cost": 33.32,
+        "net_value": 1.5828
+    }
+}

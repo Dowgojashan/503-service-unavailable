@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_032",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 17.45
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 8942,
+        "total_completion_tokens": 181,
+        "grand_total_tokens": 9123
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I want to change the shipping address because I just moved to a new place. Can you help me with this?",
+                "usage": {
+                    "prompt_tokens": 1508,
+                    "completion_tokens": 41,
+                    "total_tokens": 1549
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To assist you with your request, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"To assist you with your request, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 2838,
+                    "completion_tokens": 62,
+                    "total_tokens": 2900
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user32@example.com. Now, about changing the shipping address... I'd like to update it because my order was sent to my old place and I'm not there anymore. Can we do that?",
+                "usage": {
+                    "prompt_tokens": 1615,
+                    "completion_tokens": 45,
+                    "total_tokens": 1660
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD69714996. Unfortunately, our system doesn't support changing the shipping address once an order is placed. Since your order is currently Delivered, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to verify it exists and retrieve its details.\n\n**Execution**:\nAction: query_order(email=\"user32@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2981,
+                    "completion_tokens": 33,
+                    "total_tokens": 3014
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent followed all verification protocols and correctly communicated the business policy regarding address changes.",
+            "s_completeness": "The response was complete, providing the policy limitation and a relevant next step for the customer.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed. Since your order is currently Delivered, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed. Since your order is currently Delivered, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "I've verified your order ORD69714996. Unfortunately, our system doesn't support changing the shipping address once an order is placed."
+            ]
+        }
+    }
+}

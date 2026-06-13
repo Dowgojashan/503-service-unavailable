@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_020",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 28.75
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 13826,
+        "total_completion_tokens": 317,
+        "grand_total_tokens": 14143
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit. Can you tell me what the typical delivery time is for this product?",
+                "usage": {
+                    "prompt_tokens": 1510,
+                    "completion_tokens": 43,
+                    "total_tokens": 1553
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help me assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with this order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order exists.\n\n**Execution**:\nFinal Response: \"To help me assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with this order?\"",
+                "usage": {
+                    "prompt_tokens": 2840,
+                    "completion_tokens": 66,
+                    "total_tokens": 2906
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email address is user20@example.com. I'd appreciate it if we could discuss the refund policy for this order. Can you tell me under what circumstances I can ask for a refund?",
+                "usage": {
+                    "prompt_tokens": 1614,
+                    "completion_tokens": 40,
+                    "total_tokens": 1654
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. If you believe your package was lost in transit, please contact our support team to open an investigation. Your order ORD50580084 (Product_54) is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the customer's order.\n\n**Execution**:\nAction: query_order(email=\"user20@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2975,
+                    "completion_tokens": 33,
+                    "total_tokens": 3008
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I appreciate the information about the standard policy, but I'm still unsure about the circumstances under which I can ask for a refund if my package is lost in transit. Can you clarify this part of the policy?",
+                "usage": {
+                    "prompt_tokens": 1768,
+                    "completion_tokens": 43,
+                    "total_tokens": 1811
+                }
+            },
+            "service_agent": {
+                "final_answer": "Beyond damaged goods, incorrect items, and quality issues, refunds may also apply when a product significantly differs from its listing description. For example, receiving a red item when the listing showed blue, or a product missing a key advertised feature. Items that simply don't meet personal expectations are generally not eligible. Your order ORD50580084 (Product_54) is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to understand the current status and any relevant details.\n\n**Execution**:\nFinal Response: \"According to our policy, if your package is lost in transit, you can request a refund within 30 days of the original purchase date. Since your order was placed about a week ago, you're still within this timeframe. If you'd like to proceed with a refund, I'll guide you through the process.\"",
+                "usage": {
+                    "prompt_tokens": 3119,
+                    "completion_tokens": 92,
+                    "total_tokens": 3211
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 4
+        },
+        "final_score_0_100": 95.0,
+        "reasoning": {
+            "s_resolution": "The agent accurately addressed the customer's request for policy information without inventing any facts about the specific order.",
+            "s_completeness": "The response provided the necessary policy information and confirmed the order status, fully answering the customer's query.",
+            "s_tone": "The tone was professional and helpful, though the repetitive inclusion of the order status in every turn was slightly robotic."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Beyond damaged goods, incorrect items, and quality issues, refunds may also apply when a product significantly differs from its listing description."
+            ],
+            "s_completeness": [
+                "Your order ORD50580084 (Product_54) is currently Shipped. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Your order ORD50580084 (Product_54) is currently Shipped. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

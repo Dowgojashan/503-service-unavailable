@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_027",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 42.46
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 22730,
+        "total_completion_tokens": 499,
+        "grand_total_tokens": 23229
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been trying to check the allowed payment methods for my order, but I don't know what options are available. This is ridiculous - it's not like I'm asking for something complicated.\"",
+                "usage": {
+                    "prompt_tokens": 1640,
+                    "completion_tokens": 40,
+                    "total_tokens": 1680
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To clarify, you're asking about our accepted payment methods? We support Visa, Mastercard, Amex, and digital wallets.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Identify request type (policy or order-specific)\n2. If policy question, provide answer directly\n3. If order-specific, ask for Order ID or email\n\n**Execution**\nFinal Response: \"To clarify, you're asking about our accepted payment methods? We support Visa, Mastercard, Amex, and digital wallets.\"",
+                "usage": {
+                    "prompt_tokens": 5776,
+                    "completion_tokens": 192,
+                    "total_tokens": 5968
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"That's great, but I already knew that. What I want to know is how to check which payment methods are actually allowed for my specific order. Can you tell me where I can find that information?\"",
+                "usage": {
+                    "prompt_tokens": 1736,
+                    "completion_tokens": 42,
+                    "total_tokens": 1778
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To check which payment methods are allowed for your specific order, I'll need to see your Order ID (ORDxxx format) or registered email first.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Determine if the customer's request is about policy or an order-specific issue.\n\n**Execution**\nFinal Response: \"To check which payment methods are allowed for your specific order, I'll need to see your Order ID (ORDxxx format) or registered email first.\"",
+                "usage": {
+                    "prompt_tokens": 3135,
+                    "completion_tokens": 58,
+                    "total_tokens": 3193
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up which payment methods are allowed for my order without needing all this extra information?\"",
+                "usage": {
+                    "prompt_tokens": 1821,
+                    "completion_tokens": 35,
+                    "total_tokens": 1856
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Determine if the customer's request is about policy or an order-specific issue.\n2. If it's a policy question, call get_policy(policy_type=\"payment\") immediately.\n\n**Execution**\nAction: get_policy(policy_type=\"payment\")",
+                "usage": {
+                    "prompt_tokens": 3328,
+                    "completion_tokens": 52,
+                    "total_tokens": 3380
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"Fine, my email is user27@example.com. But I still don't see why I have to give you all this information just to find out which payment methods are allowed for my order. Can you please just tell me how to check it?\"",
+                "usage": {
+                    "prompt_tokens": 1962,
+                    "completion_tokens": 51,
+                    "total_tokens": 2013
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout. For your order ORD63589792 (Product_4), payment has already been processed and your order is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Verify the order exists using the provided email.\n\n**Execution**\nAction: query_order(email=\"user27@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3332,
+                    "completion_tokens": 29,
+                    "total_tokens": 3361
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 52.5,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order and status but failed to answer the customer's specific question regarding how to check payment methods for a specific order.",
+            "s_completeness": "The response provided general payment information rather than explaining the process for checking specific order payment methods, leaving the customer's core need unaddressed.",
+            "s_tone": "The agent maintained a professional, polite, and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD63589792 (Product_4), payment has already been processed and your order is currently Processing."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

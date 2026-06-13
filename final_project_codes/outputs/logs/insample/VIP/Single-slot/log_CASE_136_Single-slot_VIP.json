@@ -1,0 +1,85 @@
+{
+    "metadata": {
+        "case_id": "CASE_136",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 19.41
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 10437,
+        "total_completion_tokens": 165,
+        "grand_total_tokens": 10602
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the secondary delivery address isn't valid and I need help resolving this so I can get my package delivered correctly.",
+                "usage": {
+                    "prompt_tokens": 1783,
+                    "completion_tokens": 39,
+                    "total_tokens": 1822
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4408,
+                    "completion_tokens": 56,
+                    "total_tokens": 4464
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user136@example.com. Can we please focus on fixing the invalid secondary delivery address? I'd appreciate it if you could help me resolve this issue so I can get my package delivered correctly.",
+                "usage": {
+                    "prompt_tokens": 1859,
+                    "completion_tokens": 58,
+                    "total_tokens": 1917
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD72256085 is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user136@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2387,
+                    "completion_tokens": 12,
+                    "total_tokens": 2399
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 3,
+            "s_tone": 5
+        },
+        "final_score_0_100": 60.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly stated the address change policy but gave illogical advice by telling the customer to contact a carrier for an order that is already refunded.",
+            "s_completeness": "The information provided is confusing and unhelpful because it directs the customer to a carrier for a non-existent delivery.",
+            "s_tone": "The agent was professional and followed the identity verification protocol correctly."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "Since your order ORD72256085 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Since your order ORD72256085 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further."
+            ]
+        }
+    }
+}

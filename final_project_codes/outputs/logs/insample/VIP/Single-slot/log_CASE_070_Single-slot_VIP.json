@@ -1,0 +1,105 @@
+{
+    "metadata": {
+        "case_id": "CASE_070",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 37.52
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 19432,
+        "total_completion_tokens": 409,
+        "grand_total_tokens": 19841
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order that I'd like resolved promptly. My refund for Product_57 hasn't been processed yet, and it's been over two weeks since I initiated the return.",
+                "usage": {
+                    "prompt_tokens": 1786,
+                    "completion_tokens": 48,
+                    "total_tokens": 1834
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4426,
+                    "completion_tokens": 56,
+                    "total_tokens": 4482
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user70@example.com. Can we please focus on getting an update on the status of my refund for Product_57? I'd appreciate it if you could check on that for me.",
+                "usage": {
+                    "prompt_tokens": 1875,
+                    "completion_tokens": 57,
+                    "total_tokens": 1932
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on the status of your refund for Product_57. According to our records, your order (ORD93976191) was shipped on May 1st with a total amount of $443.39. Since it's already been shipped, I'm afraid we can't process any further refunds or cancellations at this time. If you have any other questions or concerns, please don't hesitate to reach out.",
+                "full_trace": "I've checked on the status of your refund for Product_57. According to our records, your order (ORD93976191) was shipped on May 1st with a total amount of $443.39. Since it's already been shipped, I'm afraid we can't process any further refunds or cancellations at this time. If you have any other questions or concerns, please don't hesitate to reach out.",
+                "usage": {
+                    "prompt_tokens": 4440,
+                    "completion_tokens": 98,
+                    "total_tokens": 4538
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a long-standing VIP member, is there anything that can be done for me specifically regarding this refund? I understand that's the standard policy, but I'd appreciate it if you could look into making an exception in my case. Can we please discuss further options or alternatives since shipping has already occurred?",
+                "usage": {
+                    "prompt_tokens": 2091,
+                    "completion_tokens": 61,
+                    "total_tokens": 2152
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your refund request for Product_57 has been submitted successfully. The status of your refund is currently pending, and you can expect to receive a refund amount of $94.87 once it's processed. You'll be notified via email when this happens. Thank you for choosing our service, and we're glad we could assist you with this matter.",
+                "full_trace": "Your refund request for Product_57 has been submitted successfully. The status of your refund is currently pending, and you can expect to receive a refund amount of $94.87 once it's processed. You'll be notified via email when this happens. Thank you for choosing our service, and we're glad we could assist you with this matter.",
+                "usage": {
+                    "prompt_tokens": 4814,
+                    "completion_tokens": 89,
+                    "total_tokens": 4903
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 75.0,
+        "reasoning": {
+            "s_resolution": "The agent initially provided false information claiming refunds were impossible, which contradicts both the fact sheet and business policy, though it was corrected in the final turn.",
+            "s_completeness": "The final response successfully provided all necessary information regarding the refund status and next steps.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Since it's already been shipped, I'm afraid we can't process any further refunds or cancellations at this time.",
+                "The status of your refund is currently pending, and you can expect to receive a refund amount of $94.87 once it's processed."
+            ],
+            "s_completeness": [
+                "The status of your refund is currently pending, and you can expect to receive a refund amount of $94.87 once it's processed. You'll be notified via email when this happens."
+            ],
+            "s_tone": [
+                "Thank you for choosing our service, and we're glad we could assist you with this matter."
+            ]
+        }
+    }
+}

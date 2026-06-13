@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_076",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 32.4
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 17318,
+        "total_completion_tokens": 319,
+        "grand_total_tokens": 17637
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the payment method isn't showing up correctly on my account summary. Can you look into this for me?",
+                "usage": {
+                    "prompt_tokens": 1786,
+                    "completion_tokens": 38,
+                    "total_tokens": 1824
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this issue for you?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this issue for you?",
+                "usage": {
+                    "prompt_tokens": 4411,
+                    "completion_tokens": 66,
+                    "total_tokens": 4477
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user76@example.com. Now, about the payment method issue... I'd like to know which payment modalities are available for my order so I can choose one and proceed with the purchase. Can you list them for me?",
+                "usage": {
+                    "prompt_tokens": 1875,
+                    "completion_tokens": 65,
+                    "total_tokens": 1940
+                }
+            },
+            "service_agent": {
+                "final_answer": "Based on our policy, you have several payment options available for your order: Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security. We also accept USD, EUR, GBP, and other major currencies.\n\nIs there anything else I can assist you with regarding your order?",
+                "full_trace": "Based on our policy, you have several payment options available for your order: Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security. We also accept USD, EUR, GBP, and other major currencies.\n\nIs there anything else I can assist you with regarding your order?",
+                "usage": {
+                    "prompt_tokens": 4475,
+                    "completion_tokens": 85,
+                    "total_tokens": 4560
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "Actually, I was hoping for a list of payment modalities available specifically for my order, Product_90. The options you mentioned are general and don't address my issue. Can you please provide the exact payment methods that can be used for this particular item?",
+                "usage": {
+                    "prompt_tokens": 2072,
+                    "completion_tokens": 53,
+                    "total_tokens": 2125
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD29643981 is currently Delivered, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user76@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2699,
+                    "completion_tokens": 12,
+                    "total_tokens": 2711
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 3
+        },
+        "final_score_0_100": 10.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's request and provided an irrelevant, canned response about shipping and delivery.",
+            "s_completeness": "The response failed to provide any information relevant to the customer's query, offering no actionable value.",
+            "s_tone": "While the language used is polite, the response is robotic and entirely off-topic, failing to address the user's actual needs."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD29643981 is currently Delivered, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD29643981 is currently Delivered, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

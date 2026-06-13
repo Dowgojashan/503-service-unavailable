@@ -1,0 +1,75 @@
+@startuml fig0_experiment_flow
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Arial"
+skinparam defaultFontSize 12
+skinparam arrowColor #2C3E50
+skinparam activityBackgroundColor #EBF5FB
+skinparam activityBorderColor #2E86C1
+skinparam activityBorderThickness 1.5
+skinparam activityDiamondBackgroundColor #FEF9E7
+skinparam activityDiamondBorderColor #D4AC0D
+skinparam swimlaneBorderThickness 1
+skinparam swimlaneBorderColor #AAAAAA
+skinparam titleFontSize 14
+skinparam titleFontStyle bold
+
+title Simulation-Based Benchmark: Experiment Pipeline
+
+|#EAF2FF| Data Preparation |
+start
+:Load **Fact Sheets**\n· 150 IS cases (known intents)\n· 50 OOS cases (9 novel intents)\n· JSON ground truth + expected tools;
+
+fork
+  :Polite\nPersona;
+fork again
+  :Adversarial\nPersona;
+fork again
+  :VIP\nPersona;
+end fork
+
+:Cross **4 Architectures** × **3 Personas**\n→ IS: 1,800 conversations\n→ OOS: 600 conversations;
+
+|#E9F7EF| Simulation Loop |
+repeat
+  :**Customer Agent** (Gemini-2.0-flash-lite)\nGenerates turn message\nper Persona script;
+
+  :Runner guards\n· Identity check (require Order ID / email)\n· DEDUP (block repeated tool calls)\n· Loop detection (exact-match on last 2 responses);
+
+  :Service Agent (**llama3.1:8b**)\n[Single-slot / ReAct / Reflection / PlanExecute];
+
+  if (Tool call\ndetected?) then (yes)
+    :Execute simulated tool\n**query_order** · **cancel_order**\n**apply_refund** · **get_policy**;
+    :Return observation to agent;
+  else (no)
+  endif
+
+  :Check termination condition;
+
+repeat while (Conversation continues?) is (yes)
+->no;
+
+:Record final status\n**SUCCESS** / **LOOP_FAILURE** / **FAILED_INCOMPLETE**;
+
+|#FEF9E7| Evaluation |
+fork
+  :Rule-based Metrics\n· S_Tool (ToolF1 + ArgCorrectness)\n· S_Trajectory (flow, loops, identity)\n· S_Efficiency (token proxy)\n· I_fatal (safety gate);
+fork again
+  :LLM-as-Judge (**Gemini**)\n· Blind evaluation (no arch name)\n· CoT scoring\n· S_Resolution · S_Completeness · S_Tone\n→ S_AnswerQuality (0–100);
+end fork
+
+:Compute **S_Agent**\n= 0.50 · S_Outcome + 0.20 · S_Tool\n+ 0.10 · S_Traj + 0.20 · S_Eff\n(capped at 40 if I_fatal = 1);
+
+:Compute **ProxyCost · NetValue · ΔMB**;
+
+|#F5EEF8| Analysis |
+fork
+  :**PSS** (ProSA)\nCross-Persona sensitivity\nper architecture & intent;
+fork again
+  :**Weight Sensitivity**\n969 weight combinations\nRank-1 stability check;
+fork again
+  :**IS → OOS Gap**\nGeneralization drop\n& NetValue collapse;
+end fork
+
+stop
+
+@enduml

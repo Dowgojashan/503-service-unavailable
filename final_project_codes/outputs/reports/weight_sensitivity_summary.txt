@@ -1,0 +1,110 @@
+========================================================================
+S_Agent Weight Sensitivity Analysis
+  Input : outputs\reports\s_agent_results_full.csv  (1944 rows, 4 architectures x 486 cases)
+  Sweep : step=0.05, min_weight=0.05, total combos=969
+  Baseline weights: Outcome=0.35 Tool=0.25 Traj=0.2 Eff=0.2
+========================================================================
+
+--- Baseline scores (current published weights) ---
+  #1  PlanExecute     mean=85.01
+  #2  Single-slot     mean=80.96
+  #3  Reflection      mean=75.43
+  #4  ReAct           mean=71.95
+
+--- Rank Frequency (% of all weight combos) ---
+  Architecture      Rank 1    Rank 2    Rank 3    Rank 4
+  --------------------------------------------------------
+  ReAct               0.0%      8.0%     26.2%     65.7%
+  PlanExecute       100.0%      0.0%      0.0%      0.0%
+  Reflection          0.0%      0.0%     65.7%     34.3%
+  Single-slot         0.0%     92.0%      8.0%      0.0%
+
+--- Top-1 Rank Stability ---
+  Baseline top-1: PlanExecute
+  Weight combos where top-1 differs: 0 / 969 (0.0%)
+  Top-1 is stable across ALL weight combinations.
+
+--- Score Range Across All Weight Combos (min / mean / max) ---
+  PlanExecute     min=75.3  mean=87.0  max=96.4  range=21.1
+  Single-slot     min=73.8  mean=82.8  max=96.4  range=22.6
+  Reflection      min=64.3  mean=76.0  max=94.8  range=30.5
+  ReAct           min=52.5  mean=71.6  max=89.4  range=36.9
+
+--- Weight Impact on Score Gap (ReAct vs Single-slot) ---
+  (Shows how gap changes as each weight increases, others averaged)
+  W_OUTCOME:
+    0.05 → avg gap = -16.11
+    0.10 → avg gap = -14.87
+    0.15 → avg gap = -13.63
+    0.20 → avg gap = -12.40
+    0.25 → avg gap = -11.16
+    0.30 → avg gap = -9.92
+    0.35 → avg gap = -8.68
+    0.40 → avg gap = -7.44
+    0.45 → avg gap = -6.21
+    0.50 → avg gap = -4.97
+    0.55 → avg gap = -3.73
+    0.60 → avg gap = -2.49
+    0.65 → avg gap = -1.25
+    0.70 → avg gap = -0.02
+    0.75 → avg gap = +1.22
+    0.80 → avg gap = +2.46
+    0.85 → avg gap = +3.70
+  W_TOOL:
+    0.05 → avg gap = -7.77
+    0.10 → avg gap = -8.62
+    0.15 → avg gap = -9.46
+    0.20 → avg gap = -10.31
+    0.25 → avg gap = -11.16
+    0.30 → avg gap = -12.00
+    0.35 → avg gap = -12.85
+    0.40 → avg gap = -13.70
+    0.45 → avg gap = -14.55
+    0.50 → avg gap = -15.39
+    0.55 → avg gap = -16.24
+    0.60 → avg gap = -17.09
+    0.65 → avg gap = -17.94
+    0.70 → avg gap = -18.78
+    0.75 → avg gap = -19.63
+    0.80 → avg gap = -20.48
+    0.85 → avg gap = -21.32
+  W_TRAJECTORY:
+    0.05 → avg gap = -4.36
+    0.10 → avg gap = -6.06
+    0.15 → avg gap = -7.76
+    0.20 → avg gap = -9.46
+    0.25 → avg gap = -11.16
+    0.30 → avg gap = -12.86
+    0.35 → avg gap = -14.56
+    0.40 → avg gap = -16.26
+    0.45 → avg gap = -17.96
+    0.50 → avg gap = -19.66
+    0.55 → avg gap = -21.36
+    0.60 → avg gap = -23.06
+    0.65 → avg gap = -24.76
+    0.70 → avg gap = -26.46
+    0.75 → avg gap = -28.16
+    0.80 → avg gap = -29.86
+    0.85 → avg gap = -31.56
+  W_EFFICIENCY:
+    0.05 → avg gap = -16.39
+    0.10 → avg gap = -15.09
+    0.15 → avg gap = -13.78
+    0.20 → avg gap = -12.47
+    0.25 → avg gap = -11.16
+    0.30 → avg gap = -9.85
+    0.35 → avg gap = -8.54
+    0.40 → avg gap = -7.23
+    0.45 → avg gap = -5.92
+    0.50 → avg gap = -4.61
+    0.55 → avg gap = -3.30
+    0.60 → avg gap = -1.99
+    0.65 → avg gap = -0.68
+    0.70 → avg gap = +0.63
+    0.75 → avg gap = +1.94
+    0.80 → avg gap = +3.24
+    0.85 → avg gap = +4.55
+
+========================================================================
+Output CSV : outputs\reports\weight_sensitivity_ranks.csv
+========================================================================

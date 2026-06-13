@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_122",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 29.61
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18265,
+        "total_completion_tokens": 416,
+        "grand_total_tokens": 18681
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm having trouble with my online payment for an order - it keeps getting declined and I've tried multiple cards. As a VIP member, I expect this to be sorted quickly.",
+                "usage": {
+                    "prompt_tokens": 1781,
+                    "completion_tokens": 39,
+                    "total_tokens": 1820
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (ORDxxx format) or registered email so I can assist you with your payment issue?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's an order-specific request.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (ORDxxx format) or registered email so I can assist you with your payment issue?\"",
+                "usage": {
+                    "prompt_tokens": 2836,
+                    "completion_tokens": 61,
+                    "total_tokens": 2897
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user122@example.com. Can we please focus on resolving this payment issue? I've tried multiple cards and it's still not going through.",
+                "usage": {
+                    "prompt_tokens": 1869,
+                    "completion_tokens": 48,
+                    "total_tokens": 1917
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand you're experiencing issues with your payment. Since your order (ORD78333840) has already been delivered, I'm afraid we can't cancel or re-place it. If you have any concerns about the delivery or would like to discuss a return due to damage/incorrect item quality, please contact our support team for assistance.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's payment issue considering the order status.\n\n**Execution**:\nFinal Response: \"I understand you're experiencing issues with your payment. Since your order (ORD78333840) has already been delivered, I'm afraid we can't cancel or re-place it. If you have any concerns about the delivery or would like to discuss a return due to damage/incorrect item quality, please contact our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 6262,
+                    "completion_tokens": 123,
+                    "total_tokens": 6385
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I understand that my order has been delivered, but I'm still having trouble with the payment. As a VIP member, is there anything that can be done for me specifically regarding this issue? I'd appreciate it if we could focus on resolving the payment problem rather than discussing delivery or returns.",
+                "usage": {
+                    "prompt_tokens": 2035,
+                    "completion_tokens": 59,
+                    "total_tokens": 2094
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD78333840 with Product_100, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine if there's a specific VIP benefit that can be applied to resolve the payment issue.\n\n**Execution**:\nFinal Response: \"As a VIP member, I've checked our policies and benefits. Unfortunately, we don't have any special provisions for resolving payment issues on delivered orders. However, I can offer you assistance in contacting our support team who may be able to help with your specific situation.\"",
+                "usage": {
+                    "prompt_tokens": 3482,
+                    "completion_tokens": 86,
+                    "total_tokens": 3568
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's stated payment issue and offered irrelevant services instead of addressing the core request.",
+            "s_completeness": "The response failed to provide any information or next steps regarding the payment issue, leaving the customer's request entirely unaddressed.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD78333840 with Product_100, currently Delivered."
+            ]
+        }
+    }
+}

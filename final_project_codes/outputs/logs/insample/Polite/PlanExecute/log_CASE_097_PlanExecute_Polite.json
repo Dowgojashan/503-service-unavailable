@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_097",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 27.79
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 13710,
+        "total_completion_tokens": 316,
+        "grand_total_tokens": 14026
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit.\"",
+                "usage": {
+                    "prompt_tokens": 1506,
+                    "completion_tokens": 30,
+                    "total_tokens": 1536
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can look into this further?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's an order-specific request.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can look into this further?\"",
+                "usage": {
+                    "prompt_tokens": 2827,
+                    "completion_tokens": 62,
+                    "total_tokens": 2889
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"I don't have my Order ID handy right now, but I can give you my registered email if that's okay? It's user97@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1588,
+                    "completion_tokens": 32,
+                    "total_tokens": 1620
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. If you believe your package was lost in transit, please contact our support team to open an investigation. Your order ORD34133958 (Product_7) is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to verify it exists and retrieve its details.\n\n**Execution**:\nAction: query_order(email=\"user97@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2951,
+                    "completion_tokens": 33,
+                    "total_tokens": 2984
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I'm actually more concerned about whether I can place an order from my country now. You mentioned my order is still Processing, but I'd like to know if it's possible for me to make a purchase with delivery to {{Delivery Country}}.\"",
+                "usage": {
+                    "prompt_tokens": 1736,
+                    "completion_tokens": 50,
+                    "total_tokens": 1786
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD34133958 with Product_7, currently Processing. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Check the order status and delivery country to determine if a new purchase can be made.\n\n**Execution**:\nFinal Response: \"I've checked your order, and it's still in the Processing stage. However, I need to inform you that our system doesn't support modifying individual items on an existing order. If you'd like to place a new order with delivery to {{Delivery Country}}, please feel free to do so, but keep in mind that any changes or cancellations will be handled separately for each order.\"",
+                "usage": {
+                    "prompt_tokens": 3102,
+                    "completion_tokens": 109,
+                    "total_tokens": 3211
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's core question about delivery availability, instead offering irrelevant services.",
+            "s_completeness": "The response provided no information regarding the customer's inquiry, leaving the request entirely unanswered.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD34133958 with Product_7, currently Processing. I can help with tracking, cancellation, or refund requests."
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD34133958 with Product_7, currently Processing."
+            ]
+        }
+    }
+}

@@ -1,0 +1,137 @@
+{
+    "metadata": {
+        "case_id": "OOS_025",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 33.9
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18355,
+        "total_completion_tokens": 477,
+        "grand_total_tokens": 18832
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm just checking on the status of my order for the bookshelf I bought last week. It was supposed to arrive yesterday, but the tracking hasn't updated in a few days and I'm getting worried it might be lost or delayed somehow.",
+                "usage": {
+                    "prompt_tokens": 1812,
+                    "completion_tokens": 52,
+                    "total_tokens": 1864
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (ORDxxx format) or registered email so I can look into the status of your order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (ORDxxx format) or registered email so I can look into the status of your order?\"",
+                "usage": {
+                    "prompt_tokens": 2849,
+                    "completion_tokens": 55,
+                    "total_tokens": 2904
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is oos025@example.com. Can we please focus on why the tracking hasn't updated? I'm concerned about the delivery status of my bookshelf order.",
+                "usage": {
+                    "prompt_tokens": 1945,
+                    "completion_tokens": 51,
+                    "total_tokens": 1996
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Since your order has been shipped, I recommend contacting our shipping partner directly to inquire about the delay in tracking updates. You can find their contact information on the shipping confirmation email sent to you.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. The customer's concern is about the tracking not updating and delivery status of their bookshelf order.\n2. Since the order has already shipped (status='Shipped'), advise the customer to contact the shipping carrier for further assistance.\n\n**Execution**:\nFinal Response: \"Since your order has been shipped, I recommend contacting our shipping partner directly to inquire about the delay in tracking updates. You can find their contact information on the shipping confirmation email sent to you.\"",
+                "usage": {
+                    "prompt_tokens": 6256,
+                    "completion_tokens": 134,
+                    "total_tokens": 6390
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a VIP member, I expect more proactive assistance from your team when there's an issue with delivery. I've already checked my email and haven't found any contact information for the shipping partner. Can you please look into this further and see if there's anything that can be done to get me an update on my order?",
+                "usage": {
+                    "prompt_tokens": 2056,
+                    "completion_tokens": 66,
+                    "total_tokens": 2122
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD72839482 (Home_38) is currently Shipped, shipped on 2024-05-01. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to see if there's any additional information that can be provided to assist with tracking updates.\n\n**Execution**:\nFinal Response: \"I understand your concern as a VIP member, and I apologize for the inconvenience. Unfortunately, our shipping partner does not provide direct contact information in their emails. However, I can offer you an alternative solution. You can try contacting our customer support team directly through our website or by calling us at [insert phone number]. They will be able to assist you further with tracking updates and any other concerns you may have.\"",
+                "usage": {
+                    "prompt_tokens": 3437,
+                    "completion_tokens": 119,
+                    "total_tokens": 3556
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 42.5,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order details but failed to address the customer's primary concern regarding the tracking delay.",
+            "s_completeness": "The response is incomplete as it ignores the customer's request for help with the delivery issue, offering no next steps.",
+            "s_tone": "The tone is professional but becomes dismissive by abruptly closing the interaction without resolving the customer's stated problem."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD72839482 (Home_38) is currently Shipped, shipped on 2024-05-01."
+            ],
+            "s_completeness": [
+                "Your order ORD72839482 (Home_38) is currently Shipped, shipped on 2024-05-01. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.842690+00:00",
+        "s_answer_quality": 42.5,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true
+        },
+        "s_outcome": 65.5,
+        "s_tool": 83.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 79.4,
+        "s_agent": 79.4,
+        "proxy_cost": 19.09,
+        "net_value": 0.6031
+    }
+}

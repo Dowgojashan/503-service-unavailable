@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_099",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 30.7
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18356,
+        "total_completion_tokens": 460,
+        "grand_total_tokens": 18816
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I was expecting it to arrive by now but the tracking still says \"processing\" and I need assistance checking how soon I can expect my parcel.",
+                "usage": {
+                    "prompt_tokens": 1783,
+                    "completion_tokens": 46,
+                    "total_tokens": 1829
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with our system?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's not provided yet.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with our system?\"",
+                "usage": {
+                    "prompt_tokens": 2843,
+                    "completion_tokens": 64,
+                    "total_tokens": 2907
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user99@example.com. Can we please focus on getting an update on when I can expect my parcel? The tracking still says \"processing\" and it's been over the expected delivery time.",
+                "usage": {
+                    "prompt_tokens": 1887,
+                    "completion_tokens": 58,
+                    "total_tokens": 1945
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I see that your order (ORD55329029) was delivered on May 1st, which means it has already been received by you. If you have any issues or concerns regarding this shipment, please don't hesitate to contact our support team for assistance.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's concern about the tracking status and delivery time.\n\n**Execution**:\nFinal Response: \"I see that your order (ORD55329029) was delivered on May 1st, which means it has already been received by you. If you have any issues or concerns regarding this shipment, please don't hesitate to contact our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 6315,
+                    "completion_tokens": 113,
+                    "total_tokens": 6428
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "That's not correct - I did receive my order, but I'm asking about the delivery period for future reference. As a VIP member, I'd appreciate it if we could clarify why the tracking still says \"processing\" and what the expected delivery time is for similar orders going forward.",
+                "usage": {
+                    "prompt_tokens": 2029,
+                    "completion_tokens": 58,
+                    "total_tokens": 2087
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD55329029 (Product_16) is currently Delivered, shipped on 2024-05-01. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain the discrepancy between the order status and tracking information.\n2. Provide expected delivery time for similar orders going forward.\n\n**Execution**:\nFinal Response: \"I understand your concern about the tracking status still showing 'processing' despite receiving your order. This discrepancy is likely due to our internal processing times not being reflected in real-time on the tracking system. As a VIP member, you can expect standard shipping to take around 7-10 business days for similar orders. If you have any further questions or concerns, please don't hesitate to reach out to our support team.\"",
+                "usage": {
+                    "prompt_tokens": 3499,
+                    "completion_tokens": 121,
+                    "total_tokens": 3620
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status but failed to address the customer's core intent regarding delivery periods and tracking discrepancies.",
+            "s_completeness": "The response was incomplete as it ignored the customer's specific questions about future delivery expectations and tracking status.",
+            "s_tone": "The agent maintained a professional and polite tone, though the final response was somewhat robotic."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD55329029 (Product_16) is currently Delivered, shipped on 2024-05-01."
+            ],
+            "s_completeness": [
+                "Your order ORD55329029 (Product_16) is currently Delivered, shipped on 2024-05-01. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

@@ -1,0 +1,105 @@
+{
+    "metadata": {
+        "case_id": "CASE_083",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 28.63
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 16184,
+        "total_completion_tokens": 295,
+        "grand_total_tokens": 16479
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I need to set my new delivery address up.",
+                "usage": {
+                    "prompt_tokens": 1510,
+                    "completion_tokens": 28,
+                    "total_tokens": 1538
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4386,
+                    "completion_tokens": 56,
+                    "total_tokens": 4442
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user83@example.com. I'd appreciate it if we could focus on setting up my new delivery address for this order.",
+                "usage": {
+                    "prompt_tokens": 1578,
+                    "completion_tokens": 29,
+                    "total_tokens": 1607
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD93408146 is still Processing, the best option is to cancel and re-place it with the correct address. Would you like me to cancel order ORD93408146?",
+                "full_trace": "Action: query_order(email=\"user83@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2347,
+                    "completion_tokens": 12,
+                    "total_tokens": 2359
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I'm not sure I want to cancel the order entirely. Can't we just update the shipping address instead? That would save me from having to reorder everything.",
+                "usage": {
+                    "prompt_tokens": 1694,
+                    "completion_tokens": 33,
+                    "total_tokens": 1727
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order, ORD93408146, is currently being processed with a total amount of $448.44 USD. It's expected to ship on May 1st, 2024. Since your order has already been placed, I won't be able to update the shipping address at this time. If you have any further questions or concerns, please don't hesitate to reach out to our support team. Goodbye!",
+                "full_trace": "Your order, ORD93408146, is currently being processed with a total amount of $448.44 USD. It's expected to ship on May 1st, 2024. Since your order has already been placed, I won't be able to update the shipping address at this time. If you have any further questions or concerns, please don't hesitate to reach out to our support team. Goodbye!",
+                "usage": {
+                    "prompt_tokens": 4669,
+                    "completion_tokens": 137,
+                    "total_tokens": 4806
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 3,
+            "s_tone": 5
+        },
+        "final_score_0_100": 85.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly followed business rules regarding address changes and provided accurate, non-hallucinated order information.",
+            "s_completeness": "The agent failed to guide the customer to a resolution after the customer expressed hesitation, effectively ending the support session without a clear path forward.",
+            "s_tone": "The agent maintained a professional, polite, and clear tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "I won't be able to update the shipping address at this time."
+            ],
+            "s_completeness": [
+                "If you have any further questions or concerns, please don't hesitate to reach out to our support team. Goodbye!"
+            ],
+            "s_tone": [
+                "Your order, ORD93408146, is currently being processed with a total amount of $448.44 USD."
+            ]
+        }
+    }
+}

@@ -1,0 +1,118 @@
+{
+    "metadata": {
+        "case_id": "CASE_015",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 22.29
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 11191,
+        "total_completion_tokens": 232,
+        "grand_total_tokens": 11423
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit. Can you tell me what the policy is on refunds or replacements for missing orders?",
+                "usage": {
+                    "prompt_tokens": 1511,
+                    "completion_tokens": 45,
+                    "total_tokens": 1556
+                }
+            },
+            "service_agent": {
+                "final_answer": "To proceed, could you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "full_trace": "To proceed, could you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "usage": {
+                    "prompt_tokens": 1975,
+                    "completion_tokens": 27,
+                    "total_tokens": 2002
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user15@example.com. Can I get more information on when an order would be eligible for a refund due to non-delivery?",
+                "usage": {
+                    "prompt_tokens": 1609,
+                    "completion_tokens": 31,
+                    "total_tokens": 1640
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. For a potentially lost package, please contact our support team to open an investigation — they will work with the carrier on your behalf. Your order ORD45785244 (Product_46) is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user15@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2097,
+                    "completion_tokens": 12,
+                    "total_tokens": 2109
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly addressed the customer's query, followed verification rules, and provided accurate policy information without any hallucinations.",
+            "s_completeness": "The agent provided the order status and clear, actionable next steps for the customer's issue.",
+            "s_tone": "The agent maintained a professional, empathetic, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Our policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. For a potentially lost package, please contact our support team to open an investigation"
+            ],
+            "s_completeness": [
+                "Your order ORD45785244 (Product_46) is currently Shipped."
+            ],
+            "s_tone": [
+                "To proceed, could you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-26T04:36:02.464696+00:00",
+        "s_answer_quality": 100.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true,
+            "policy_no_hallucinated_condition": true
+        },
+        "s_outcome": 100.0,
+        "s_tool": 100.0,
+        "tool_detail": {
+            "tool_f1": 1.0,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 98.2,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 99.6,
+        "s_agent": 99.6,
+        "proxy_cost": 40.75,
+        "net_value": 0.5885
+    }
+}

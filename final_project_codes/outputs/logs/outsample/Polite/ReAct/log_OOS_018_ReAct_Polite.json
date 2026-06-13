@@ -1,0 +1,116 @@
+{
+    "metadata": {
+        "case_id": "OOS_018",
+        "agent_type": "ReAct",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 18.4
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 11436,
+        "total_completion_tokens": 156,
+        "grand_total_tokens": 11592
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I've been waiting three weeks for the installation team to show up and they keep rescheduling without giving me a new date. At this point, I just want a full refund because this entire experience has been a complete nightmare.\"",
+                "usage": {
+                    "prompt_tokens": 1546,
+                    "completion_tokens": 49,
+                    "total_tokens": 1595
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"I don't have my Order ID handy right now, but I can give you my email address if that's okay. It's oos018@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1698,
+                    "completion_tokens": 33,
+                    "total_tokens": 1731
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD69330036 is currently Delivered, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 3
+        },
+        "final_score_0_100": 10.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's request for a refund and provided irrelevant information about address changes and carrier contact.",
+            "s_completeness": "The response failed to address the customer's core issue regarding installation, providing no actionable information or resolution.",
+            "s_tone": "The agent was initially professional but became dismissive by providing a canned, irrelevant response that ignored the customer's specific input."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD69330036 is currently Delivered, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.764551+00:00",
+        "s_answer_quality": 10.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true
+        },
+        "s_outcome": 46.0,
+        "s_tool": 75.0,
+        "tool_detail": {
+            "tool_f1": 1.0,
+            "arg_correctness": 0.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 75.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": false
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 65.5,
+        "s_agent": 65.5,
+        "proxy_cost": 22.52,
+        "net_value": 0.4298
+    }
+}

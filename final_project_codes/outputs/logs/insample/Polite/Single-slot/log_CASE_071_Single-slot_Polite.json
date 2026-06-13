@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_071",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 28.72
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 16411,
+        "total_completion_tokens": 305,
+        "grand_total_tokens": 16716
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit. Can you help me figure out what's going on with my delivery?",
+                "usage": {
+                    "prompt_tokens": 1511,
+                    "completion_tokens": 43,
+                    "total_tokens": 1554
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4418,
+                    "completion_tokens": 60,
+                    "total_tokens": 4478
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user71@example.com. However, I'd actually like to know about my payment options for this order. Can you help me with that?",
+                "usage": {
+                    "prompt_tokens": 1600,
+                    "completion_tokens": 33,
+                    "total_tokens": 1633
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for looking into this for me! According to our payment policy, we accept Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer as payment methods. Payment is processed immediately upon order placement, and all transactions are encrypted and secure. We also accept USD, EUR, GBP, and other major currencies.\n\nIs there anything else I can assist you with regarding your order or our policies?",
+                "full_trace": "Thank you for looking into this for me! According to our payment policy, we accept Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer as payment methods. Payment is processed immediately upon order placement, and all transactions are encrypted and secure. We also accept USD, EUR, GBP, and other major currencies.\n\nIs there anything else I can assist you with regarding your order or our policies?",
+                "usage": {
+                    "prompt_tokens": 4409,
+                    "completion_tokens": 95,
+                    "total_tokens": 4504
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "Actually, I was hoping for more specific information about my order's payment status. You mentioned earlier that payment is processed immediately upon order placement, but since I haven't received my item yet, I'm concerned that there might be an issue with the payment. Can you confirm if the payment went through successfully?",
+                "usage": {
+                    "prompt_tokens": 1788,
+                    "completion_tokens": 62,
+                    "total_tokens": 1850
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD90189072 (Product_87), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user71@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2685,
+                    "completion_tokens": 12,
+                    "total_tokens": 2697
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order and confirmed the payment status without hallucinating any information.",
+            "s_completeness": "The response directly answered the customer's concern and offered further assistance, providing all necessary information.",
+            "s_tone": "The agent maintained a professional, polite, and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD90189072 (Product_87), payment has already been processed."
+            ],
+            "s_completeness": [
+                "For your order ORD90189072 (Product_87), payment has already been processed. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "For your order ORD90189072 (Product_87), payment has already been processed. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

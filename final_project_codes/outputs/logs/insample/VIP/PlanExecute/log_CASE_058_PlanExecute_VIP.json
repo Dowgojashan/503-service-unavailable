@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_058",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 29.65
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18099,
+        "total_completion_tokens": 414,
+        "grand_total_tokens": 18513
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I'm a VIP member and I have an issue with my order - the item I wanted is missing from the package.\"",
+                "usage": {
+                    "prompt_tokens": 1777,
+                    "completion_tokens": 28,
+                    "total_tokens": 1805
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with our system?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's an order-specific request.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with our system?\"",
+                "usage": {
+                    "prompt_tokens": 2825,
+                    "completion_tokens": 65,
+                    "total_tokens": 2890
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"I would have thought my VIP account details were already on file, but fine — my email is user58@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1857,
+                    "completion_tokens": 25,
+                    "total_tokens": 1882
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Thank you for providing your email address, user58@example.com. I've checked our system and found that your order (ORD89366792) has already been delivered. Since it's a closed/terminal state, we can't make any changes to the order itself. However, if you have any concerns or issues with your purchase, please don't hesitate to contact our support team for assistance.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's concern about their VIP account details being on file.\n\n**Execution**:\nFinal Response: \"Thank you for providing your email address, user58@example.com. I've checked our system and found that your order (ORD89366792) has already been delivered. Since it's a closed/terminal state, we can't make any changes to the order itself. However, if you have any concerns or issues with your purchase, please don't hesitate to contact our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 6181,
+                    "completion_tokens": 141,
+                    "total_tokens": 6322
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I understand that my order is marked as delivered, but I'm still missing an item from my package. As a VIP member, I expect this kind of issue to be resolved promptly. Can we discuss how to get the missing item sent out or replaced?\"",
+                "usage": {
+                    "prompt_tokens": 2021,
+                    "completion_tokens": 52,
+                    "total_tokens": 2073
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD89366792 with Product_21, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain that the order is already delivered and cannot be modified.\n2. Offer an alternative solution for the missing item.\n\n**Execution**:\nFinal Response: \"I understand your concern, but since your order (ORD89366792) has been marked as delivered, we can't make any changes to it directly. However, I can offer you a full refund for the missing item or help you initiate a return process if you'd like. Please let me know which option you prefer.\"",
+                "usage": {
+                    "prompt_tokens": 3438,
+                    "completion_tokens": 103,
+                    "total_tokens": 3541
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 40.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's report of a missing item and failed to provide any relevant assistance for that specific issue.",
+            "s_completeness": "The response failed to provide any actionable next steps for the missing item, leaving the customer without a resolution or clear path forward.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD89366792 with Product_21, currently Delivered."
+            ]
+        }
+    }
+}

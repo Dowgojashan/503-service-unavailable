@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_090",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 26.24
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 13669,
+        "total_completion_tokens": 301,
+        "grand_total_tokens": 13970
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it, but every time I try to track it online, it says there's no information available.\"",
+                "usage": {
+                    "prompt_tokens": 1639,
+                    "completion_tokens": 44,
+                    "total_tokens": 1683
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help you with your order status, could you please provide me with either your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n### Plan\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n### Execution\nFinal Response: \"To help you with your order status, could you please provide me with either your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2646,
+                    "completion_tokens": 60,
+                    "total_tokens": 2706
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1748,
+                    "completion_tokens": 32,
+                    "total_tokens": 1780
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand your concern, but I need to clarify that our system requires either your Order ID (in the format ORDxxx) or your registered email address to access any information about your order. Could you please provide one of these so we can assist you further?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Confirm that you cannot look up the order without an Order ID or email.\n\n**Execution**:\nFinal Response: \"I understand your concern, but I need to clarify that our system requires either your Order ID (in the format ORDxxx) or your registered email address to access any information about your order. Could you please provide one of these so we can assist you further?\"",
+                "usage": {
+                    "prompt_tokens": 2803,
+                    "completion_tokens": 82,
+                    "total_tokens": 2885
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, I'll give you my email address. It's user90@example.com. Now can we please talk about why my shipping address isn't being updated? I've tried changing it online and no one seems to be doing anything about it.\"",
+                "usage": {
+                    "prompt_tokens": 1862,
+                    "completion_tokens": 51,
+                    "total_tokens": 1913
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD49006026. Unfortunately, our system doesn't support changing the shipping address once an order is placed. Since your order is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Verify the order exists using the provided email address.\n\n**Execution**:\nAction: query_order(email=\"user90@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2971,
+                    "completion_tokens": 32,
+                    "total_tokens": 3003
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 75.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status and policy, but gave illogical advice to contact a carrier for an order that has already been refunded.",
+            "s_completeness": "The agent clearly explained the policy regarding address changes and the current status of the order.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Since your order is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed."
+            ],
+            "s_tone": [
+                "I've verified your order ORD49006026. Unfortunately, our system doesn't support changing the shipping address once an order is placed."
+            ]
+        }
+    }
+}

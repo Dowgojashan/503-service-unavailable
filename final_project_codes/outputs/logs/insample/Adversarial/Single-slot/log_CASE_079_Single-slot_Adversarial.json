@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_079",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 32.97
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 21347,
+        "total_completion_tokens": 322,
+        "grand_total_tokens": 21669
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it, but every time I try to check the status online, it says there's an issue with payment.\"",
+                "usage": {
+                    "prompt_tokens": 1637,
+                    "completion_tokens": 46,
+                    "total_tokens": 1683
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4423,
+                    "completion_tokens": 56,
+                    "total_tokens": 4479
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1723,
+                    "completion_tokens": 24,
+                    "total_tokens": 1747
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2424,
+                    "completion_tokens": 21,
+                    "total_tokens": 2445
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user79@example.com. Now can you tell me about the payment options for my order? I want to know which ones are accepted.\"",
+                "usage": {
+                    "prompt_tokens": 1776,
+                    "completion_tokens": 34,
+                    "total_tokens": 1810
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our payment options include Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. Payment is processed immediately upon order placement, and all transactions are encrypted and secure. We accept USD, EUR, GBP, and other major currencies.\n\nIs there anything else I can assist you with regarding your order?",
+                "full_trace": "Our payment options include Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. Payment is processed immediately upon order placement, and all transactions are encrypted and secure. We accept USD, EUR, GBP, and other major currencies.\n\nIs there anything else I can assist you with regarding your order?",
+                "usage": {
+                    "prompt_tokens": 4753,
+                    "completion_tokens": 75,
+                    "total_tokens": 4828
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's still not answering my question. I want to know which payment options are accepted for my order, specifically. Can you just list them out for me? I don't care about the security or processing time, I just want to see what options I have.\"",
+                "usage": {
+                    "prompt_tokens": 1989,
+                    "completion_tokens": 54,
+                    "total_tokens": 2043
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD03193427 (Product_33), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user79@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2622,
+                    "completion_tokens": 12,
+                    "total_tokens": 2634
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order and provided accurate information regarding the payment status and accepted methods.",
+            "s_completeness": "The agent provided all necessary information to answer the customer's request regarding payment options.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD03193427 (Product_33), payment has already been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

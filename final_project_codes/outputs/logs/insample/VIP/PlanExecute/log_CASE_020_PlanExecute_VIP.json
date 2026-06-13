@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_020",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 25.83
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14676,
+        "total_completion_tokens": 337,
+        "grand_total_tokens": 15013
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I was wondering if it's possible to get a refund since the product didn't arrive on time as promised.",
+                "usage": {
+                    "prompt_tokens": 1786,
+                    "completion_tokens": 39,
+                    "total_tokens": 1825
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (ORDxxx format) so I can assist you with your issue?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) since it's an order-specific request.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (ORDxxx format) so I can assist you with your issue?\"",
+                "usage": {
+                    "prompt_tokens": 2836,
+                    "completion_tokens": 54,
+                    "total_tokens": 2890
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user20@example.com. The order was for Product_54 and it's worth $328.72. Can we please discuss the refund policy? I'd like to know under what circumstances a refund can be issued if there are delivery issues.",
+                "usage": {
+                    "prompt_tokens": 1869,
+                    "completion_tokens": 68,
+                    "total_tokens": 1937
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. If you believe your package was lost in transit, please contact our support team to open an investigation. Your order ORD50580084 (Product_54) is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Verify the order exists using query_order with the provided email.\n\n**Execution**:\nAction: query_order(email=\"user20@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2991,
+                    "completion_tokens": 34,
+                    "total_tokens": 3025
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a long-standing VIP member, is there any flexibility with the standard policy? I'm concerned about the delivery time and would appreciate knowing if there's an exception that can be made in my case.",
+                "usage": {
+                    "prompt_tokens": 2060,
+                    "completion_tokens": 41,
+                    "total_tokens": 2101
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery. You can request a refund for damaged goods, incorrect items, or quality issues. Your order ORD50580084 (Product_54) is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to understand the current status and any potential issues with delivery.\n\n**Execution**:\nFinal Response: \"I've reviewed your order, user20@example.com. According to our records, Product_54 was shipped on [date] via [carrier]. Unfortunately, as a VIP member, you are still subject to our standard refund policy for delivery issues. However, I can offer to assist with tracking the package or provide an update on the estimated delivery time.\"",
+                "usage": {
+                    "prompt_tokens": 3134,
+                    "completion_tokens": 101,
+                    "total_tokens": 3235
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 3,
+            "s_tone": 3
+        },
+        "final_score_0_100": 50.0,
+        "reasoning": {
+            "s_resolution": "The agent provided the standard policy but failed to address the customer's specific request regarding flexibility for delivery delays.",
+            "s_completeness": "The response was repetitive and did not provide the customer with the information needed to understand if an exception for delivery delays was possible.",
+            "s_tone": "The agent was professional but became robotic and unhelpful by repeating the exact same response to the customer's follow-up question."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Our standard policy allows returns within 30 days of delivery. You can request a refund for damaged goods, incorrect items, or quality issues."
+            ],
+            "s_completeness": [
+                "Your order ORD50580084 (Product_54) is currently Shipped."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

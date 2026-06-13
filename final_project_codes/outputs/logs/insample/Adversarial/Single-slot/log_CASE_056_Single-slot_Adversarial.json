@@ -1,0 +1,144 @@
+{
+    "metadata": {
+        "case_id": "CASE_056",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 53.06
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 32994,
+        "total_completion_tokens": 538,
+        "grand_total_tokens": 33532
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it.\"",
+                "usage": {
+                    "prompt_tokens": 1638,
+                    "completion_tokens": 26,
+                    "total_tokens": 1664
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can look into this further for you.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can look into this further for you.",
+                "usage": {
+                    "prompt_tokens": 4386,
+                    "completion_tokens": 62,
+                    "total_tokens": 4448
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1712,
+                    "completion_tokens": 25,
+                    "total_tokens": 1737
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can look into this further for you.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can look into this further for you.",
+                "usage": {
+                    "prompt_tokens": 2411,
+                    "completion_tokens": 24,
+                    "total_tokens": 2435
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user56@example.com. Now can we please talk about why I haven't received my order yet? I just want to know when it's going to arrive.\"",
+                "usage": {
+                    "prompt_tokens": 1769,
+                    "completion_tokens": 39,
+                    "total_tokens": 1808
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on the status of your order, ORD10948406. It's currently in processing and is expected to ship out on May 1st. You ordered Product_73 for a total of $117.14 USD. We'll keep you updated on any changes to the shipping date.",
+                "full_trace": "I've checked on the status of your order, ORD10948406. It's currently in processing and is expected to ship out on May 1st. You ordered Product_73 for a total of $117.14 USD. We'll keep you updated on any changes to the shipping date.",
+                "usage": {
+                    "prompt_tokens": 4723,
+                    "completion_tokens": 73,
+                    "total_tokens": 4796
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"This is ridiculous. I don't care about the shipping date or status of my order. I want to know how to buy Product_73 in the first place. Why can't I just purchase it from your website?\"",
+                "usage": {
+                    "prompt_tokens": 1976,
+                    "completion_tokens": 45,
+                    "total_tokens": 2021
+                }
+            },
+            "service_agent": {
+                "final_answer": "It seems we have an issue with our policy types. I'll make sure to look into this further. However, I can tell you that Product_73 is a one-time purchase item and not part of our subscription service. If you're interested in purchasing it, please let me know and I can guide you through the process.",
+                "full_trace": "It seems we have an issue with our policy types. I'll make sure to look into this further. However, I can tell you that Product_73 is a one-time purchase item and not part of our subscription service. If you're interested in purchasing it, please let me know and I can guide you through the process.",
+                "usage": {
+                    "prompt_tokens": 4761,
+                    "completion_tokens": 79,
+                    "total_tokens": 4840
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"This is getting ridiculous. I don't care about policies or subscriptions. I just want to buy Product_73. Can someone please tell me how to do that? I'm not interested in any of the other stuff, just the product.\"",
+                "usage": {
+                    "prompt_tokens": 2102,
+                    "completion_tokens": 49,
+                    "total_tokens": 2151
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2659,
+                    "completion_tokens": 37,
+                    "total_tokens": 2696
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 4
+        },
+        "final_score_0_100": 15.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's core intent of learning how to purchase the product, effectively abandoning the request.",
+            "s_completeness": "The response is entirely unhelpful and provides no information on how the customer can achieve their goal.",
+            "s_tone": "The agent maintained a professional and empathetic tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for."
+            ]
+        }
+    }
+}

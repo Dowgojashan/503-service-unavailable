@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_035",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 17.75
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9916,
+        "total_completion_tokens": 166,
+        "grand_total_tokens": 10082
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I need to set up a different shipping address for the item. The original address was incorrect and I'd like to change it before it ships.",
+                "usage": {
+                    "prompt_tokens": 1509,
+                    "completion_tokens": 47,
+                    "total_tokens": 1556
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4424,
+                    "completion_tokens": 56,
+                    "total_tokens": 4480
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user35@example.com. I'd appreciate it if we could focus on changing the shipping address for my order. The item hasn't shipped yet, so I'm hoping it's still possible to update the address before it goes out.",
+                "usage": {
+                    "prompt_tokens": 1595,
+                    "completion_tokens": 51,
+                    "total_tokens": 1646
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD63876210 is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user35@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2388,
+                    "completion_tokens": 12,
+                    "total_tokens": 2400
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 40.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly stated the address policy but gave illogical advice to contact a carrier for a refunded order, failing to address the customer's misunderstanding of the order status.",
+            "s_completeness": "The response is incomplete because it fails to clarify that the order is already refunded and therefore not in transit, leaving the customer without actionable information.",
+            "s_tone": "The agent was professional, concise, and followed identity verification procedures."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Since your order ORD63876210 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Since your order ORD63876210 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Shipping addresses cannot be changed once an order is placed."
+            ]
+        }
+    }
+}

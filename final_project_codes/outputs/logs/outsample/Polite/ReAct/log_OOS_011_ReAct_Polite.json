@@ -1,0 +1,116 @@
+{
+    "metadata": {
+        "case_id": "OOS_011",
+        "agent_type": "ReAct",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 40.42
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 25471,
+        "total_completion_tokens": 328,
+        "grand_total_tokens": 25799
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I just checked my account and noticed a return was processed for an item I never actually sent back. Could you please look into this and make sure my account isn't being used by someone else?\"",
+                "usage": {
+                    "prompt_tokens": 1537,
+                    "completion_tokens": 43,
+                    "total_tokens": 1580
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email is oos011@example.com. But I'm concerned about the return being processed for an item I never sent back. Can we focus on why this happened and how to prevent it in the future?\"",
+                "usage": {
+                    "prompt_tokens": 1673,
+                    "completion_tokens": 44,
+                    "total_tokens": 1717
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD76105494 with Book_36, which is currently Delivered. I can help with order tracking, cancellation, or refund requests. Is there anything else I can help you with today?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 4
+        },
+        "final_score_0_100": 15.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's report of a fraudulent return and failed to address the security concern.",
+            "s_completeness": "The response failed to provide any information or next steps regarding the fraud dispute, leaving the customer with no resolution.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I can help with order tracking, cancellation, or refund requests. Is there anything else I can help you with today?"
+            ],
+            "s_completeness": [
+                "I can help with order tracking, cancellation, or refund requests. Is there anything else I can help you with today?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD76105494 with Book_36, which is currently Delivered."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.761710+00:00",
+        "s_answer_quality": 15.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true
+        },
+        "s_outcome": 49.0,
+        "s_tool": 58.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 0.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 75.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": false
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 63.7,
+        "s_agent": 63.7,
+        "proxy_cost": 25.6,
+        "net_value": 0.381
+    }
+}

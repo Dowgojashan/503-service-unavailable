@@ -1,0 +1,85 @@
+{
+    "metadata": {
+        "case_id": "CASE_100",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 19.23
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 10495,
+        "total_completion_tokens": 167,
+        "grand_total_tokens": 10662
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I want to place it for delivery to Canada but the website only shows me shipping options within the US. Can you help me figure out if there's any way to get this sorted?",
+                "usage": {
+                    "prompt_tokens": 1784,
+                    "completion_tokens": 54,
+                    "total_tokens": 1838
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4440,
+                    "completion_tokens": 60,
+                    "total_tokens": 4500
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine - my email is user100@example.com. Now, about placing an order for delivery in Canada... can it be done?",
+                "usage": {
+                    "prompt_tokens": 1882,
+                    "completion_tokens": 41,
+                    "total_tokens": 1923
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order is placed, delivery options cannot be changed through our system. For future orders, standard, express, or priority shipping are available at checkout. Your order ORD07137588 (Product_6) is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user100@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2389,
+                    "completion_tokens": 12,
+                    "total_tokens": 2401
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly followed identity verification protocols and accurately stated the policy regarding delivery options without hallucinating any details.",
+            "s_completeness": "The agent provided a clear answer regarding the inability to change delivery options and provided relevant information for future orders.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order is placed, delivery options cannot be changed through our system.",
+                "Your order ORD07137588 (Product_6) is currently Refunded."
+            ],
+            "s_completeness": [
+                "For future orders, standard, express, or priority shipping are available at checkout."
+            ],
+            "s_tone": [
+                "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?"
+            ]
+        }
+    }
+}

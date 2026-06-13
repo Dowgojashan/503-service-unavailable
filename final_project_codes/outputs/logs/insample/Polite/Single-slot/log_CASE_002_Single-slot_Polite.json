@@ -1,0 +1,144 @@
+{
+    "metadata": {
+        "case_id": "CASE_002",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 48.01
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 28229,
+        "total_completion_tokens": 522,
+        "grand_total_tokens": 28751
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I need to remove one of the items from it.",
+                "usage": {
+                    "prompt_tokens": 1509,
+                    "completion_tokens": 29,
+                    "total_tokens": 1538
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4390,
+                    "completion_tokens": 60,
+                    "total_tokens": 4450
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My Order ID is ORD26577442 and my registered email is user2@example.com. I'd appreciate it if we could focus on removing one of the items from this order instead of discussing delivery or other issues.",
+                "usage": {
+                    "prompt_tokens": 1583,
+                    "completion_tokens": 44,
+                    "total_tokens": 1627
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD26577442 is currently being processed with a total amount of $364.16 USD. It's expected to ship on May 1st, 2024. Unfortunately, our system does not support modifying individual items on an existing order. However, you can cancel the entire order if needed. Would you like me to proceed with cancellation?",
+                "full_trace": "Your order ORD26577442 is currently being processed with a total amount of $364.16 USD. It's expected to ship on May 1st, 2024. Unfortunately, our system does not support modifying individual items on an existing order. However, you can cancel the entire order if needed. Would you like me to proceed with cancellation?",
+                "usage": {
+                    "prompt_tokens": 4396,
+                    "completion_tokens": 85,
+                    "total_tokens": 4481
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I'm afraid I don't want to cancel the entire order. That's not what I'm looking for. Can we please discuss other options? Is there no way to remove just one item from my order instead of cancelling it entirely?",
+                "usage": {
+                    "prompt_tokens": 1756,
+                    "completion_tokens": 48,
+                    "total_tokens": 1804
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2698,
+                    "completion_tokens": 37,
+                    "total_tokens": 2735
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "I appreciate your help so far, but I'm afraid we haven't resolved my issue yet. I'd like to cancel the order instead of removing an item, as it seems that's the only option left. Please go ahead with cancelling ORD26577442 for me. Thank you!",
+                "usage": {
+                    "prompt_tokens": 1876,
+                    "completion_tokens": 58,
+                    "total_tokens": 1934
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2731,
+                    "completion_tokens": 37,
+                    "total_tokens": 2768
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "I think we've discussed this enough. I appreciate your help, but I'm still looking for a way to remove one item from my order ORD26577442. Since it's not possible to modify individual items, I'd like to cancel the entire order as you mentioned earlier. Please go ahead with cancelling it for me.",
+                "usage": {
+                    "prompt_tokens": 1979,
+                    "completion_tokens": 66,
+                    "total_tokens": 2045
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD26577442 has been successfully cancelled. We appreciate your business and hope you'll consider shopping with us again in the future. Thank you for contacting our support team. Goodbye!",
+                "full_trace": "Your order ORD26577442 has been successfully cancelled. We appreciate your business and hope you'll consider shopping with us again in the future. Thank you for contacting our support team. Goodbye!",
+                "usage": {
+                    "prompt_tokens": 5311,
+                    "completion_tokens": 58,
+                    "total_tokens": 5369
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly followed business rules by explaining the item removal limitation and successfully executing the cancellation as requested.",
+            "s_completeness": "The agent provided all necessary information and confirmed the final status of the order clearly.",
+            "s_tone": "The agent maintained a professional and empathetic tone throughout the interaction, even when the customer repeated their request."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD26577442 has been successfully cancelled."
+            ],
+            "s_completeness": [
+                "Your order ORD26577442 has been successfully cancelled. We appreciate your business and hope you'll consider shopping with us again in the future."
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for."
+            ]
+        }
+    }
+}

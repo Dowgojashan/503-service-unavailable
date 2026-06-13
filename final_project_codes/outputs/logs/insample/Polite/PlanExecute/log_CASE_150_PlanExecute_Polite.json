@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_150",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 16.31
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 8915,
+        "total_completion_tokens": 162,
+        "grand_total_tokens": 9077
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm getting worried about the delivery options. Can you please tell me what shipping options are available for my order?",
+                "usage": {
+                    "prompt_tokens": 1510,
+                    "completion_tokens": 41,
+                    "total_tokens": 1551
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order exists.\n\n**Execution**:\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 2838,
+                    "completion_tokens": 65,
+                    "total_tokens": 2903
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email address is user150@example.com. Can I please know about the shipping options for my order?",
+                "usage": {
+                    "prompt_tokens": 1612,
+                    "completion_tokens": 23,
+                    "total_tokens": 1635
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout. Your order ORD21639898 (Product_92) is currently Shipped. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the customer's order.\n\n**Execution**:\nAction: query_order(email=\"user150@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2955,
+                    "completion_tokens": 33,
+                    "total_tokens": 2988
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order, addressed the customer's intent, and followed all business rules.",
+            "s_completeness": "The agent provided all necessary information regarding the order status and the policy on delivery changes.",
+            "s_tone": "The agent maintained a professional, empathetic, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order has been placed, delivery options cannot be changed through our system."
+            ],
+            "s_completeness": [
+                "Your order ORD21639898 (Product_92) is currently Shipped."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

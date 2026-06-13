@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_121",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 32.88
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 17025,
+        "total_completion_tokens": 422,
+        "grand_total_tokens": 17447
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I placed an order about a week ago but haven't received it yet and I'm worried something went wrong with the payment.\"",
+                "usage": {
+                    "prompt_tokens": 1506,
+                    "completion_tokens": 29,
+                    "total_tokens": 1535
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (in the format ORDxxxxx) or your registered email so I can look into this further?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's an order-specific request.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (in the format ORDxxxxx) or your registered email so I can look into this further?\"",
+                "usage": {
+                    "prompt_tokens": 2826,
+                    "completion_tokens": 63,
+                    "total_tokens": 2889
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email is user121@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1589,
+                    "completion_tokens": 10,
+                    "total_tokens": 1599
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Since your order (ORD68694117) was shipped on May 1st, you have 30 days to report any issues related to damage, incorrect or quality items. If you believe there's a problem with the payment, please let me know and I'll be happy to assist further.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the customer's request based on their initial message (\"I placed an order about a week ago but haven't received it yet and I'm worried something went wrong with the payment.\")\n2. Since the order has been shipped, explain the 30-day return policy for damaged/incorrect/quality items.\n\n**Execution**:\nFinal Response: \"Since your order (ORD68694117) was shipped on May 1st, you have 30 days to report any issues related to damage, incorrect or quality items. If you believe there's a problem with the payment, please let me know and I'll be happy to assist further.\"",
+                "usage": {
+                    "prompt_tokens": 6083,
+                    "completion_tokens": 167,
+                    "total_tokens": 6250
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I actually placed the order on April 15th and I'm still waiting for confirmation of payment. The issue is with the online payment itself, not with the shipping or product quality.\"",
+                "usage": {
+                    "prompt_tokens": 1700,
+                    "completion_tokens": 38,
+                    "total_tokens": 1738
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD68694117 with Product_6, currently Shipped. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain that the issue is not with shipping or product quality, but rather with the online payment itself.\n\n**Execution**:\nFinal Response: \"I understand that the issue is related to the online payment, which was processed on April 15th. Unfortunately, we cannot cancel or refund an order due to payment issues at this stage. However, I can offer you a full cancellation of your order (ORD68694117) and provide a refund for the amount paid ($182.05). Would you like me to proceed with cancelling the order?\"",
+                "usage": {
+                    "prompt_tokens": 3321,
+                    "completion_tokens": 115,
+                    "total_tokens": 3436
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 40.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's specific concern regarding payment confirmation, instead offering irrelevant services.",
+            "s_completeness": "The response is incomplete as it provides no information or next steps regarding the payment issue raised by the customer.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD68694117 with Product_6, currently Shipped. I can help with tracking, cancellation, or refund requests."
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD68694117 with Product_6, currently Shipped."
+            ]
+        }
+    }
+}

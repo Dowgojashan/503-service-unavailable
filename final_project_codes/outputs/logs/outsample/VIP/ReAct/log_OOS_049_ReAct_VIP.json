@@ -1,0 +1,114 @@
+{
+    "metadata": {
+        "case_id": "OOS_049",
+        "agent_type": "ReAct",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 27.1
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 16134,
+        "total_completion_tokens": 255,
+        "grand_total_tokens": 16389
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with the cordless vacuum on your site - I'm trying to decide if it's suitable for my apartment, but I can't find clear information on how long the battery lasts on the high-power setting. Could you let me know if it's enough to cover a standard-sized apartment?",
+                "usage": {
+                    "prompt_tokens": 1832,
+                    "completion_tokens": 70,
+                    "total_tokens": 1902
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine - my email is oos049@example.com. Now, about the cordless vacuum: I'm trying to decide if it's suitable for my apartment, but I really need to know how long the battery lasts on the high-power setting before making a decision. Can you provide that information?",
+                "usage": {
+                    "prompt_tokens": 2014,
+                    "completion_tokens": 74,
+                    "total_tokens": 2088
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order N/A (Product_62) is currently N/A. Is there anything else I can help you with today?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 2
+        },
+        "final_score_0_100": 5.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's core product inquiry and provided irrelevant order status information instead.",
+            "s_completeness": "The response failed to address the customer's question, providing no information to help them make a purchasing decision.",
+            "s_tone": "The agent's response was robotic and dismissive, failing to acknowledge the customer's actual request."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order N/A (Product_62) is currently N/A. Is there anything else I can help you with today?"
+            ],
+            "s_completeness": [
+                "Your order N/A (Product_62) is currently N/A. Is there anything else I can help you with today?"
+            ],
+            "s_tone": [
+                "Your order N/A (Product_62) is currently N/A. Is there anything else I can help you with today?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.874095+00:00",
+        "s_answer_quality": 5.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {},
+        "s_outcome": 43.0,
+        "s_tool": 25.0,
+        "tool_detail": {
+            "tool_f1": 0.0,
+            "arg_correctness": 0.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 75.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": false
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 54.0,
+        "s_agent": 54.0,
+        "proxy_cost": 23.56,
+        "net_value": 0.3044
+    }
+}

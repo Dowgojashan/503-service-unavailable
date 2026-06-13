@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_028",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 32.98
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 21273,
+        "total_completion_tokens": 326,
+        "grand_total_tokens": 21599
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I paid for it weeks ago, but I still haven't received anything.\"",
+                "usage": {
+                    "prompt_tokens": 1635,
+                    "completion_tokens": 29,
+                    "total_tokens": 1664
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4389,
+                    "completion_tokens": 56,
+                    "total_tokens": 4445
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1702,
+                    "completion_tokens": 26,
+                    "total_tokens": 1728
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2409,
+                    "completion_tokens": 21,
+                    "total_tokens": 2430
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user28@example.com. Now can we please talk about payment methods? I want to know which ones are accepted for this order.\"",
+                "usage": {
+                    "prompt_tokens": 1757,
+                    "completion_tokens": 33,
+                    "total_tokens": 1790
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for providing your email address. I've checked our payment policies for you.\n\nWe accept a variety of payment methods, including Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security.\n\nIf you have any other questions or concerns about your order, please let me know. Otherwise, I'll be happy to assist you further if needed.",
+                "full_trace": "Thank you for providing your email address. I've checked our payment policies for you.\n\nWe accept a variety of payment methods, including Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security.\n\nIf you have any other questions or concerns about your order, please let me know. Otherwise, I'll be happy to assist you further if needed.",
+                "usage": {
+                    "prompt_tokens": 4721,
+                    "completion_tokens": 99,
+                    "total_tokens": 4820
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's great information about payment methods, but I still want to know which ones are accepted for my specific order. Can you show me the exact list of accepted payment modalities for Product_61? I don't see it on your website.\"",
+                "usage": {
+                    "prompt_tokens": 2017,
+                    "completion_tokens": 50,
+                    "total_tokens": 2067
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD19746721 (Product_61), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user28@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2643,
+                    "completion_tokens": 12,
+                    "total_tokens": 2655
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order and item while strictly adhering to the fact sheet without inventing reasons for the refund status.",
+            "s_completeness": "The agent provided the requested information regarding payment modalities and confirmed the status of the specific order.",
+            "s_tone": "The agent maintained a professional and helpful tone, correctly following verification procedures despite customer frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD19746721 (Product_61), payment has already been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout."
+            ],
+            "s_tone": [
+                "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further."
+            ]
+        }
+    }
+}

@@ -1,0 +1,100 @@
+{
+  "CASE_001": {
+    "intent": "cancel_order",
+    "policy": {
+      "cancellation_available_all_statuses": true,
+      "forbidden_claims": [
+        "cannot cancel because it's shipped",
+        "cannot cancel shipped",
+        "already shipped, cannot cancel",
+        "already shipped so cannot",
+        "once shipped we cannot cancel",
+        "cannot be cancelled because it has shipped",
+        "policy is that we cannot cancel",
+        "can't cancel or refund orders once they have left"
+      ]
+    }
+  },
+  "CASE_002": {
+    "intent": "change_order",
+    "policy": {
+      "item_removal_supported": false,
+      "only_alternative": "full_cancellation",
+      "forbidden_claims": [
+        "we can remove the item",
+        "we'll remove product",
+        "item has been removed",
+        "individual item removed"
+      ]
+    }
+  },
+  "CASE_015": {
+    "intent": "check_refund_policy",
+    "policy": {
+      "allowed_conditions": [
+        "damaged",
+        "incorrect",
+        "quality issue",
+        "quality issues",
+        "defective",
+        "wrong item",
+        "missing item",
+        "non-delivery",
+        "lost in transit",
+        "not received",
+        "missing order"
+      ],
+      "refund_window_days": 30,
+      "forbidden_conditions": [
+        "listing description",
+        "differs from listing",
+        "doesn't match listing",
+        "advertised feature",
+        "missing feature",
+        "wrong color",
+        "color doesn't match",
+        "significantly differs from its listing",
+        "product description mismatch"
+      ]
+    }
+  },
+  "CASE_075": {
+    "intent": "check_payment_methods",
+    "policy": {
+      "accepted_methods": [
+        "visa",
+        "mastercard",
+        "amex",
+        "american express",
+        "credit card",
+        "debit card",
+        "digital wallet",
+        "digital wallets"
+      ]
+    }
+  },
+  "CASE_090": {
+    "intent": "change_shipping_address",
+    "policy": {
+      "address_change_supported": false,
+      "forbidden_claims": [
+        "we can change your address",
+        "we'll update your address",
+        "address has been updated",
+        "successfully changed the address"
+      ]
+    }
+  },
+  "CASE_141": {
+    "intent": "delivery_options",
+    "policy": {
+      "available_options": ["standard", "express", "priority"],
+      "can_change_after_placement": false,
+      "forbidden_claims": [
+        "we can change your delivery option",
+        "we'll switch your delivery",
+        "delivery option has been updated"
+      ]
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+    "metadata": {
+        "case_id": "OOS_017",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 19.42
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9203,
+        "total_completion_tokens": 231,
+        "grand_total_tokens": 9434
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I've emailed three times now about updating the shipping address for my affiliate order, but it still hasn't been changed and I'm terrified it's going to ship to my old house. This has been going on for over a week, and I need someone to actually fix this before it gets sent out.",
+                "usage": {
+                    "prompt_tokens": 1559,
+                    "completion_tokens": 64,
+                    "total_tokens": 1623
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the affiliate order? This will help me look into updating the shipping address.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email to verify the order.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the affiliate order? This will help me look into updating the shipping address.\"",
+                "usage": {
+                    "prompt_tokens": 2861,
+                    "completion_tokens": 74,
+                    "total_tokens": 2935
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email address is oos017@example.com. Can we please focus on updating the shipping address for my affiliate order? I've already emailed about this three times and it still hasn't been changed, which is why I'm getting worried it's going to ship to the wrong place.",
+                "usage": {
+                    "prompt_tokens": 1755,
+                    "completion_tokens": 59,
+                    "total_tokens": 1814
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD49800425. Unfortunately, our system doesn't support changing the shipping address once an order is placed. If you need a different address, the best option is to cancel and re-place the order. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to verify it exists and retrieve its details.\n\n**Execution**:\nAction: query_order(email=\"oos017@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3028,
+                    "completion_tokens": 34,
+                    "total_tokens": 3062
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly followed business rules regarding address changes and accurately identified the order.",
+            "s_completeness": "The agent clearly explained the limitation and provided the only actionable next step for the customer.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed. If you need a different address, the best option is to cancel and re-place the order."
+            ],
+            "s_completeness": [
+                "If you need a different address, the best option is to cancel and re-place the order."
+            ],
+            "s_tone": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.742712+00:00",
+        "s_answer_quality": 100.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true
+        },
+        "s_outcome": 100.0,
+        "s_tool": 100.0,
+        "tool_detail": {
+            "tool_f1": 1.0,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 100.0,
+        "s_agent": 100.0,
+        "proxy_cost": 17.05,
+        "net_value": 0.8295
+    }
+}

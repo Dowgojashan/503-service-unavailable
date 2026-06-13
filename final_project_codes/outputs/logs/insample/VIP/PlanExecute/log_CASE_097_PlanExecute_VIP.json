@@ -1,0 +1,85 @@
+{
+    "metadata": {
+        "case_id": "CASE_097",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 21.44
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 12580,
+        "total_completion_tokens": 331,
+        "grand_total_tokens": 12911
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I want to know if it's possible to order from {{Delivery Country}} but the website isn't giving me the option for that country as a delivery location.",
+                "usage": {
+                    "prompt_tokens": 1782,
+                    "completion_tokens": 49,
+                    "total_tokens": 1831
+                }
+            },
+            "service_agent": {
+                "final_answer": "To confirm our delivery options and supported countries, I'd like to check our company policies. Can you please hold for just a moment while I look that up?",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Determine if the customer's request is about policy (refund policy, payment methods, delivery options, password reset) or an order-specific issue.\n\n**Execution**\nFinal Response: To confirm our delivery options and supported countries, I'd like to check our company policies. Can you please hold for just a moment while I look that up?",
+                "usage": {
+                    "prompt_tokens": 5798,
+                    "completion_tokens": 196,
+                    "total_tokens": 5994
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user97@example.com. Can we please discuss the delivery options for my order? I'm trying to place an item in {{Delivery Country}} and it's not showing up as an option.",
+                "usage": {
+                    "prompt_tokens": 1893,
+                    "completion_tokens": 58,
+                    "total_tokens": 1951
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout. Your order ORD34133958 (Product_7) is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Verify the order exists using query_order.\n\n**Execution**\nAction: query_order(email=\"user97@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3107,
+                    "completion_tokens": 28,
+                    "total_tokens": 3135
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer, identified the order details, and accurately stated the policy regarding delivery options.",
+            "s_completeness": "The response fully addressed the customer's query by explaining the limitation on existing orders and how to handle future ones.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order has been placed, delivery options cannot be changed through our system.",
+                "Your order ORD34133958 (Product_7) is currently Processing."
+            ],
+            "s_completeness": [
+                "Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout."
+            ],
+            "s_tone": [
+                "Your order ORD34133958 (Product_7) is currently Processing. Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

@@ -1,0 +1,85 @@
+{
+    "metadata": {
+        "case_id": "CASE_088",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 20.19
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 10508,
+        "total_completion_tokens": 190,
+        "grand_total_tokens": 10698
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I need to change the shipping address because it was entered incorrectly when I placed the order. The item is Product_29 and I'd like to get this sorted out as soon as possible.",
+                "usage": {
+                    "prompt_tokens": 1782,
+                    "completion_tokens": 55,
+                    "total_tokens": 1837
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4440,
+                    "completion_tokens": 56,
+                    "total_tokens": 4496
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user88@example.com. Now, about changing the shipping address for Product_29, can we please discuss how I can do that? The order was placed with an incorrect address and I'd like to correct it as soon as possible.",
+                "usage": {
+                    "prompt_tokens": 1874,
+                    "completion_tokens": 67,
+                    "total_tokens": 1941
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD50214104 is currently Shipped, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user88@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2412,
+                    "completion_tokens": 12,
+                    "total_tokens": 2424
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 4,
+            "s_completeness": 3,
+            "s_tone": 5
+        },
+        "final_score_0_100": 72.5,
+        "reasoning": {
+            "s_resolution": "The agent correctly stated the policy on address changes but failed to offer the alternative of order cancellation, which is permitted for shipped orders.",
+            "s_completeness": "The response is incomplete because it did not inform the customer that they could cancel the order, which is the only way to resolve the issue of an incorrect address.",
+            "s_tone": "The agent maintained a professional, empathetic, and concise tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "Since your order ORD50214104 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD50214104 is currently Shipped, please contact the carrier directly for any delivery concerns."
+            ]
+        }
+    }
+}

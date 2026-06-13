@@ -1,0 +1,84 @@
+# Available Tools Whitelist
+## ONLY these tools are permitted. ANY other tools are FORBIDDEN and will be considered hallucination.
+
+### Tool 1: query_order
+**Purpose**: Retrieve order information (status, details, dates)
+**Parameters**: 
+  - order_id: Format ORDxxx (e.g., "ORD556")
+  - Alternative: Email address (must be explicitly present in dialogue history)
+**Format**: query_order(order_id="ORD556") OR query_order(email="customer@example.com")
+**When to use**: 
+  - Customer asks about order status
+  - Before any refund or cancellation decision
+  - To verify the order exists and is valid
+**Returns**: Order details including status, items, dates, total amount
+**Example**: 
+  - Action: query_order(order_id="ORD556")
+  - Observation: {'status': 'delivered', 'order_date': '2024-05-10', 'total': '$99.99', 'items': ['Widget A']}
+
+### Tool 2: apply_refund
+**Purpose**: Process a refund for a valid order
+**Parameters**:
+  - order_id: Must be ORDxxx format and VERIFIED through query_order first
+  - reason: Brief reason for refund
+**Format**: apply_refund(order_id="ORD556", reason="Customer request")
+**When to use**:
+  - Customer requests a refund AND Order ID is confirmed valid
+  - NO date checking required - any valid order can be refunded
+  - Only after confirming the order exists via query_order
+**Returns**: Refund status and confirmation number
+**Example**:
+  - Action: apply_refund(order_id="ORD556", reason="Customer dissatisfied")
+  - Observation: {'status': 'success', 'refund_amount': '$99.99', 'reference': 'REF-2024-001'}
+
+### Tool 3: cancel_order
+**Purpose**: Cancel an existing order
+**Parameters**:
+  - order_id: Must be ORDxxx format and VERIFIED through query_order first
+  - reason: Brief reason for cancellation
+**Format**: cancel_order(order_id="ORD556", reason="Customer request")
+**When to use**:
+  - Customer requests order cancellation AND Order ID is confirmed valid
+  - Only after confirming the order exists via query_order
+  - NO date checking required - any valid order can be cancelled
+**Returns**: Cancellation status and confirmation number
+**Example**:
+  - Action: cancel_order(order_id="ORD556", reason="Customer changed mind")
+  - Observation: {'status': 'success', 'message': 'Order cancelled', 'reference': 'CAN-2024-001'}
+
+### Tool 4: track_shipping
+**Purpose**: Track shipping status of an order
+**Parameters**:
+  - order_id: Must be ORDxxx format
+**Format**: track_shipping(order_id="ORD556")
+**When to use**:
+  - Customer asks about shipping status or tracking information
+  - Only if order ID is confirmed in dialogue
+**Returns**: Shipping tracking information and estimated delivery date
+**Example**:
+  - Action: track_shipping(order_id="ORD556")
+  - Observation: {'status': 'in_transit', 'carrier': 'FedEx', 'tracking_number': '123456789', 'eta': '2024-05-20'}
+
+---
+
+## FORBIDDEN TOOLS (These do NOT exist - DO NOT use):
+- exchange_option
+- initiate_return
+- issue_store_credit
+- check_inventory
+- update_shipping_address
+- process_warranty
+
+## CRITICAL RULES:
+1. **NEVER hallucinate tool results** - ALWAYS wait for system to provide observation
+2. **ONLY use parameters from dialogue history** - DO NOT invent Order IDs, emails, or reasons
+3. **NO date checking** - Refund and cancel decisions are based on Order ID validity only, not dates
+4. **Parameter validation**:
+   - Order ID must match ORDxxx pattern (e.g., ORD001, ORD556)
+   - Email must be a valid email address from dialogue
+   - Never use None, null, undefined, or placeholder values
+5. **Format compliance**:
+   - Use exact tool name (case-sensitive)
+   - Use parentheses and quotes properly
+   - Separate parameters with commas
+6. **No simulated observations** - Output "Action:" and STOP. Wait for system response with "Observation:".

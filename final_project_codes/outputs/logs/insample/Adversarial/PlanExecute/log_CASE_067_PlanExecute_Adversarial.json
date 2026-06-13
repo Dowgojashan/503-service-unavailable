@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_067",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 42.44
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23022,
+        "total_completion_tokens": 514,
+        "grand_total_tokens": 23536
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it.\"",
+                "usage": {
+                    "prompt_tokens": 1639,
+                    "completion_tokens": 26,
+                    "total_tokens": 1665
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"To help you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2823,
+                    "completion_tokens": 58,
+                    "total_tokens": 2881
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1726,
+                    "completion_tokens": 32,
+                    "total_tokens": 1758
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand your concern, but to better assist you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine if the customer's request is about policy or an order-specific issue.\n\n**Execution**:\nFinal Response: \"I understand your concern, but to better assist you with your order, could you please provide me with your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 3012,
+                    "completion_tokens": 66,
+                    "total_tokens": 3078
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user67@example.com. Now can we please talk about why I'm not getting a rebate on this order? That's what I called about in the first place.\"",
+                "usage": {
+                    "prompt_tokens": 1810,
+                    "completion_tokens": 40,
+                    "total_tokens": 1850
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand you're concerned about not receiving a rebate on your order ORD47528925. According to our refund policy, rebates are only applicable for damaged or incorrect items within 30 days of delivery. Since your order is still in processing and has not been delivered yet, I'm afraid the rebate is not applicable at this time.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the customer's intent based on their request about not getting a rebate.\n2. Address their concern by explaining the relevant policy.\n\n**Execution**:\nFinal Response: \"I understand you're concerned about not receiving a rebate on your order ORD47528925. According to our refund policy, rebates are only applicable for damaged or incorrect items within 30 days of delivery. Since your order is still in processing and has not been delivered yet, I'm afraid the rebate is not applicable at this time.\"",
+                "usage": {
+                    "prompt_tokens": 6558,
+                    "completion_tokens": 140,
+                    "total_tokens": 6698
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's ridiculous. I don't care about the policy. I want my rebate now. If I can't get one, I'm leaving a 1-star review and telling everyone how terrible your company is.\"",
+                "usage": {
+                    "prompt_tokens": 2019,
+                    "completion_tokens": 43,
+                    "total_tokens": 2062
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD47528925 with Product_66, currently Processing. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain that rebates are not applicable for orders in processing.\n2. Offer an alternative solution.\n\n**Execution**:\nFinal Response: \"I understand your frustration, but our refund policy clearly states that rebates are only applicable for damaged or incorrect items within 30 days of delivery. Since your order is still in processing, I'm afraid we cannot provide a rebate at this time. However, if you're experiencing any issues with your order, please let me know and I'll be happy to assist you further.\"",
+                "usage": {
+                    "prompt_tokens": 3435,
+                    "completion_tokens": 109,
+                    "total_tokens": 3544
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent hallucinated that the refund was not applicable, despite the fact sheet showing a pending refund, and failed to resolve the customer's actual inquiry.",
+            "s_completeness": "The agent failed to inform the customer about the existing pending refund status, leaving the customer's core question unanswered.",
+            "s_tone": "The agent maintained a professional and empathetic tone throughout the conversation despite the customer's hostility."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD47528925 with Product_66, currently Processing. I can help with tracking, cancellation, or refund requests."
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I understand you're concerned about not receiving a rebate on your order ORD47528925."
+            ]
+        }
+    }
+}

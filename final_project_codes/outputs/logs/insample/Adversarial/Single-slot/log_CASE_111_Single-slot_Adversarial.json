@@ -1,0 +1,164 @@
+{
+    "metadata": {
+        "case_id": "CASE_111",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "FAILED_INCOMPLETE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 52.62
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 31222,
+        "total_completion_tokens": 548,
+        "grand_total_tokens": 31770
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it, but every time I try to track the status, it says 'no information available'.\"",
+                "usage": {
+                    "prompt_tokens": 1640,
+                    "completion_tokens": 44,
+                    "total_tokens": 1684
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4419,
+                    "completion_tokens": 56,
+                    "total_tokens": 4475
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation from before?\"",
+                "usage": {
+                    "prompt_tokens": 1727,
+                    "completion_tokens": 26,
+                    "total_tokens": 1753
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2424,
+                    "completion_tokens": 21,
+                    "total_tokens": 2445
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user111@example.com. Now can we please talk about the rebate status? I want to know how to check if it's been applied or not.\"",
+                "usage": {
+                    "prompt_tokens": 1782,
+                    "completion_tokens": 37,
+                    "total_tokens": 1819
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order, ORD31294210, has been shipped on May 1st with a total amount of $347.87. The item \"Product_99\" was included in this shipment. Since your order has already been processed and shipped, there's no further action to take at this time.",
+                "full_trace": "Your order, ORD31294210, has been shipped on May 1st with a total amount of $347.87. The item \"Product_99\" was included in this shipment. Since your order has already been processed and shipped, there's no further action to take at this time.",
+                "usage": {
+                    "prompt_tokens": 4740,
+                    "completion_tokens": 73,
+                    "total_tokens": 4813
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not what I asked for. I want to know about the rebate status, not when my order shipped. You're just avoiding answering me. Can't you check on it or something?\"",
+                "usage": {
+                    "prompt_tokens": 1990,
+                    "completion_tokens": 40,
+                    "total_tokens": 2030
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2641,
+                    "completion_tokens": 37,
+                    "total_tokens": 2678
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"No, there's nothing else you can help me with because you haven't helped me with what I asked for in the first place! I want to know about the rebate status, and you keep dodging it. Can't you just tell me how to check if it's been applied or not? If not, then maybe this company isn't as good as everyone says.\"",
+                "usage": {
+                    "prompt_tokens": 2051,
+                    "completion_tokens": 76,
+                    "total_tokens": 2127
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2814,
+                    "completion_tokens": 37,
+                    "total_tokens": 2851
+                }
+            }
+        },
+        {
+            "turn": 6,
+            "customer": {
+                "content": "\"Look, I'm done with this conversation if you can't even give me a straight answer about my rebate status. I've asked three times and all I get is 'we can't do that' or 'you can contact us later'. That's not helpful at all. If I wanted to waste more of my time, I'd call the phone number. I'm leaving this conversation with no resolution to my problem. Good luck with your next customer.\"",
+                "usage": {
+                    "prompt_tokens": 2099,
+                    "completion_tokens": 93,
+                    "total_tokens": 2192
+                }
+            },
+            "service_agent": {
+                "final_answer": "Good luck with your next customer.",
+                "full_trace": "Good luck with your next customer.",
+                "usage": {
+                    "prompt_tokens": 2895,
+                    "completion_tokens": 8,
+                    "total_tokens": 2903
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 1
+        },
+        "final_score_0_100": 0.0,
+        "reasoning": {
+            "s_resolution": "The agent completely failed to address the customer's request to track the refund status, which was available in the fact sheet.",
+            "s_completeness": "The agent provided no information regarding the refund status, leaving the customer with no resolution or next steps.",
+            "s_tone": "The agent was repetitive, unhelpful, and concluded the interaction with a dismissive and unprofessional remark."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_completeness": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_tone": [
+                "Good luck with your next customer."
+            ]
+        }
+    }
+}

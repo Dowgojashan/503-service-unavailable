@@ -1,0 +1,144 @@
+{
+    "metadata": {
+        "case_id": "CASE_123",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 50.33
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 29881,
+        "total_completion_tokens": 496,
+        "grand_total_tokens": 30377
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I'm having trouble making payments for my order and was wondering how to inform you of the issues with payment.\"",
+                "usage": {
+                    "prompt_tokens": 1508,
+                    "completion_tokens": 26,
+                    "total_tokens": 1534
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4382,
+                    "completion_tokens": 56,
+                    "total_tokens": 4438
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email is user123@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1574,
+                    "completion_tokens": 10,
+                    "total_tokens": 1584
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for providing your registered email address. I've checked on your order and it's currently in processing with an estimated shipping date of May 1st. The total amount due is $273.29 USD. You have one item in your order: Product_64.\n\nIs there anything else I can assist you with regarding this order?",
+                "full_trace": "Thank you for providing your registered email address. I've checked on your order and it's currently in processing with an estimated shipping date of May 1st. The total amount due is $273.29 USD. You have one item in your order: Product_64.\n\nIs there anything else I can assist you with regarding this order?",
+                "usage": {
+                    "prompt_tokens": 4302,
+                    "completion_tokens": 81,
+                    "total_tokens": 4383
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"No, I'm still having trouble making payments for my order. The issue is with payment, not shipping. Can we discuss how to resolve this?\"",
+                "usage": {
+                    "prompt_tokens": 1709,
+                    "completion_tokens": 31,
+                    "total_tokens": 1740
+                }
+            },
+            "service_agent": {
+                "final_answer": "Based on our company's payment policy, you have several options for making payments: Credit card (Visa, Mastercard, American Express), PayPal, or Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security.\n\nIf you're still experiencing issues with your payment, I recommend trying a different method from the ones listed above. If the problem persists, please contact our support team through the contact details in your original order confirmation.\n\nIs there anything else I can assist you with?",
+                "full_trace": "Based on our company's payment policy, you have several options for making payments: Credit card (Visa, Mastercard, American Express), PayPal, or Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security.\n\nIf you're still experiencing issues with your payment, I recommend trying a different method from the ones listed above. If the problem persists, please contact our support team through the contact details in your original order confirmation.\n\nIs there anything else I can assist you with?",
+                "usage": {
+                    "prompt_tokens": 4636,
+                    "completion_tokens": 111,
+                    "total_tokens": 4747
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"I appreciate the options you've provided, but I'm still having trouble making payments. The issue is not with choosing a payment method, but rather with completing the payment itself. Can we discuss how to resolve this payment issue?\"",
+                "usage": {
+                    "prompt_tokens": 1943,
+                    "completion_tokens": 46,
+                    "total_tokens": 1989
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2701,
+                    "completion_tokens": 37,
+                    "total_tokens": 2738
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"Thank you for trying to help me with my payment issue, but I think we've reached an impasse. I appreciate your time and assistance, but I'm still unable to make payments. I'll have to cancel my order then.\"",
+                "usage": {
+                    "prompt_tokens": 1970,
+                    "completion_tokens": 49,
+                    "total_tokens": 2019
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order has been successfully cancelled for the reason you specified. We appreciate your understanding in this matter. Is there anything else I can help you with?",
+                "full_trace": "Your order has been successfully cancelled for the reason you specified. We appreciate your understanding in this matter. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 5156,
+                    "completion_tokens": 49,
+                    "total_tokens": 5205
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to resolve the payment issue and hallucinated that a cancellation was performed without executing a tool.",
+            "s_completeness": "The response lacks necessary confirmation details and fails to address the customer's underlying payment problem.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order has been successfully cancelled for the reason you specified."
+            ],
+            "s_completeness": [
+                "Your order has been successfully cancelled for the reason you specified."
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ]
+        }
+    }
+}

@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_136",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 16.26
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9492,
+        "total_completion_tokens": 194,
+        "grand_total_tokens": 9686
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the secondary delivery address isn't valid and I need help resolving this so I can get my package delivered correctly.",
+                "usage": {
+                    "prompt_tokens": 1783,
+                    "completion_tokens": 39,
+                    "total_tokens": 1822
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with our system?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's an order-specific request.\n\n**Execution**\nFinal Response: \"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address associated with our system?\"",
+                "usage": {
+                    "prompt_tokens": 2836,
+                    "completion_tokens": 69,
+                    "total_tokens": 2905
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user136@example.com. Now, about the secondary delivery address not being valid... can we please focus on resolving this issue so I can get my package delivered correctly?",
+                "usage": {
+                    "prompt_tokens": 1886,
+                    "completion_tokens": 53,
+                    "total_tokens": 1939
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD72256085. Unfortunately, our system doesn't support changing the shipping address once an order is placed. Since your order is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the customer's order.\n\n**Execution**:\nAction: query_order(email=\"user136@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2987,
+                    "completion_tokens": 33,
+                    "total_tokens": 3020
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 3,
+            "s_tone": 5
+        },
+        "final_score_0_100": 47.5,
+        "reasoning": {
+            "s_resolution": "The agent provided nonsensical advice by telling the customer to contact a carrier for an order that is already marked as refunded.",
+            "s_completeness": "The response is incomplete because it fails to clarify the status of the order or address why the customer is being directed to a carrier for a refunded item.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Since your order is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Unfortunately, our system doesn't support changing the shipping address once an order is placed."
+            ],
+            "s_tone": [
+                "I've verified your order ORD72256085. Unfortunately, our system doesn't support changing the shipping address once an order is placed."
+            ]
+        }
+    }
+}

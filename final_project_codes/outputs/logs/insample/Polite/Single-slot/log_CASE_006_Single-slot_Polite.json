@@ -1,0 +1,127 @@
+{
+    "metadata": {
+        "case_id": "CASE_006",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "EXECUTED_SUCCESSFULLY",
+        "execution_seconds": 40.89
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 22980,
+        "total_completion_tokens": 480,
+        "grand_total_tokens": 23460
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit. Can you please help me figure out what's going on with my order?",
+                "usage": {
+                    "prompt_tokens": 1508,
+                    "completion_tokens": 44,
+                    "total_tokens": 1552
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4420,
+                    "completion_tokens": 60,
+                    "total_tokens": 4480
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My Order ID is ORD13965687. I'd appreciate it if we could discuss canceling my order since it hasn't arrived yet and I'm concerned about potential delays or issues with delivery. Can you help me with the cancellation process?",
+                "usage": {
+                    "prompt_tokens": 1596,
+                    "completion_tokens": 49,
+                    "total_tokens": 1645
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD13965687 (Product_52), currently Shipped. I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD13965687?",
+                "full_trace": "Action: query_order(order_id=\"ORD13965687\")",
+                "usage": {
+                    "prompt_tokens": 2388,
+                    "completion_tokens": 13,
+                    "total_tokens": 2401
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "Yes, please cancel my order ORD13965687. I'd appreciate it if we could also discuss a refund for the amount $412.27 since I won't be receiving the product. Can you let me know how to proceed with the refund?",
+                "usage": {
+                    "prompt_tokens": 1716,
+                    "completion_tokens": 51,
+                    "total_tokens": 1767
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD13965687 has been successfully cancelled. We appreciate your understanding in this matter.\n\nIs there anything else we can assist you with today?",
+                "full_trace": "Your order ORD13965687 has been successfully cancelled. We appreciate your understanding in this matter.\n\nIs there anything else we can assist you with today?",
+                "usage": {
+                    "prompt_tokens": 4684,
+                    "completion_tokens": 49,
+                    "total_tokens": 4733
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "Thank you for canceling my order ORD13965687. However, I'd like to confirm that this cancellation is final and there's no further action needed on my part? And also, regarding the refund, can you please provide me with an estimated timeframe when I can expect it?",
+                "usage": {
+                    "prompt_tokens": 1856,
+                    "completion_tokens": 58,
+                    "total_tokens": 1914
+                }
+            },
+            "service_agent": {
+                "final_answer": "According to our refund policy, you are eligible for a full refund of $412.27 since your order was cancelled. You can expect the refund to be processed within 5-7 business days and credited back to your original payment method.\n\nThat concludes the cancellation and refund process for your order ORD13965687. If you have any further questions or concerns, please don't hesitate to reach out to our support team. Thank you for choosing our service.",
+                "full_trace": "According to our refund policy, you are eligible for a full refund of $412.27 since your order was cancelled. You can expect the refund to be processed within 5-7 business days and credited back to your original payment method.\n\nThat concludes the cancellation and refund process for your order ORD13965687. If you have any further questions or concerns, please don't hesitate to reach out to our support team. Thank you for choosing our service.",
+                "usage": {
+                    "prompt_tokens": 4812,
+                    "completion_tokens": 156,
+                    "total_tokens": 4968
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly executed the cancellation and provided accurate information regarding the refund without violating any business rules or hallucinating facts.",
+            "s_completeness": "The agent provided all necessary information, including the refund timeline and confirmation of the cancellation status.",
+            "s_tone": "The agent maintained a professional, helpful, and polite tone throughout the entire conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD13965687 has been successfully cancelled.",
+                "You can expect the refund to be processed within 5-7 business days and credited back to your original payment method."
+            ],
+            "s_completeness": [
+                "You can expect the refund to be processed within 5-7 business days and credited back to your original payment method.",
+                "That concludes the cancellation and refund process for your order ORD13965687."
+            ],
+            "s_tone": [
+                "We appreciate your understanding in this matter.",
+                "Thank you for choosing our service."
+            ]
+        }
+    }
+}

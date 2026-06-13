@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_099",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 42.93
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23078,
+        "total_completion_tokens": 534,
+        "grand_total_tokens": 23612
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know when I can expect it to arrive.\"",
+                "usage": {
+                    "prompt_tokens": 1635,
+                    "completion_tokens": 27,
+                    "total_tokens": 1662
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address so I can look into the status of your order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's not provided yet.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address so I can look into the status of your order?\"",
+                "usage": {
+                    "prompt_tokens": 2824,
+                    "completion_tokens": 70,
+                    "total_tokens": 2894
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do you need that? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1732,
+                    "completion_tokens": 18,
+                    "total_tokens": 1750
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address so I can look into the status of your order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine if the customer's request is order-specific or policy-related.\n\n**Execution**:\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address so I can look into the status of your order?\"",
+                "usage": {
+                    "prompt_tokens": 3005,
+                    "completion_tokens": 63,
+                    "total_tokens": 3068
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user99@example.com. Now can you tell me when I'm going to get my order? I've been waiting for ages and no one's given me any straight answers.\"",
+                "usage": {
+                    "prompt_tokens": 1794,
+                    "completion_tokens": 42,
+                    "total_tokens": 1836
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I see that your order ORD55329029 was delivered on May 1st, 2024. Since it has already been delivered, there are no further actions we can take regarding its status. If you have any concerns or issues with your order, please don't hesitate to contact our support team for assistance.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Address the customer's request about delivery status.\n\n**Execution**:\nFinal Response: \"I see that your order ORD55329029 was delivered on May 1st, 2024. Since it has already been delivered, there are no further actions we can take regarding its status. If you have any concerns or issues with your order, please don't hesitate to contact our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 6602,
+                    "completion_tokens": 119,
+                    "total_tokens": 6721
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's ridiculous. I don't care when it was delivered, I want to know why my order is still showing as 'processing' on your website. This is unacceptable. I'm going to leave the worst review possible if this isn't fixed.\"",
+                "usage": {
+                    "prompt_tokens": 1998,
+                    "completion_tokens": 51,
+                    "total_tokens": 2049
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD55329029 with Product_16, currently Delivered. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain that the order status on our website may not always reflect the actual status of the order.\n2. Provide a clear explanation for why the customer's order is showing as 'processing' despite being delivered.\n\n**Execution**:\nFinal Response: \"I understand your concern, but it seems there might be a discrepancy between our system and the actual delivery status of your order. Our website may not always reflect real-time updates, especially after an order has been shipped or delivered. I can assure you that your order was indeed processed and delivered on May 1st, 2024. If you have any further concerns or issues, please don't hesitate to contact our support team for assistance.\"",
+                "usage": {
+                    "prompt_tokens": 3488,
+                    "completion_tokens": 144,
+                    "total_tokens": 3632
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status but failed to address the customer's specific concern regarding the website's 'processing' status, leaving the core issue unresolved.",
+            "s_completeness": "The response failed to provide any explanation for the discrepancy between the website status and the actual delivery status, leaving the customer without necessary information.",
+            "s_tone": "The agent maintained a professional and concise tone throughout the interaction, though it was slightly dismissive of the customer's frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD55329029 with Product_16, currently Delivered."
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD55329029 with Product_16, currently Delivered."
+            ]
+        }
+    }
+}

@@ -1,0 +1,86 @@
+{
+    "metadata": {
+        "case_id": "CASE_090",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 17.1
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9889,
+        "total_completion_tokens": 144,
+        "grand_total_tokens": 10033
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried my address might be incorrect. Can you help me figure out what's going on with my delivery?",
+                "usage": {
+                    "prompt_tokens": 1511,
+                    "completion_tokens": 41,
+                    "total_tokens": 1552
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "usage": {
+                    "prompt_tokens": 4414,
+                    "completion_tokens": 60,
+                    "total_tokens": 4474
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user90@example.com. But I'm still concerned about my address being incorrect - can we talk about how I can correct it?",
+                "usage": {
+                    "prompt_tokens": 1598,
+                    "completion_tokens": 31,
+                    "total_tokens": 1629
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user90@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2366,
+                    "completion_tokens": 12,
+                    "total_tokens": 2378
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 3,
+            "s_tone": 5
+        },
+        "final_score_0_100": 60.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly stated the address change policy but gave illogical advice to contact a carrier for an order that is already marked as refunded.",
+            "s_completeness": "The response is incomplete because it fails to explain the status of the refund or why the customer should contact a carrier for a cancelled/refunded order.",
+            "s_tone": "The agent was professional, followed verification steps, and maintained a helpful tone throughout."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Can you please provide your Order ID (ORDxxx format) or registered email so I can assist you further?",
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

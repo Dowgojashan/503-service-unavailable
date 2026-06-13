@@ -1,0 +1,198 @@
+{
+    "metadata": {
+        "case_id": "OOS_037",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "FAILED_INCOMPLETE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 56.75
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 31779,
+        "total_completion_tokens": 528,
+        "grand_total_tokens": 32307
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been trying to resolve this payment error for over a week, and I'm beyond frustrated that my card keeps getting declined despite having sufficient funds. My order is still sitting in 'pending' status and I need it fixed immediately.\"",
+                "usage": {
+                    "prompt_tokens": 1681,
+                    "completion_tokens": 48,
+                    "total_tokens": 1729
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4427,
+                    "completion_tokens": 56,
+                    "total_tokens": 4483
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation from last week?\"",
+                "usage": {
+                    "prompt_tokens": 1813,
+                    "completion_tokens": 27,
+                    "total_tokens": 1840
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2429,
+                    "completion_tokens": 21,
+                    "total_tokens": 2450
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is oos037@example.com. Now can we please focus on getting this payment issue resolved? I've already given you all the information you need - it's not about the card being declined, it's about your system not processing the payment correctly.\"",
+                "usage": {
+                    "prompt_tokens": 1869,
+                    "completion_tokens": 56,
+                    "total_tokens": 1925
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on your order, ORD37936371. It's currently in a Processing status with an amount of $32.10 USD for Product_19. Since it hasn't shipped yet, I can assist you with canceling or refunding the order if needed.\n\nIs there anything else I can help you with regarding this order?",
+                "full_trace": "I've checked on your order, ORD37936371. It's currently in a Processing status with an amount of $32.10 USD for Product_19. Since it hasn't shipped yet, I can assist you with canceling or refunding the order if needed.\n\nIs there anything else I can help you with regarding this order?",
+                "usage": {
+                    "prompt_tokens": 4785,
+                    "completion_tokens": 82,
+                    "total_tokens": 4867
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's not what I asked for. I didn't ask about canceling or refunding - I want this payment issue resolved so my order can ship. Can you please look into why my card keeps getting declined? This is ridiculous.\"",
+                "usage": {
+                    "prompt_tokens": 2112,
+                    "completion_tokens": 48,
+                    "total_tokens": 2160
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD37936371 (Product_19), currently Processing. I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD37936371?",
+                "full_trace": "Action: query_order(order_id=\"ORD37936371\")",
+                "usage": {
+                    "prompt_tokens": 2674,
+                    "completion_tokens": 13,
+                    "total_tokens": 2687
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"No, I don't want my order canceled! That's not going to fix the payment issue. Can you please just look into why my card is being declined? This is ridiculous and I'm still waiting for an answer.\"",
+                "usage": {
+                    "prompt_tokens": 2183,
+                    "completion_tokens": 46,
+                    "total_tokens": 2229
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2784,
+                    "completion_tokens": 37,
+                    "total_tokens": 2821
+                }
+            }
+        },
+        {
+            "turn": 6,
+            "customer": {
+                "content": "\"This is unacceptable. I'm still waiting for an answer about why my card keeps getting declined. Can't you just look into this and fix the issue? I don't care about canceling or removing items, I just want to pay for my order and get it shipped already.\"",
+                "usage": {
+                    "prompt_tokens": 2192,
+                    "completion_tokens": 57,
+                    "total_tokens": 2249
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2830,
+                    "completion_tokens": 37,
+                    "total_tokens": 2867
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 2
+        },
+        "final_score_0_100": 5.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the payment issue entirely, instead repeatedly offering unwanted cancellation options.",
+            "s_completeness": "The agent provided no information or next steps regarding the payment decline, leaving the customer's request completely unaddressed.",
+            "s_tone": "The agent was robotic and dismissive, ignoring the customer's frustration and repeating canned responses that did not address the conversation context."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_completeness": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.727975+00:00",
+        "s_answer_quality": 5.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true,
+            "amount_match": true
+        },
+        "s_outcome": 43.0,
+        "s_tool": 50.0,
+        "tool_detail": {
+            "tool_f1": 0.0,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 92.7,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 60.0,
+        "s_agent": 60.0,
+        "proxy_cost": 42.01,
+        "net_value": 0.1799
+    }
+}

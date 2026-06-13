@@ -1,0 +1,116 @@
+{
+    "metadata": {
+        "case_id": "OOS_043",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 26.97
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14283,
+        "total_completion_tokens": 228,
+        "grand_total_tokens": 14511
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I've already contacted you three times about cancelling my return request, but the label is still showing as active in my account. I need this resolved immediately before the courier arrives again.\"",
+                "usage": {
+                    "prompt_tokens": 1542,
+                    "completion_tokens": 40,
+                    "total_tokens": 1582
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4410,
+                    "completion_tokens": 56,
+                    "total_tokens": 4466
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My registered email is oos043@example.com. However, I'd appreciate it if we could focus on resolving my return request cancellation first. The courier is scheduled to arrive soon and I'm worried about the label still being active.\"",
+                "usage": {
+                    "prompt_tokens": 1655,
+                    "completion_tokens": 47,
+                    "total_tokens": 1702
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD95089082 (Product_64), currently Delivered. I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD95089082?",
+                "full_trace": "Action: query_order(email=\"oos043@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2380,
+                    "completion_tokens": 13,
+                    "total_tokens": 2393
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 40.0,
+        "reasoning": {
+            "s_resolution": "The agent misunderstood the customer's intent to cancel a return request, instead offering to cancel the entire order, which would result in the loss of the item the customer wants to keep.",
+            "s_completeness": "The response fails to address the active return label issue and proposes an incorrect solution that does not resolve the customer's core need.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD95089082?"
+            ],
+            "s_completeness": [
+                "I've verified your order ORD95089082 (Product_64), currently Delivered. I can proceed with the cancellation regardless of the shipping status."
+            ],
+            "s_tone": [
+                "I've verified your order ORD95089082 (Product_64), currently Delivered. I can proceed with the cancellation regardless of the shipping status."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.827409+00:00",
+        "s_answer_quality": 40.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true
+        },
+        "s_outcome": 64.0,
+        "s_tool": 100.0,
+        "tool_detail": {
+            "tool_f1": 1.0,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 82.0,
+        "s_agent": 82.0,
+        "proxy_cost": 18.15,
+        "net_value": 0.6385
+    }
+}

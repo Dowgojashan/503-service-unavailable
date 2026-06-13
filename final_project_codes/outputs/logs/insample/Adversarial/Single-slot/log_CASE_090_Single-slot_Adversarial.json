@@ -1,0 +1,107 @@
+{
+    "metadata": {
+        "case_id": "CASE_090",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 23.87
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14602,
+        "total_completion_tokens": 228,
+        "grand_total_tokens": 14830
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it, but every time I try to track it online, it says there's no information available.\"",
+                "usage": {
+                    "prompt_tokens": 1639,
+                    "completion_tokens": 44,
+                    "total_tokens": 1683
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "usage": {
+                    "prompt_tokens": 4422,
+                    "completion_tokens": 62,
+                    "total_tokens": 4484
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1731,
+                    "completion_tokens": 33,
+                    "total_tokens": 1764
+                }
+            },
+            "service_agent": {
+                "final_answer": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "full_trace": "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "usage": {
+                    "prompt_tokens": 2437,
+                    "completion_tokens": 24,
+                    "total_tokens": 2461
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user90@example.com. Now can we please talk about why I'm still waiting for my order and how I can get it delivered to the right address? I've tried tracking it online, but it's not showing up anywhere.\"",
+                "usage": {
+                    "prompt_tokens": 1796,
+                    "completion_tokens": 53,
+                    "total_tokens": 1849
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user90@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2577,
+                    "completion_tokens": 12,
+                    "total_tokens": 2589
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 30.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status but gave illogical advice by telling the customer to contact a carrier for an order that is already marked as refunded.",
+            "s_completeness": "The agent failed to explain why the order was refunded or address the customer's confusion, leaving the customer without a path forward.",
+            "s_tone": "The agent was professional but repetitive and dismissive of the customer's confusion regarding the order status."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Shipping addresses cannot be changed once an order is placed.",
+                "Since your order ORD49006026 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Can you please provide your Order ID (ORDxxx format) or registered email so I can look into this further?",
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

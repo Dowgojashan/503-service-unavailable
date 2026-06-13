@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_022",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 22.79
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14431,
+        "total_completion_tokens": 199,
+        "grand_total_tokens": 14630
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I paid for expedited shipping but it's still stuck on 'processing' after three days.\"",
+                "usage": {
+                    "prompt_tokens": 1630,
+                    "completion_tokens": 33,
+                    "total_tokens": 1663
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4397,
+                    "completion_tokens": 56,
+                    "total_tokens": 4453
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID again? Can't you just look it up from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1696,
+                    "completion_tokens": 24,
+                    "total_tokens": 1720
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2411,
+                    "completion_tokens": 21,
+                    "total_tokens": 2432
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user22@example.com. Now can we please talk about why I'm not seeing any payment options for my order? It's still stuck on 'processing' and I want to know if there's an issue with the payment method.\"",
+                "usage": {
+                    "prompt_tokens": 1749,
+                    "completion_tokens": 53,
+                    "total_tokens": 1802
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD06505513 (Product_21), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user22@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2548,
+                    "completion_tokens": 12,
+                    "total_tokens": 2560
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 3
+        },
+        "final_score_0_100": 90.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer's identity and accurately addressed the payment inquiry without any factual errors.",
+            "s_completeness": "The agent provided all necessary information regarding payment methods and the status of the specific order.",
+            "s_tone": "The agent was professional but relied on robotic, repetitive phrasing that failed to acknowledge the customer's frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD06505513 (Product_21), payment has already been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD06505513 (Product_21), payment has already been processed."
+            ],
+            "s_tone": [
+                "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further."
+            ]
+        }
+    }
+}

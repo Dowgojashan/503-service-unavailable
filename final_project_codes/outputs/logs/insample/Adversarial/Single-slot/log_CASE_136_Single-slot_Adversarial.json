@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_136",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 22.9
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14504,
+        "total_completion_tokens": 204,
+        "grand_total_tokens": 14708
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been trying to set up shipping for my order, but the system keeps saying my secondary delivery address isn't valid. This is ridiculous - I know it's correct!\"",
+                "usage": {
+                    "prompt_tokens": 1635,
+                    "completion_tokens": 36,
+                    "total_tokens": 1671
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4403,
+                    "completion_tokens": 56,
+                    "total_tokens": 4459
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation and see that we're trying to resolve this issue with my secondary delivery address?\"",
+                "usage": {
+                    "prompt_tokens": 1708,
+                    "completion_tokens": 39,
+                    "total_tokens": 1747
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2429,
+                    "completion_tokens": 21,
+                    "total_tokens": 2450
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user136@example.com. Now can we please focus on fixing this address issue? I don't want to have to wait another day for my order to be delivered.\"",
+                "usage": {
+                    "prompt_tokens": 1776,
+                    "completion_tokens": 40,
+                    "total_tokens": 1816
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD72256085 is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user136@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2553,
+                    "completion_tokens": 12,
+                    "total_tokens": 2565
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 3
+        },
+        "final_score_0_100": 90.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly applied business rules regarding address changes and order status without hallucinating any information.",
+            "s_completeness": "The response clearly explained why the request could not be fulfilled and provided the current status of the order.",
+            "s_tone": "The agent was professional but used robotic, repetitive phrasing when asking for verification, which hindered the flow of conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD72256085 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD72256085 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further."
+            ]
+        }
+    }
+}

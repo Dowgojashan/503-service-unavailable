@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_025",
+        "agent_type": "Single-slot",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 38.45
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 22713,
+        "total_completion_tokens": 366,
+        "grand_total_tokens": 23079
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm trying to place an order but I need to know what payment methods are accepted before I proceed. Can you tell me which payment options are available?",
+                "usage": {
+                    "prompt_tokens": 1508,
+                    "completion_tokens": 34,
+                    "total_tokens": 1542
+                }
+            },
+            "service_agent": {
+                "final_answer": "What's your order number (ORDxxx) or registered email?",
+                "full_trace": "What's your order number (ORDxxx) or registered email?",
+                "usage": {
+                    "prompt_tokens": 4391,
+                    "completion_tokens": 42,
+                    "total_tokens": 4433
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is user25@example.com. But I'd appreciate it if we could focus on the payment options first. Can you tell me which methods are accepted for this order?",
+                "usage": {
+                    "prompt_tokens": 1567,
+                    "completion_tokens": 37,
+                    "total_tokens": 1604
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our accepted payment methods include Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security. We also accept USD, EUR, GBP, and other major currencies.\n\nIs there anything else I can assist you with?",
+                "full_trace": "Our accepted payment methods include Credit card (Visa, Mastercard, American Express), PayPal, and Bank transfer. All transactions are processed immediately upon order placement and are encrypted for security. We also accept USD, EUR, GBP, and other major currencies.\n\nIs there anything else I can assist you with?",
+                "usage": {
+                    "prompt_tokens": 4363,
+                    "completion_tokens": 72,
+                    "total_tokens": 4435
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "No, I think we're good on payment methods now. But actually, I was wondering if there's an option for payment plans or installments? I'd like to know if it's possible to split the cost of my order into smaller payments.",
+                "usage": {
+                    "prompt_tokens": 1722,
+                    "completion_tokens": 51,
+                    "total_tokens": 1773
+                }
+            },
+            "service_agent": {
+                "final_answer": "It seems we don't offer payment plans or installments for our orders. However, you can still place your order as usual and make a single payment upfront.\n\nIs there anything else I can assist you with?",
+                "full_trace": "It seems we don't offer payment plans or installments for our orders. However, you can still place your order as usual and make a single payment upfront.\n\nIs there anything else I can assist you with?",
+                "usage": {
+                    "prompt_tokens": 4688,
+                    "completion_tokens": 54,
+                    "total_tokens": 4742
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "I appreciate your help so far. However, I'm still trying to understand if there's an option for payment plans or installments. You mentioned earlier that we can place the order as usual and make a single payment upfront, but I'd like to confirm that this is indeed our only option. Can you clarify?",
+                "usage": {
+                    "prompt_tokens": 1867,
+                    "completion_tokens": 64,
+                    "total_tokens": 1931
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout. For your order ORD80319147 (Product_89), payment has already been processed. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user25@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2607,
+                    "completion_tokens": 12,
+                    "total_tokens": 2619
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 4,
+            "s_completeness": 4,
+            "s_tone": 5
+        },
+        "final_score_0_100": 80.0,
+        "reasoning": {
+            "s_resolution": "The agent addressed the payment method inquiry but failed to clearly confirm that installments are not an option, instead repeating the payment method list.",
+            "s_completeness": "The information provided was mostly complete, though the customer's specific question about installment exclusivity remained slightly ambiguous.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD80319147 (Product_89), payment has already been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex) and digital wallets at checkout."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

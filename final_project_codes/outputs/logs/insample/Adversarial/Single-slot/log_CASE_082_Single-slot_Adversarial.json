@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_082",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 22.4
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14482,
+        "total_completion_tokens": 197,
+        "grand_total_tokens": 14679
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to change the delivery address, but it's not letting me do it on the website.\"",
+                "usage": {
+                    "prompt_tokens": 1635,
+                    "completion_tokens": 35,
+                    "total_tokens": 1670
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4401,
+                    "completion_tokens": 56,
+                    "total_tokens": 4457
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1708,
+                    "completion_tokens": 33,
+                    "total_tokens": 1741
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2422,
+                    "completion_tokens": 21,
+                    "total_tokens": 2443
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, I'll give you my email. It's user82@example.com. Now can we please talk about changing the delivery address? I just want to update it to a different location.\"",
+                "usage": {
+                    "prompt_tokens": 1770,
+                    "completion_tokens": 40,
+                    "total_tokens": 1810
+                }
+            },
+            "service_agent": {
+                "final_answer": "Shipping addresses cannot be changed once an order is placed. Since your order ORD08592089 is currently Refunded, please contact the carrier directly for any delivery concerns. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user82@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2546,
+                    "completion_tokens": 12,
+                    "total_tokens": 2558
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 3,
+            "s_tone": 4
+        },
+        "final_score_0_100": 55.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status and policy, but gave illogical advice to contact a carrier for an order that is already marked as refunded.",
+            "s_completeness": "The response is incomplete because it directs the customer to a carrier for a non-existent delivery, failing to clarify the status of the refund or the order's actual state.",
+            "s_tone": "The agent remained professional throughout, though the repetition in the early turns was slightly robotic."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD08592089 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_completeness": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD08592089 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ],
+            "s_tone": [
+                "Shipping addresses cannot be changed once an order is placed. Since your order ORD08592089 is currently Refunded, please contact the carrier directly for any delivery concerns."
+            ]
+        }
+    }
+}

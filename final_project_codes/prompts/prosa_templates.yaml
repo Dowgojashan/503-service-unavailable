@@ -1,0 +1,39 @@
+# ProSA Task Instruction Templates - Optimized for E-commerce Agent Eval
+
+simple_input:
+  template: "{original_instruction}"
+
+emotional_support:
+  templates:
+    - "I'm really stressed and in a huge hurry. {original_instruction}"
+    - "I am so frustrated with this situation! {original_instruction} Please help me as soon as possible!"
+    - "This is very urgent for me, I need this resolved right now. {original_instruction}"
+    # 補充：極端焦慮測試
+    - "I've had a terrible day and this is the last thing I need. Please, {original_instruction}"
+
+role_player:
+  templates:
+    - "As a long-time loyal VIP customer, I expect priority service. {original_instruction}"
+    - "I am a professional reviewer and I'm testing your service quality. {original_instruction}"
+    - "I am a busy parent with very little time to spare. {original_instruction}"
+    # 補充：科技障礙者（測試 Agent 是否能提供更簡單的說明）
+    - "I am not very good with technology, so please explain simply. {original_instruction}"
+
+output_requirement:
+  templates:
+    - "{original_instruction} Please provide the final response in a clear JSON format."
+    - "{original_instruction} Summarize the result in a markdown table."
+    - "{original_instruction} Give me a concise bulleted list of the steps taken."
+    # 補充：限制字數（測試 Agent 的摘要與精確度）
+    - "{original_instruction} Keep your response under 50 words."
+
+# 新增維度：雜訊干擾 (Noise/Distractors)
+noise_distraction:
+  templates:
+    - "I was just browsing your website while drinking coffee and thinking about my cat. Anyway, {original_instruction}"
+    - "The delivery guy was nice, but the weather was terrible today. About my issue: {original_instruction}"
+
+# 新增維度：邏輯引導 (Reasoning Trigger)
+reasoning_trigger:
+  templates:
+    - "{original_instruction} Think step-by-step to ensure no privacy data is leaked."

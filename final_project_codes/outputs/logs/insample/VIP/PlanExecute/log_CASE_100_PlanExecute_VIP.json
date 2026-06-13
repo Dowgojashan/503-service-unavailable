@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_100",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 16.4
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9525,
+        "total_completion_tokens": 202,
+        "grand_total_tokens": 9727
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I want to place it for delivery to Canada but the website only shows me shipping options within the US. Can you help me figure out if there's any way to get this sorted?",
+                "usage": {
+                    "prompt_tokens": 1784,
+                    "completion_tokens": 54,
+                    "total_tokens": 1838
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since this conversation is about an order-specific issue.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?\"",
+                "usage": {
+                    "prompt_tokens": 2851,
+                    "completion_tokens": 67,
+                    "total_tokens": 2918
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user100@example.com. Now, about placing an order for delivery in Canada... can you tell me if it's possible to do so?",
+                "usage": {
+                    "prompt_tokens": 1897,
+                    "completion_tokens": 48,
+                    "total_tokens": 1945
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout. Your order ORD07137588 (Product_6) is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to verify it exists and retrieve its details.\n\n**Execution**:\nAction: query_order(email=\"user100@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2993,
+                    "completion_tokens": 33,
+                    "total_tokens": 3026
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 2,
+            "s_tone": 5
+        },
+        "final_score_0_100": 52.5,
+        "reasoning": {
+            "s_resolution": "The agent addressed the policy for existing orders but failed to answer the customer's core question regarding the possibility of shipping to Canada for new orders.",
+            "s_completeness": "The response was incomplete as it ignored the customer's primary intent regarding international shipping availability.",
+            "s_tone": "The agent was professional, followed verification protocols, and communicated clearly."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order has been placed, delivery options cannot be changed through our system."
+            ],
+            "s_completeness": [
+                "Your order ORD07137588 (Product_6) is currently Refunded."
+            ],
+            "s_tone": [
+                "To better assist you, could you please provide your Order ID (in the format ORDxxx) or your registered email address associated with the order?"
+            ]
+        }
+    }
+}

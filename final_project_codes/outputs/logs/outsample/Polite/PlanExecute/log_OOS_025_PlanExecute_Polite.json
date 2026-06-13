@@ -1,0 +1,137 @@
+{
+    "metadata": {
+        "case_id": "OOS_025",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 32.82
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 17355,
+        "total_completion_tokens": 405,
+        "grand_total_tokens": 17760
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm just checking on the status of my order for the bookshelf I bought last week. It was supposed to arrive yesterday, but the tracking hasn't updated in a few days.",
+                "usage": {
+                    "prompt_tokens": 1536,
+                    "completion_tokens": 40,
+                    "total_tokens": 1576
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can look into the status of your order?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's not provided yet.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can look into the status of your order?\"",
+                "usage": {
+                    "prompt_tokens": 2837,
+                    "completion_tokens": 64,
+                    "total_tokens": 2901
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "My registered email is oos025@example.com. Can you check on the status of my order and let me know if there's an issue with delivery?",
+                "usage": {
+                    "prompt_tokens": 1663,
+                    "completion_tokens": 32,
+                    "total_tokens": 1695
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Your order ORD72839482 was shipped on May 1st. We apologize for any inconvenience caused by the delayed tracking updates. If you have any further concerns or questions, please don't hesitate to reach out.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. The customer asked about the status of their order and potential delivery issues.\n2. Since the order has already shipped, there's no issue with delivery.\n3. However, the customer might be concerned about the delay in tracking updates.\n\n**Execution**:\nFinal Response: \"Your order ORD72839482 was shipped on May 1st. We apologize for any inconvenience caused by the delayed tracking updates. If you have any further concerns or questions, please don't hesitate to reach out.\"",
+                "usage": {
+                    "prompt_tokens": 6179,
+                    "completion_tokens": 138,
+                    "total_tokens": 6317
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "I appreciate the update on when my order was shipped, but I'm still concerned about why the tracking hasn't updated in a few days. Can you tell me if there's an issue with the delivery or if it's just taking longer than expected?",
+                "usage": {
+                    "prompt_tokens": 1762,
+                    "completion_tokens": 51,
+                    "total_tokens": 1813
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD72839482 (Home_38) is currently Shipped, shipped on 2024-05-01. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain the shipping status and estimated delivery time based on the order data.\n\n**Execution**:\nFinal Response: \"Our records show that your order ORD72839482 was shipped on May 1st, which means it should arrive within a few business days. However, if you're concerned about the tracking updates, I can suggest contacting our support team for further assistance.\"",
+                "usage": {
+                    "prompt_tokens": 3378,
+                    "completion_tokens": 80,
+                    "total_tokens": 3458
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 30.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's concern regarding the lack of tracking updates, merely repeating the order status.",
+            "s_completeness": "The response lacks actionable information or next steps for the customer to resolve the delivery concern.",
+            "s_tone": "The agent remained professional but became robotic and unhelpful by repeating information instead of addressing the customer's specific question."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD72839482 (Home_38) is currently Shipped, shipped on 2024-05-01."
+            ],
+            "s_completeness": [
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Your order ORD72839482 (Home_38) is currently Shipped, shipped on 2024-05-01."
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.746179+00:00",
+        "s_answer_quality": 30.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true
+        },
+        "s_outcome": 58.0,
+        "s_tool": 83.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 75.7,
+        "s_agent": 75.7,
+        "proxy_cost": 18.86,
+        "net_value": 0.5684
+    }
+}

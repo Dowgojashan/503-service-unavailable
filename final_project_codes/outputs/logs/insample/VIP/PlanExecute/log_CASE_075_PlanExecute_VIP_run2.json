@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_075",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 22.96
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9113,
+        "total_completion_tokens": 194,
+        "grand_total_tokens": 9307
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the payment method I selected isn't showing up as an option when I try to check out. Can you help me resolve this?",
+                "usage": {
+                    "prompt_tokens": 1786,
+                    "completion_tokens": 43,
+                    "total_tokens": 1829
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\nHere's the response:\n\n**Plan**:\n1. Ask customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**:\nFinal Response: \"To assist you with your issue, could you please provide me with your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2645,
+                    "completion_tokens": 64,
+                    "total_tokens": 2709
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user75@example.com. Now, about the payment options for my order... I'd appreciate it if we could focus on getting those listed so I can proceed with checkout.",
+                "usage": {
+                    "prompt_tokens": 1889,
+                    "completion_tokens": 54,
+                    "total_tokens": 1943
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout. For your order ORD26468425 (Product_76), payment has already been processed and your order is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve data associated with the provided email.\n\n**Execution**:\nAction: query_order(email=\"user75@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2793,
+                    "completion_tokens": 33,
+                    "total_tokens": 2826
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status and details without inventing any reasons for the refund, adhering to all business rules.",
+            "s_completeness": "The agent provided the requested payment information and addressed the customer's specific order status clearly.",
+            "s_tone": "The agent maintained a professional and helpful tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD26468425 (Product_76), payment has already been processed and your order is currently Refunded."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

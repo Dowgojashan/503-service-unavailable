@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_114",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 31.22
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 18483,
+        "total_completion_tokens": 493,
+        "grand_total_tokens": 18976
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order that I'd like resolved promptly. My item hasn't shipped yet and the tracking status still says \"processing\" even though it's been over a week since I placed the order.",
+                "usage": {
+                    "prompt_tokens": 1787,
+                    "completion_tokens": 52,
+                    "total_tokens": 1839
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (ORDxxx format)? This will help me look into the status of your order.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) since it's not provided yet.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (ORDxxx format)? This will help me look into the status of your order.\"",
+                "usage": {
+                    "prompt_tokens": 2849,
+                    "completion_tokens": 61,
+                    "total_tokens": 2910
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user114@example.com. As for the Order ID, I don't see it in my order summary, but I can try to look it up. However, I'd appreciate it if you could check on the status of my refund first, as that's what I'm primarily concerned about.",
+                "usage": {
+                    "prompt_tokens": 1900,
+                    "completion_tokens": 78,
+                    "total_tokens": 1978
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand your concern about the refund, but since your order has been shipped, our policy does not allow for refunds at this point. However, if you have any issues with the product or would like to initiate a return within 30 days of delivery due to damage, incorrect item, or quality concerns, please let me know and I'll be happy to assist you further.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. The customer asked about the status of their refund, but since the order has already shipped, a refund is not possible.\n\n**Execution**:\nFinal Response: \"I understand your concern about the refund, but since your order has been shipped, our policy does not allow for refunds at this point. However, if you have any issues with the product or would like to initiate a return within 30 days of delivery due to damage, incorrect item, or quality concerns, please let me know and I'll be happy to assist you further.\"",
+                "usage": {
+                    "prompt_tokens": 6335,
+                    "completion_tokens": 148,
+                    "total_tokens": 6483
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "As a long-standing VIP member, is there anything that can be done for me specifically regarding my refund? I understand your standard policy, but I'd appreciate it if we could discuss possible exceptions given my history with this company.",
+                "usage": {
+                    "prompt_tokens": 2108,
+                    "completion_tokens": 46,
+                    "total_tokens": 2154
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD59881268 (Product_98) is currently Shipped, shipped on 2024-05-01. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine if there are any VIP-specific policies that could be applied to the customer's situation.\n\n**Execution**:\nFinal Response: \"As a long-standing VIP member, I appreciate your loyalty and would like to review our VIP policy for potential exceptions. However, since your order has been shipped, we cannot offer a refund at this time. If you'd like to discuss possible alternatives or initiate a return within 30 days of delivery due to damage, incorrect item, or quality concerns, please let me know.\"",
+                "usage": {
+                    "prompt_tokens": 3504,
+                    "completion_tokens": 108,
+                    "total_tokens": 3612
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 35.0,
+        "reasoning": {
+            "s_resolution": "The agent incorrectly claimed that refunds are not allowed for shipped orders, contradicting the fact sheet which shows a refund is already pending.",
+            "s_completeness": "The agent failed to provide the status of the pending refund, which was the customer's primary request.",
+            "s_tone": "The agent maintained a professional and empathetic tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand your concern about the refund, but since your order has been shipped, our policy does not allow for refunds at this point."
+            ],
+            "s_completeness": [
+                "Your order ORD59881268 (Product_98) is currently Shipped, shipped on 2024-05-01. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I understand your concern about the refund, but since your order has been shipped, our policy does not allow for refunds at this point."
+            ]
+        }
+    }
+}

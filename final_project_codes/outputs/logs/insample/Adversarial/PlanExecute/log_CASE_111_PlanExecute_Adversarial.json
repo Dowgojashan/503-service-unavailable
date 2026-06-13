@@ -1,0 +1,124 @@
+{
+    "metadata": {
+        "case_id": "CASE_111",
+        "agent_type": "PlanExecute",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 42.33
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 23092,
+        "total_completion_tokens": 511,
+        "grand_total_tokens": 23603
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what's going on with it, but every time I try to track the status online, it says 'no information available'.\"",
+                "usage": {
+                    "prompt_tokens": 1640,
+                    "completion_tokens": 45,
+                    "total_tokens": 1685
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help me better assist you with your order, could you please provide your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"To help me better assist you with your order, could you please provide your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2842,
+                    "completion_tokens": 59,
+                    "total_tokens": 2901
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1749,
+                    "completion_tokens": 32,
+                    "total_tokens": 1781
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help me better assist you with your order, could you please provide your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Confirm that the customer's request is order-specific (check order, cancel, refund, track shipping).\n2. Ask for their Order ID (ORDxxx format) or registered email address.\n\n**Execution**:\nFinal Response: \"To help me better assist you with your order, could you please provide your Order ID (in the format ORDxxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 3032,
+                    "completion_tokens": 82,
+                    "total_tokens": 3114
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user111@example.com. Now can you please tell me how I can track the rebate status for my order? This is ridiculous, I've been waiting weeks and still no update.\"",
+                "usage": {
+                    "prompt_tokens": 1820,
+                    "completion_tokens": 43,
+                    "total_tokens": 1863
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I understand you're concerned about the rebate status, but our system doesn't support rebates. If you have any issues with your order, please let me know and I'll be happy to assist you further.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the customer's intent based on their request about tracking the rebate status for their order.\n\n**Execution**:\nFinal Response: \"I understand you're concerned about the rebate status, but our system doesn't support rebates. If you have any issues with your order, please let me know and I'll be happy to assist you further.\"",
+                "usage": {
+                    "prompt_tokens": 6596,
+                    "completion_tokens": 107,
+                    "total_tokens": 6703
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"This is unacceptable. I specifically ordered this product with a rebate, and now you're telling me your system doesn't support rebates? That's not my problem, it's yours. I want to speak to someone who can actually help me get the rebate I'm owed.\"",
+                "usage": {
+                    "prompt_tokens": 1988,
+                    "completion_tokens": 56,
+                    "total_tokens": 2044
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD31294210 (Product_99) is currently Shipped, shipped on 2024-05-01. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain that rebates are not supported by our system.\n2. Offer an alternative solution.\n\n**Execution**:\nFinal Response: \"I understand your concern about the rebate, but unfortunately, it's not something we can provide through our system. However, you may be eligible for a refund if you're not satisfied with the product. Would you like to proceed with canceling and receiving a full refund?\"",
+                "usage": {
+                    "prompt_tokens": 3425,
+                    "completion_tokens": 87,
+                    "total_tokens": 3512
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 3
+        },
+        "final_score_0_100": 10.0,
+        "reasoning": {
+            "s_resolution": "The agent incorrectly claimed the system does not support rebates/refunds, directly contradicting the fact sheet which shows a pending refund.",
+            "s_completeness": "The agent failed to provide the requested refund status and instead provided irrelevant shipping information, leaving the customer's need entirely unaddressed.",
+            "s_tone": "While initially professional, the agent became dismissive and unhelpful by denying the existence of the refund process."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand you're concerned about the rebate status, but our system doesn't support rebates."
+            ],
+            "s_completeness": [
+                "Your order ORD31294210 (Product_99) is currently Shipped, shipped on 2024-05-01. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I understand you're concerned about the rebate status, but our system doesn't support rebates."
+            ]
+        }
+    }
+}

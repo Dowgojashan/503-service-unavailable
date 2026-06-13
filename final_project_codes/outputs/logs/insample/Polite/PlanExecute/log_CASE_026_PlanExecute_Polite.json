@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_026",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 16.74
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 8945,
+        "total_completion_tokens": 193,
+        "grand_total_tokens": 9138
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might not have gone through properly. Can you help me figure out what's going on with my order?",
+                "usage": {
+                    "prompt_tokens": 1507,
+                    "completion_tokens": 43,
+                    "total_tokens": 1550
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To help you with your order, could you please provide me with either your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email.\n\n**Execution**\nFinal Response: \"To help you with your order, could you please provide me with either your Order ID (in the format ORDxxx) or your registered email address?\"",
+                "usage": {
+                    "prompt_tokens": 2840,
+                    "completion_tokens": 59,
+                    "total_tokens": 2899
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I don't have my Order ID handy right now, but I can give you my email address if that helps. My registered email is user26@example.com. Can we talk about the payment methods for my order? I'd like to know what options are available.",
+                "usage": {
+                    "prompt_tokens": 1609,
+                    "completion_tokens": 54,
+                    "total_tokens": 1663
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout. For your order ORD95851138 (Product_32), payment has already been processed and your order is currently Delivered. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the customer's account and any associated orders.\n\n**Execution**:\nAction: query_order(email=\"user26@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2989,
+                    "completion_tokens": 37,
+                    "total_tokens": 3026
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer's identity and provided accurate information regarding the order status and payment methods.",
+            "s_completeness": "The response fully addressed the customer's intent regarding payment methods and provided relevant context about their specific order.",
+            "s_tone": "The agent maintained a professional, polite, and efficient tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your order ORD95851138 (Product_32), payment has already been processed and your order is currently Delivered."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

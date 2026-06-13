@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_111",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 29.93
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 17066,
+        "total_completion_tokens": 346,
+        "grand_total_tokens": 17412
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I placed an order about a week ago but haven't received it yet and I'm trying to check the status of my rebate.\"",
+                "usage": {
+                    "prompt_tokens": 1512,
+                    "completion_tokens": 30,
+                    "total_tokens": 1542
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can assist you with checking the status of your rebate?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's not provided yet.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can assist you with checking the status of your rebate?\"",
+                "usage": {
+                    "prompt_tokens": 2827,
+                    "completion_tokens": 66,
+                    "total_tokens": 2893
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"My email is user111@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1609,
+                    "completion_tokens": 9,
+                    "total_tokens": 1618
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"I see that your order ORD31294210 has shipped on May 1st, and it contains Product_99. Since you mentioned checking the status of your rebate, I'd like to confirm if there are any issues with your order or if you have any questions about the shipping process.\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Determine the customer's request based on their initial message.\n\n**Execution**:\nFinal Response: \"I see that your order ORD31294210 has shipped on May 1st, and it contains Product_99. Since you mentioned checking the status of your rebate, I'd like to confirm if there are any issues with your order or if you have any questions about the shipping process.\"",
+                "usage": {
+                    "prompt_tokens": 6090,
+                    "completion_tokens": 117,
+                    "total_tokens": 6207
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I'm actually looking for information on my rebate status, not just shipping details. Can you tell me how I can check if my rebate has been processed?\"",
+                "usage": {
+                    "prompt_tokens": 1712,
+                    "completion_tokens": 32,
+                    "total_tokens": 1744
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD31294210 with Product_99, currently Shipped. I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Review the order data to see if there's any information about the rebate status.\n\n**Execution**:\nFinal Response: \"According to our policy, rebates are processed within 30 days of purchase. Since your order was shipped on May 1st and it's been a week, I'd recommend checking with our support team for further assistance. They can look into the status of your rebate and provide you with an update.\"",
+                "usage": {
+                    "prompt_tokens": 3316,
+                    "completion_tokens": 92,
+                    "total_tokens": 3408
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 1,
+            "s_tone": 5
+        },
+        "final_score_0_100": 32.5,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's specific request for rebate status despite the information being present in the fact sheet.",
+            "s_completeness": "The response was entirely unhelpful regarding the customer's intent, leaving the core request completely unanswered.",
+            "s_tone": "The agent maintained a professional and polite tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I've verified your order ORD31294210 with Product_99, currently Shipped. I can help with tracking, cancellation, or refund requests."
+            ],
+            "s_completeness": [
+                "I can help with tracking, cancellation, or refund requests. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I've verified your order ORD31294210 with Product_99, currently Shipped."
+            ]
+        }
+    }
+}

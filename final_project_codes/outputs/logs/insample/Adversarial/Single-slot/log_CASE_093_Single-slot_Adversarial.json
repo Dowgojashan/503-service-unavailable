@@ -1,0 +1,105 @@
+{
+    "metadata": {
+        "case_id": "CASE_093",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 21.58
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 14435,
+        "total_completion_tokens": 188,
+        "grand_total_tokens": 14623
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know what shipping options are available for my item.\"",
+                "usage": {
+                    "prompt_tokens": 1634,
+                    "completion_tokens": 28,
+                    "total_tokens": 1662
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4387,
+                    "completion_tokens": 56,
+                    "total_tokens": 4443
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1700,
+                    "completion_tokens": 33,
+                    "total_tokens": 1733
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2415,
+                    "completion_tokens": 21,
+                    "total_tokens": 2436
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user93@example.com. Now can we please talk about shipping options for my order? I want to know what methods are available and how long they take.\"",
+                "usage": {
+                    "prompt_tokens": 1762,
+                    "completion_tokens": 38,
+                    "total_tokens": 1800
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order is placed, delivery options cannot be changed through our system. For future orders, standard, express, or priority shipping are available at checkout. Your order ORD00785553 (Product_86) is currently Refunded. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user93@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2537,
+                    "completion_tokens": 12,
+                    "total_tokens": 2549
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 4,
+            "s_tone": 3
+        },
+        "final_score_0_100": 82.5,
+        "reasoning": {
+            "s_resolution": "The agent correctly identified the order status and adhered to all business rules regarding policy and identity verification.",
+            "s_completeness": "The agent answered the core question about shipping methods but missed the customer's request for information regarding delivery times.",
+            "s_tone": "The agent was professional but used a robotic, verbatim repetition of the verification request in Turn 2 instead of addressing the customer's concern."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order is placed, delivery options cannot be changed through our system.",
+                "Your order ORD00785553 (Product_86) is currently Refunded."
+            ],
+            "s_completeness": [
+                "For future orders, standard, express, or priority shipping are available at checkout."
+            ],
+            "s_tone": [
+                "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further."
+            ]
+        }
+    }
+}

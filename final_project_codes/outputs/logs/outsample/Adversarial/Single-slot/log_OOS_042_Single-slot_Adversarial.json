@@ -1,0 +1,197 @@
+{
+    "metadata": {
+        "case_id": "OOS_042",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "FAILED_INCOMPLETE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 53.56
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 29448,
+        "total_completion_tokens": 492,
+        "grand_total_tokens": 29940
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've already requested to cancel my mobile phone order three times now, yet I just received a shipping notification this morning. This is completely unacceptable and I need you to stop the shipment immediately.\"",
+                "usage": {
+                    "prompt_tokens": 1670,
+                    "completion_tokens": 39,
+                    "total_tokens": 1709
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4409,
+                    "completion_tokens": 56,
+                    "total_tokens": 4465
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation from before?\"",
+                "usage": {
+                    "prompt_tokens": 1782,
+                    "completion_tokens": 26,
+                    "total_tokens": 1808
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2419,
+                    "completion_tokens": 21,
+                    "total_tokens": 2440
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is oos042@example.com. Now, can you please tell me why this order was not cancelled as I requested? And more importantly, how am I going to get my money back for the phone I don't want?\"",
+                "usage": {
+                    "prompt_tokens": 1837,
+                    "completion_tokens": 51,
+                    "total_tokens": 1888
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD43599764 (Mobile_25), currently Shipped. I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD43599764?",
+                "full_trace": "Action: query_order(email=\"oos042@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2556,
+                    "completion_tokens": 13,
+                    "total_tokens": 2569
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"No, I don't want cancellation - I want this shipment stopped immediately and my full refund processed today. Your previous response doesn't address my original issue at all. Can you please escalate this to someone who can actually help me?\"",
+                "usage": {
+                    "prompt_tokens": 2023,
+                    "completion_tokens": 47,
+                    "total_tokens": 2070
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand that you've explicitly refused cancellation and want to stop the shipment instead. Unfortunately, removing individual items isn't supported in our current system. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand that you've explicitly refused cancellation and want to stop the shipment instead. Unfortunately, removing individual items isn't supported in our current system. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2734,
+                    "completion_tokens": 54,
+                    "total_tokens": 2788
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"This is ridiculous. I don't want an alternative - I want my order stopped and refunded. Your system may not support removing individual items, but surely there's some way to stop the shipment now that it's been sent out incorrectly? I demand you escalate this to someone who can actually help me.\"",
+                "usage": {
+                    "prompt_tokens": 2143,
+                    "completion_tokens": 61,
+                    "total_tokens": 2204
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2775,
+                    "completion_tokens": 37,
+                    "total_tokens": 2812
+                }
+            }
+        },
+        {
+            "turn": 6,
+            "customer": {
+                "content": "\"Unacceptable is right. I've been patient for far too long, and now I'm fed up with this company's incompetence. I want my full refund today, not some vague promise of 'contacting us' in the future. This conversation has gone on long enough - it's time to take action.\"",
+                "usage": {
+                    "prompt_tokens": 2164,
+                    "completion_tokens": 64,
+                    "total_tokens": 2228
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2936,
+                    "completion_tokens": 23,
+                    "total_tokens": 2959
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 2
+        },
+        "final_score_0_100": 25.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to process the requested cancellation and ignored the customer's demand for escalation, effectively stalling the resolution.",
+            "s_completeness": "The agent provided no actionable information or next steps, leaving the customer without a resolution or a path to escalate.",
+            "s_tone": "The agent became robotic and dismissive, repeating the same canned response three times while ignoring the customer's clear distress."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand this isn't the outcome you were hoping for. Is there anything else I can help you with?"
+            ],
+            "s_completeness": [
+                "I understand this isn't the outcome you were hoping for. Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for. Is there anything else I can help you with?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.730294+00:00",
+        "s_answer_quality": 25.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true
+        },
+        "s_outcome": 55.0,
+        "s_tool": 83.3,
+        "tool_detail": {
+            "tool_f1": 0.667,
+            "arg_correctness": 1.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 98.2,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 73.8,
+        "s_agent": 73.8,
+        "proxy_cost": 41.5,
+        "net_value": 0.323
+    }
+}

@@ -1,0 +1,84 @@
+{
+    "metadata": {
+        "case_id": "CASE_147",
+        "agent_type": "PlanExecute",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 16.65
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 9526,
+        "total_completion_tokens": 214,
+        "grand_total_tokens": 9740
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - I need assistance checking the shipment methods available for my recent purchase. The item is Product_85 and I'd appreciate it if you could help me explore the delivery options.",
+                "usage": {
+                    "prompt_tokens": 1783,
+                    "completion_tokens": 51,
+                    "total_tokens": 1834
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"To better assist you, could you please provide your Order ID (ORDxxx format) or registered email associated with your recent purchase?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) since they mentioned an order-specific issue.\n\n**Execution**\nFinal Response: \"To better assist you, could you please provide your Order ID (ORDxxx format) or registered email associated with your recent purchase?\"",
+                "usage": {
+                    "prompt_tokens": 2848,
+                    "completion_tokens": 59,
+                    "total_tokens": 2907
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user147@example.com. Now, about the shipment methods for Product_85, can you please tell me what options are available? I'd like to know if there's any expedited shipping or alternative delivery services that might be suitable for this item.",
+                "usage": {
+                    "prompt_tokens": 1886,
+                    "completion_tokens": 70,
+                    "total_tokens": 1956
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout. Your order ORD44256487 (Product_85) is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to retrieve information about the customer's recent purchase.\n\n**Execution**:\nAction: query_order(email=\"user147@example.com\")",
+                "usage": {
+                    "prompt_tokens": 3009,
+                    "completion_tokens": 34,
+                    "total_tokens": 3043
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly followed verification protocols and accurately communicated the business policy regarding delivery options.",
+            "s_completeness": "The agent provided all necessary information, including the current order status and the limitation on changing delivery methods.",
+            "s_tone": "The agent remained professional, clear, and helpful throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order has been placed, delivery options cannot be changed through our system."
+            ],
+            "s_completeness": [
+                "Your order ORD44256487 (Product_85) is currently Processing."
+            ],
+            "s_tone": [
+                "Once an order has been placed, delivery options cannot be changed through our system. For future orders, you can select standard, express, or priority shipping at checkout."
+            ]
+        }
+    }
+}

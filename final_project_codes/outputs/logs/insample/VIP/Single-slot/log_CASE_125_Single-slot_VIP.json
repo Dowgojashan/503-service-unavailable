@@ -1,0 +1,144 @@
+{
+    "metadata": {
+        "case_id": "CASE_125",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 57.87
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 34079,
+        "total_completion_tokens": 472,
+        "grand_total_tokens": 34551
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I'm having an issue with my payment for the order I placed recently. The amount was supposed to be deducted from my account automatically, but it still shows as pending.\"",
+                "usage": {
+                    "prompt_tokens": 1782,
+                    "completion_tokens": 38,
+                    "total_tokens": 1820
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4406,
+                    "completion_tokens": 56,
+                    "total_tokens": 4462
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"I would have thought my VIP account details were already on file, but fine — my email is user125@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1858,
+                    "completion_tokens": 25,
+                    "total_tokens": 1883
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on your order and it appears that it has already been refunded in full for $173.55. The refund was processed on May 1st, 2024, and you should see this amount credited back to your account shortly. If you have any other questions or concerns, please don't hesitate to reach out. Thank you for contacting us!",
+                "full_trace": "I've checked on your order and it appears that it has already been refunded in full for $173.55. The refund was processed on May 1st, 2024, and you should see this amount credited back to your account shortly. If you have any other questions or concerns, please don't hesitate to reach out. Thank you for contacting us!",
+                "usage": {
+                    "prompt_tokens": 4357,
+                    "completion_tokens": 86,
+                    "total_tokens": 4443
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I'm disappointed. As a VIP member, I expect more accurate information about my order status. The refund was processed on May 1st, but I still see the payment pending in my account. Can you look into this further and let me know why there's a discrepancy?\"",
+                "usage": {
+                    "prompt_tokens": 2018,
+                    "completion_tokens": 57,
+                    "total_tokens": 2075
+                }
+            },
+            "service_agent": {
+                "final_answer": "It appears that your order ORD63646308 has already been refunded, which means it's no longer eligible for further shipping status updates. Since the refund was processed on May 1st, you should see this amount credited back to your account shortly. If you have any other questions or concerns, please don't hesitate to reach out. Thank you for contacting us!",
+                "full_trace": "It appears that your order ORD63646308 has already been refunded, which means it's no longer eligible for further shipping status updates. Since the refund was processed on May 1st, you should see this amount credited back to your account shortly. If you have any other questions or concerns, please don't hesitate to reach out. Thank you for contacting us!",
+                "usage": {
+                    "prompt_tokens": 4703,
+                    "completion_tokens": 87,
+                    "total_tokens": 4790
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"Alright, I understand that my order is refunded and no longer eligible for shipping status updates. However, as a VIP member, I'm still concerned about the payment issue. Can you confirm with your team why there's a discrepancy between the refund being processed on May 1st and me still seeing the pending payment in my account?\"",
+                "usage": {
+                    "prompt_tokens": 2219,
+                    "completion_tokens": 68,
+                    "total_tokens": 2287
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2702,
+                    "completion_tokens": 37,
+                    "total_tokens": 2739
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"Goodbye.\"",
+                "usage": {
+                    "prompt_tokens": 2295,
+                    "completion_tokens": 5,
+                    "total_tokens": 2300
+                }
+            },
+            "service_agent": {
+                "final_answer": "Goodbye.",
+                "full_trace": "Goodbye.",
+                "usage": {
+                    "prompt_tokens": 2769,
+                    "completion_tokens": 4,
+                    "total_tokens": 2773
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 2,
+            "s_tone": 3
+        },
+        "final_score_0_100": 30.0,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's request to investigate the payment discrepancy, failing to address the core need.",
+            "s_completeness": "The agent provided no information or next steps regarding the payment issue, leaving the customer's request entirely unanswered.",
+            "s_tone": "The agent's final responses were robotic and dismissive, failing to engage with the customer's specific concerns."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_completeness": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for."
+            ]
+        }
+    }
+}

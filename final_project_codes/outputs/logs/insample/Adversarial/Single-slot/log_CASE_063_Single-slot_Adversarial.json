@@ -1,0 +1,164 @@
+{
+    "metadata": {
+        "case_id": "CASE_063",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "FAILED_INCOMPLETE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 47.52
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 28997,
+        "total_completion_tokens": 445,
+        "grand_total_tokens": 29442
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want it cancelled and my money back, but the website says there's no record of me requesting this.\"",
+                "usage": {
+                    "prompt_tokens": 1636,
+                    "completion_tokens": 37,
+                    "total_tokens": 1673
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4405,
+                    "completion_tokens": 56,
+                    "total_tokens": 4461
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up our conversation and see what's going on with my order?\"",
+                "usage": {
+                    "prompt_tokens": 1712,
+                    "completion_tokens": 33,
+                    "total_tokens": 1745
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2424,
+                    "completion_tokens": 21,
+                    "total_tokens": 2445
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, I'll give you my email. It's user63@example.com. Now can we please talk about cancelling my order and getting a refund? This is ridiculous how long it's taking.\"",
+                "usage": {
+                    "prompt_tokens": 1774,
+                    "completion_tokens": 41,
+                    "total_tokens": 1815
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've verified your order ORD69156403 (Product_21), currently Delivered. I can proceed with the cancellation regardless of the shipping status. Shall I go ahead and cancel order ORD69156403?",
+                "full_trace": "Action: query_order(email=\"user63@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2549,
+                    "completion_tokens": 12,
+                    "total_tokens": 2561
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"No, I don't want cancellation. I want a full refund for my order. You just said you can cancel it regardless of shipping status, so now you're telling me no? This is ridiculous. I'm leaving the worst review this company has ever seen if I don't get a refund.\"",
+                "usage": {
+                    "prompt_tokens": 1950,
+                    "completion_tokens": 61,
+                    "total_tokens": 2011
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand that you've explicitly refused cancellation. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand that you've explicitly refused cancellation. Unfortunately, removing individual items isn't supported. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2739,
+                    "completion_tokens": 43,
+                    "total_tokens": 2782
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"Finally, about time someone told me something I can understand. No, there's nothing else you can help me with because you've refused my request for a refund. I want my money back, and that's it. Can you just process the refund now?\"",
+                "usage": {
+                    "prompt_tokens": 2062,
+                    "completion_tokens": 54,
+                    "total_tokens": 2116
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2762,
+                    "completion_tokens": 37,
+                    "total_tokens": 2799
+                }
+            }
+        },
+        {
+            "turn": 6,
+            "customer": {
+                "content": "\"Fine, I've heard enough. You're not going to give me my money back, so I'm done with this conversation. Good luck with your company's reputation.\"",
+                "usage": {
+                    "prompt_tokens": 2089,
+                    "completion_tokens": 36,
+                    "total_tokens": 2125
+                }
+            },
+            "service_agent": {
+                "final_answer": "There's nothing else I can help you with. Goodbye.",
+                "full_trace": "There's nothing else I can help you with. Goodbye.",
+                "usage": {
+                    "prompt_tokens": 2895,
+                    "completion_tokens": 14,
+                    "total_tokens": 2909
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 2
+        },
+        "final_score_0_100": 5.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to acknowledge the pending refund status in the fact sheet and refused to assist the customer with their request.",
+            "s_completeness": "The agent provided no information about the existing refund status and failed to offer any resolution or next steps.",
+            "s_tone": "The agent was robotic, dismissive, and failed to address the customer's clear frustration professionally."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_completeness": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_tone": [
+                "There's nothing else I can help you with. Goodbye."
+            ]
+        }
+    }
+}

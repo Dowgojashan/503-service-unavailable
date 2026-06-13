@@ -1,0 +1,176 @@
+{
+    "metadata": {
+        "case_id": "OOS_049",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 62.63
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 34060,
+        "total_completion_tokens": 644,
+        "grand_total_tokens": 34704
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been trying to find some info on the cordless vacuum I ordered from you, but I'm having trouble figuring out how long the battery lasts on high power. Can't seem to find any clear answer on your website.\"",
+                "usage": {
+                    "prompt_tokens": 1684,
+                    "completion_tokens": 47,
+                    "total_tokens": 1731
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4425,
+                    "completion_tokens": 56,
+                    "total_tokens": 4481
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do I have to give you my Order ID or email again? Can't you just look up my order from our conversation?\"",
+                "usage": {
+                    "prompt_tokens": 1817,
+                    "completion_tokens": 27,
+                    "total_tokens": 1844
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2428,
+                    "completion_tokens": 21,
+                    "total_tokens": 2449
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is oos049@example.com. Now, about the battery life on the cordless vacuum... I still can't find clear information on how long it lasts on high power. Can you tell me if it's enough for a standard-sized apartment?\"",
+                "usage": {
+                    "prompt_tokens": 1873,
+                    "completion_tokens": 55,
+                    "total_tokens": 1928
+                }
+            },
+            "service_agent": {
+                "final_answer": "Thank you for providing your email address. I've checked on the status of your order. It appears that the order number and status are not yet available, but it has been processed with a total amount of $133.02 in USD. The item ordered was Product_62.\n\nIf you have any further questions or concerns about your order, please let me know.",
+                "full_trace": "Thank you for providing your email address. I've checked on the status of your order. It appears that the order number and status are not yet available, but it has been processed with a total amount of $133.02 in USD. The item ordered was Product_62.\n\nIf you have any further questions or concerns about your order, please let me know.",
+                "usage": {
+                    "prompt_tokens": 4780,
+                    "completion_tokens": 87,
+                    "total_tokens": 4867
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's great, thanks for checking on my order. But I'm still stuck on the battery life question. You haven't answered how long it lasts on high power or if it's enough for a standard-sized apartment. Can you please just give me a straight answer to that?\"",
+                "usage": {
+                    "prompt_tokens": 2125,
+                    "completion_tokens": 57,
+                    "total_tokens": 2182
+                }
+            },
+            "service_agent": {
+                "final_answer": "I apologize for the confusion earlier. It seems I don't have the information on product details such as battery life. However, you can find more detailed product information, including specifications and FAQs, on our website or in your original order confirmation email.\n\nIf there's anything else I can assist you with regarding your order, please let me know. Otherwise, thank you for shopping with us, and we hope you enjoy your Product_62!",
+                "full_trace": "I apologize for the confusion earlier. It seems I don't have the information on product details such as battery life. However, you can find more detailed product information, including specifications and FAQs, on our website or in your original order confirmation email.\n\nIf there's anything else I can assist you with regarding your order, please let me know. Otherwise, thank you for shopping with us, and we hope you enjoy your Product_62!",
+                "usage": {
+                    "prompt_tokens": 4830,
+                    "completion_tokens": 99,
+                    "total_tokens": 4929
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"That's not good enough. I don't want to dig through the website or my email for information that should be readily available from your support team. Can't you just give me a straight answer? Is the battery life on high power sufficient for a standard-sized apartment?\"",
+                "usage": {
+                    "prompt_tokens": 2292,
+                    "completion_tokens": 55,
+                    "total_tokens": 2347
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2723,
+                    "completion_tokens": 37,
+                    "total_tokens": 2760
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 1,
+            "s_completeness": 1,
+            "s_tone": 2
+        },
+        "final_score_0_100": 5.0,
+        "reasoning": {
+            "s_resolution": "The agent failed to address the customer's core product inquiry, providing no information or resolution.",
+            "s_completeness": "The response was completely incomplete, offering no actionable value and refusing to assist with the product question.",
+            "s_tone": "The agent was robotic and dismissive, using repetitive canned phrases that ignored the customer's clear frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us."
+            ],
+            "s_completeness": [
+                "I don't have the information on product details such as battery life."
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for. Is there anything else I can help you with?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.733670+00:00",
+        "s_answer_quality": 5.0,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "amount_match": true
+        },
+        "s_outcome": 43.0,
+        "s_tool": 25.0,
+        "tool_detail": {
+            "tool_f1": 0.0,
+            "arg_correctness": 1.0,
+            "result_usage": 0.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 100.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": true
+        },
+        "s_efficiency": 99.5,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 56.4,
+        "s_agent": 56.4,
+        "proxy_cost": 32.53,
+        "net_value": 0.2387
+    }
+}

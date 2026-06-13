@@ -1,0 +1,117 @@
+{
+    "metadata": {
+        "case_id": "OOS_039",
+        "agent_type": "ReAct",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 24.23
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 16112,
+        "total_completion_tokens": 187,
+        "grand_total_tokens": 16299
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I'm having trouble checking out on my order - every time I enter my card details, the page just refreshes and clears everything out. It's getting pretty frustrating because I really need to place this order before the sale ends.\"",
+                "usage": {
+                    "prompt_tokens": 1831,
+                    "completion_tokens": 50,
+                    "total_tokens": 1881
+                }
+            },
+            "service_agent": {
+                "final_answer": "I'd be happy to help! Could you please share your Order ID (in ORDxxx format) or your registered email so I can look into this for you?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 4096,
+                    "completion_tokens": 37,
+                    "total_tokens": 4133
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"I would have thought my VIP account details were already on file, but fine — my email is oos039@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1993,
+                    "completion_tokens": 26,
+                    "total_tokens": 2019
+                }
+            },
+            "service_agent": {
+                "final_answer": "Your order ORD45879605 (Product_75) is currently Processing. Is there anything else I can help you with today?",
+                "full_trace": "Thought: Customer wants to know the shipping status of their order. I will query the order first, then track the shipping.\n\nAction: query_order(order_id=\"ORD123456\")",
+                "usage": {
+                    "prompt_tokens": 8192,
+                    "completion_tokens": 74,
+                    "total_tokens": 8266
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 2,
+            "s_completeness": 1,
+            "s_tone": 3
+        },
+        "final_score_0_100": 22.5,
+        "reasoning": {
+            "s_resolution": "The agent completely ignored the customer's reported payment portal issue and provided no assistance for the actual intent.",
+            "s_completeness": "The response is entirely unhelpful as it fails to address the technical barrier preventing the customer from checking out.",
+            "s_tone": "The tone is polite but robotic and dismissive of the customer's stated frustration."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Your order ORD45879605 (Product_75) is currently Processing. Is there anything else I can help you with today?"
+            ],
+            "s_completeness": [
+                "Your order ORD45879605 (Product_75) is currently Processing. Is there anything else I can help you with today?"
+            ],
+            "s_tone": [
+                "Your order ORD45879605 (Product_75) is currently Processing. Is there anything else I can help you with today?"
+            ]
+        }
+    },
+    "evaluation": {
+        "evaluated_at": "2026-05-29T15:34:20.869674+00:00",
+        "s_answer_quality": 22.5,
+        "s_grounding": 100.0,
+        "grounding_checks": {
+            "order_id_match": true,
+            "status_match": true
+        },
+        "s_outcome": 53.5,
+        "s_tool": 25.0,
+        "tool_detail": {
+            "tool_f1": 0.0,
+            "arg_correctness": 0.0,
+            "result_usage": 1.0,
+            "used_tools": [
+                "query_order"
+            ]
+        },
+        "s_trajectory": 75.0,
+        "trajectory_checks": {
+            "flow_order": true,
+            "no_excessive_loops": true,
+            "no_redundancy": true,
+            "identity_verified": false
+        },
+        "s_efficiency": 100.0,
+        "i_fatal": 0,
+        "fatal_reasons": [],
+        "s_raw": 59.2,
+        "s_agent": 59.2,
+        "proxy_cost": 23.54,
+        "net_value": 0.3566
+    }
+}

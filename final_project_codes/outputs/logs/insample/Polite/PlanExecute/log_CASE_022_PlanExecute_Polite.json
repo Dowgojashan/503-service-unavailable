@@ -1,0 +1,104 @@
+{
+    "metadata": {
+        "case_id": "CASE_022",
+        "agent_type": "PlanExecute",
+        "persona_type": "Polite",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 25.15
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 13670,
+        "total_completion_tokens": 254,
+        "grand_total_tokens": 13924
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"Hi, I placed an order about a week ago but haven't received it yet and I'm worried it might have been lost in transit.\"",
+                "usage": {
+                    "prompt_tokens": 1502,
+                    "completion_tokens": 30,
+                    "total_tokens": 1532
+                }
+            },
+            "service_agent": {
+                "final_answer": "\"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can look into this further?\"",
+                "full_trace": "--- PlanExecute ---\n**Plan**\n1. Ask the customer for their Order ID (ORDxxx format) or registered email since it's an order-specific request.\n\n**Execution**\nFinal Response: \"Could you please provide your Order ID (in the format ORDxxx) or your registered email so I can look into this further?\"",
+                "usage": {
+                    "prompt_tokens": 2827,
+                    "completion_tokens": 62,
+                    "total_tokens": 2889
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"I don't have my Order ID handy right now, but I can give you my registered email if that's okay? It's user22@example.com.\"",
+                "usage": {
+                    "prompt_tokens": 1579,
+                    "completion_tokens": 32,
+                    "total_tokens": 1611
+                }
+            },
+            "service_agent": {
+                "final_answer": "Our standard policy allows returns within 30 days of delivery for damaged goods, incorrect items, or quality issues. If you believe your package was lost in transit, please contact our support team to open an investigation. Your order ORD06505513 (Product_21) is currently Processing. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Query order to verify it exists and retrieve data.\n\n**Execution**:\nAction: query_order(email=\"user22@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2951,
+                    "completion_tokens": 32,
+                    "total_tokens": 2983
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"I'm actually concerned about payment options for my order, not just delivery issues. Can I still change how I pay for this order since it's currently Processing?\"",
+                "usage": {
+                    "prompt_tokens": 1727,
+                    "completion_tokens": 33,
+                    "total_tokens": 1760
+                }
+            },
+            "service_agent": {
+                "final_answer": "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout. For your current order ORD06505513 (Product_21), payment has been processed. Is there anything else I can help you with?",
+                "full_trace": "--- PlanExecute ---\n**Plan**:\n1. Explain payment options for the order.\n\n**Execution**:\nFinal Response: \"Our system does not support changing payment methods once an order has been placed and is in the Processing status. However, you can contact our support team through the contact details in your original order confirmation to discuss possible alternatives.\"",
+                "usage": {
+                    "prompt_tokens": 3084,
+                    "completion_tokens": 65,
+                    "total_tokens": 3149
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer's identity and accurately addressed the inquiry regarding payment methods for the specific order.",
+            "s_completeness": "The response provided all necessary information regarding payment options and the status of the customer's order.",
+            "s_tone": "The agent maintained a professional, empathetic, and concise tone throughout the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "For your current order ORD06505513 (Product_21), payment has been processed."
+            ],
+            "s_completeness": [
+                "We accept major credit/debit cards (Visa, Mastercard, Amex), digital wallets, and other options at checkout."
+            ],
+            "s_tone": [
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}

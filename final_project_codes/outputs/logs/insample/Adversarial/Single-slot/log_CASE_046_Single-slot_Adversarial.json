@@ -1,0 +1,144 @@
+{
+    "metadata": {
+        "case_id": "CASE_046",
+        "agent_type": "Single-slot",
+        "persona_type": "Adversarial",
+        "model": "llama3.1:8b",
+        "status": "LOOP_FAILURE",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "PENDING",
+        "execution_seconds": 56.96
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 33494,
+        "total_completion_tokens": 625,
+        "grand_total_tokens": 34119
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "\"I've been waiting forever and nothing has happened with my order. I just want to know when it's going to arrive, but the tracking info is useless.\"",
+                "usage": {
+                    "prompt_tokens": 1636,
+                    "completion_tokens": 33,
+                    "total_tokens": 1669
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4397,
+                    "completion_tokens": 56,
+                    "total_tokens": 4453
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "\"Why do you need my Order ID or email? Can't you just look up our conversation and see I've been waiting for an answer about delivery?\"",
+                "usage": {
+                    "prompt_tokens": 1709,
+                    "completion_tokens": 31,
+                    "total_tokens": 1740
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 2418,
+                    "completion_tokens": 21,
+                    "total_tokens": 2439
+                }
+            }
+        },
+        {
+            "turn": 3,
+            "customer": {
+                "content": "\"Fine, my email is user46@example.com. Now can you tell me when I'll get my order? The delivery period was supposed to be 3-5 business days, but it's already been over a week.\"",
+                "usage": {
+                    "prompt_tokens": 1769,
+                    "completion_tokens": 47,
+                    "total_tokens": 1816
+                }
+            },
+            "service_agent": {
+                "final_answer": "I've checked on the status of your order, ORD77135959. Unfortunately, it appears that your order has already been refunded in full, with a total amount of $473.66 USD. The shipping date for this order was May 1st, 2024. If you have any further questions or concerns, please don't hesitate to reach out.",
+                "full_trace": "I've checked on the status of your order, ORD77135959. Unfortunately, it appears that your order has already been refunded in full, with a total amount of $473.66 USD. The shipping date for this order was May 1st, 2024. If you have any further questions or concerns, please don't hesitate to reach out.",
+                "usage": {
+                    "prompt_tokens": 4748,
+                    "completion_tokens": 86,
+                    "total_tokens": 4834
+                }
+            }
+        },
+        {
+            "turn": 4,
+            "customer": {
+                "content": "\"That's ridiculous! I didn't ask for a refund, and now my order is just gone? This is unacceptable. I want to know why my delivery was delayed in the first place, not some arbitrary shipping date. And what about the product itself? Is it even going to arrive?\"",
+                "usage": {
+                    "prompt_tokens": 2013,
+                    "completion_tokens": 59,
+                    "total_tokens": 2072
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand your concern about the shipping status of your order, ORD77135959. Unfortunately, since the order has already been refunded in full, it's no longer possible to track its delivery. However, I can confirm that the estimated delivery date for this order was May 1st, 2024. If you have any further questions or concerns, please don't hesitate to reach out.\n\nThis concludes our conversation regarding your order. Thank you for bringing this matter to my attention.",
+                "full_trace": "I understand your concern about the shipping status of your order, ORD77135959. Unfortunately, since the order has already been refunded in full, it's no longer possible to track its delivery. However, I can confirm that the estimated delivery date for this order was May 1st, 2024. If you have any further questions or concerns, please don't hesitate to reach out.\n\nThis concludes our conversation regarding your order. Thank you for bringing this matter to my attention.",
+                "usage": {
+                    "prompt_tokens": 4843,
+                    "completion_tokens": 111,
+                    "total_tokens": 4954
+                }
+            }
+        },
+        {
+            "turn": 5,
+            "customer": {
+                "content": "\"This is unacceptable. I don't care about the refund or the shipping date. I want my product, and I want to know when I can expect it. You're just giving me excuses instead of answers. I'm going to leave a 1-star review for this company's terrible customer service.\"",
+                "usage": {
+                    "prompt_tokens": 2202,
+                    "completion_tokens": 61,
+                    "total_tokens": 2263
+                }
+            },
+            "service_agent": {
+                "final_answer": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "full_trace": "I understand this isn't the outcome you were hoping for. If you change your mind, please don't hesitate to contact us. Is there anything else I can help you with?",
+                "usage": {
+                    "prompt_tokens": 2744,
+                    "completion_tokens": 37,
+                    "total_tokens": 2781
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 3,
+            "s_completeness": 2,
+            "s_tone": 4
+        },
+        "final_score_0_100": 47.5,
+        "reasoning": {
+            "s_resolution": "The agent incorrectly identified the shipping date as the delivery date and failed to address the customer's core need to understand why their order was cancelled/refunded.",
+            "s_completeness": "The agent failed to provide actionable information regarding the refund status or how the customer could re-order, leaving the customer with no path forward.",
+            "s_tone": "The agent maintained a professional and empathetic tone, though the responses became somewhat repetitive toward the end of the conversation."
+        },
+        "evidence": {
+            "s_resolution": [
+                "I can confirm that the estimated delivery date for this order was May 1st, 2024."
+            ],
+            "s_completeness": [
+                "Unfortunately, since the order has already been refunded in full, it's no longer possible to track its delivery."
+            ],
+            "s_tone": [
+                "I understand this isn't the outcome you were hoping for."
+            ]
+        }
+    }
+}

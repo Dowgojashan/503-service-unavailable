@@ -1,0 +1,87 @@
+{
+    "metadata": {
+        "case_id": "CASE_095",
+        "agent_type": "Single-slot",
+        "persona_type": "VIP",
+        "model": "llama3.1:8b",
+        "status": "SUCCESS",
+        "task_status": "TOOL_TRIGGERED",
+        "final_resolution": "INFO_PROVIDED",
+        "execution_seconds": 19.02
+    },
+    "usage_summary": {
+        "total_prompt_tokens": 10410,
+        "total_completion_tokens": 163,
+        "grand_total_tokens": 10573
+    },
+    "conversation": [
+        {
+            "turn": 1,
+            "customer": {
+                "content": "Hi, I'm a VIP member and I have an issue with my order - the shipping options for my item are not showing up correctly for my delivery location.",
+                "usage": {
+                    "prompt_tokens": 1780,
+                    "completion_tokens": 33,
+                    "total_tokens": 1813
+                }
+            },
+            "service_agent": {
+                "final_answer": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "full_trace": "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "usage": {
+                    "prompt_tokens": 4396,
+                    "completion_tokens": 56,
+                    "total_tokens": 4452
+                }
+            }
+        },
+        {
+            "turn": 2,
+            "customer": {
+                "content": "I would have thought my VIP account details were already on file, but fine — my email is user95@example.com. Can we please focus on getting the shipping options sorted for my order? I'm trying to get this item delivered to {{Delivery City}} and it's not showing up in the options.",
+                "usage": {
+                    "prompt_tokens": 1849,
+                    "completion_tokens": 62,
+                    "total_tokens": 1911
+                }
+            },
+            "service_agent": {
+                "final_answer": "Once an order is placed, delivery options cannot be changed through our system. For future orders, standard, express, or priority shipping are available at checkout. Your order ORD35122457 (Product_35) is currently Delivered. Is there anything else I can help you with?",
+                "full_trace": "Action: query_order(email=\"user95@example.com\")",
+                "usage": {
+                    "prompt_tokens": 2385,
+                    "completion_tokens": 12,
+                    "total_tokens": 2397
+                }
+            }
+        }
+    ],
+    "judge": {
+        "model": "gemini-3.1-flash-lite",
+        "scores": {
+            "s_resolution": 5,
+            "s_completeness": 5,
+            "s_tone": 5
+        },
+        "final_score_0_100": 100.0,
+        "reasoning": {
+            "s_resolution": "The agent correctly verified the customer, identified the order details, and accurately explained the policy regarding delivery options.",
+            "s_completeness": "The response fully addressed the customer's query by explaining the policy limitation and confirming the order status.",
+            "s_tone": "The agent maintained a professional, helpful, and concise tone throughout the interaction."
+        },
+        "evidence": {
+            "s_resolution": [
+                "Once an order is placed, delivery options cannot be changed through our system.",
+                "Your order ORD35122457 (Product_35) is currently Delivered."
+            ],
+            "s_completeness": [
+                "Once an order is placed, delivery options cannot be changed through our system.",
+                "Is there anything else I can help you with?"
+            ],
+            "s_tone": [
+                "Please provide your Order ID (ORDxxx format) or registered email so I can assist you further.",
+                "Is there anything else I can help you with?"
+            ]
+        }
+    }
+}
